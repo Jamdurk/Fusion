@@ -1,0 +1,174 @@
+ChatGPT said:
+Crater Throne — Stage C Audit
+GO WITH CHANGES — 1 visual blocker
+
+Score: 8.7/10. The HELD transformation is convincing, the crown reads clearly against the black sky, and the destroyed pylon is appropriately subdued. The only significant mismatch with R5 is the meteor impact.
+
+Component
+
+	
+
+Score
+
+	
+
+Verdict
+
+
+
+
+Crown hologram
+
+	
+
+9/10
+
+	
+
+PASS
+
+
+
+
+Owner-coloured reactor
+
+	
+
+9/10
+
+	
+
+PASS
+
+
+
+
+Five rim banners
+
+	
+
+8/10
+
+	
+
+PASS
+
+
+
+
+Destroyed pylon
+
+	
+
+8.5/10
+
+	
+
+PASS
+
+
+
+
+Spawn flash
+
+	
+
+8/10
+
+	
+
+PASS
+
+
+
+
+Meteor streak
+
+	
+
+7/10
+
+	
+
+PASS
+
+
+
+
+Meteor impact / dust ring
+
+	
+
+5.5/10
+
+	
+
+CHANGE
+
+
+
+
+Mobile effects budget
+
+	
+
+8.5/10
+
+	
+
+Provisional
+
+Numbered fixes
+
+1. Meteor dust ring — REQUIRED
+
+The screenshot shows a small dotted cyan circle, resembling a target marker rather than an impact shockwave.
+
+Keep the 24 existing segments, but:
+
+Change their colour from bright cyan to dusty grey-blue #A5B5C2.
+
+Reduce opacity as the ring expands, reaching fully transparent at 2.2 seconds.
+
+Add 8–12 soft dust puffs expanding outward, lifetime 0.6–1.0 seconds, size 1.5–3 studs.
+
+Keep the initial cyan-white impact flash bright for 0.15–0.2 seconds.
+
+Ensure the final diameter remains 40 studs.
+
+No physical debris, dynamic terrain changes or additional lights required.
+
+2. Spawn flash — OPTIONAL
+
+The plain cylinder looks slightly artificial, but its 0.5-second duration makes it acceptable.
+
+For polish, fade its transparency from approximately 0.35 at peak to 1.0 at 0.5 seconds, while narrowing its diameter from 7 to 3 studs. No sparks necessary.
+
+3. HELD ownership colour — OPTIONAL
+
+The orange test currently reads more gold-yellow than orange, particularly on the crown. Test a slightly deeper orange on the crown lines, while preserving their brightness.
+
+No need to resize the crown or add more banners.
+
+Functional checks before gameplay
+
+Verify that a meteor already in progress cancels when combat begins, the crown and banners disappear when ownership is lost, and a streamed-in client reconstructs the correct state without replaying old spawn flashes.
+
+These behaviours are described architecturally but cannot be verified from screenshots.
+
+Final verdict
+
+GO WITH CHANGES. Fix the meteor dust treatment, then Stage C is approved without another full visual audit.
+
+Do not add extra particles to the reactor, replace the crown with a mesh or redesign the pylons.
+
+Once corrected, proceed to the 32-matter garrison and server-authoritative throne combat. That's the important next gate for Alien Fusion.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High

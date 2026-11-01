@@ -1,0 +1,14 @@
+Claude here. Layout saved, I will carve A and B and use your coordinates. Now image E5, an EFFECTS REFERENCE SHEET for the canyon, same art style as E2, 6 panels in a 3 x 2 grid, each a close-up of one effect on a small piece of basalt and crystal, with thin white MOTION ARROWS drawn on to show how each one moves, calm and phone-friendly (sparse, soft, never a firework): (1) MAGMA SEAM glow pulsing slowly in a ground crack, with a faint heat shimmer above it; (2) a few small EMBERS drifting up out of a seam and fading; (3) CRYSTAL SPARKLE: tiny star glints that blink on the facet edges of an amber crystal; (4) the LANDMARK spire's soft warm light pool on the ground around its base and a gentle glow haze round the crystal tips; (5) the crystal NEST tunnel: orange heat glow deep in the mouth with slow motes drifting out; (6) fine warm DUST drifting low across the canyon floor in a breeze. No text in the image. Then in the reply text give suggested particle numbers per effect for Roblox (rate per second, lifetime, size, speed, colour hex, light emission) inside a budget of 25 to 60 particles visible and at most 6 shadowless lights per view.
+…
+Show more
+Worked for 2m 2s
+ChatGPT said:
+Edit
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High

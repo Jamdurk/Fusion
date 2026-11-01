@@ -1,0 +1,3 @@
+8 mixes, 640 fights: SQUISH 57.5 %  CRUNCH 42.5 % --dt=0.05
+8 mixes, 640 fights: SQUISH 52.7 %  CRUNCH 47.3 % --dt=0.05 --old
+DONE

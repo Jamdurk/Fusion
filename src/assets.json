@@ -1,0 +1,9 @@
+{
+  "_note": "Roblox asset ids for uploaded art (James's account, uploaded by Claude via the Studio MCP upload_image, 27 Oct 2026). Source files in assets\\.",
+  "ground": {
+    "regolith":   { "color": 120209544879770, "normal": 80568060797406,  "rough": 110956921699343 },
+    "craterdust": { "color": 74366607636081,  "normal": 116115844453031, "rough": 121981544021645 },
+    "highland":   { "color": 84645537684689,  "normal": 109037979485201, "rough": 95557563270417 },
+    "basalt":     { "color": 121006358972701, "normal": 100171342114693, "rough": 88092364874808 }
+  }
+}

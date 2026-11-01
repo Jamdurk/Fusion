@@ -1,0 +1,31 @@
+﻿# Historical backups
+backups/
+history/
+shots/
+
+# Blender automatic backups
+*.blend1
+*.blend2
+
+# Temporary files
+*.tmp
+*.bak
+*.log
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# GitHub repository exclusions
+node_modules/
+
+# Large rendered videos
+*.mp4
+
+# Exported assets (keep locally for now)
+roblox-ready/

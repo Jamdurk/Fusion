@@ -1,0 +1,9 @@
+SQUISH F1 Drip      B+C uplift avg 5%  per enemy form 0% 0% 3% 17%
+SQUISH F2 Twin      B+C uplift avg 17%  per enemy form 22% 27% 17% 0%
+SQUISH F3 Brute     B+C uplift avg 15%  per enemy form 40% 5% 18% -4%
+SQUISH F4 Titan     B+C uplift avg 3%  per enemy form 0% 0% 4% 7%
+CRUNCH F1 Pebble    B+C uplift avg 10%  per enemy form 0% 0% 16% 26%
+CRUNCH F2 Pincer    B+C uplift avg 9%  per enemy form 22% 22% -9% 0%
+CRUNCH F3 Ram       B+C uplift avg 8%  per enemy form 0% 20% 13% 0%
+CRUNCH F4 Colossus  B+C uplift avg -1%  per enemy form 0% 0% 0% -4%
+DONE

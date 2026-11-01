@@ -1,0 +1,96 @@
+crack visibility, streak count/width, plate placement). Short.
+Worked for 1m 56s
+ChatGPT said:
+Impact Scar v1 — Audit
+GO WITH CHANGES
+A. Scores
+
+Category
+
+	
+
+Score
+
+
+
+
+Visual match to K
+
+	
+
+5.5/10
+
+
+
+
+Reads as “it crashed here”
+
+	
+
+7/10
+
+
+
+
+Performance / buildability
+
+	
+
+9.5/10
+
+The scar improves the sense of destruction, particularly at eye level. However, the reference has a broad, scorched impact field; your build looks more like a dark patch beneath the wreck with several thick black streaks.
+
+B. Three exact fixes
+
+1. Charcoal footprint and contrast — HIGH
+
+The claimed 120 × 100-stud scar isn't visually apparent across that full area. Most of the visible darkness is concentrated immediately around the shell and overlaps its shadows.
+
+Keep the 120 × 100 footprint.
+
+Make the charcoal visibly distinguishable from normal regolith, but approximately 25–35% lighter than its current darkest appearance.
+
+Add an irregular 8–12-stud transition zone between charcoal and grey.
+
+Check under neutral lighting to distinguish painted ground from cast shadows.
+
+2. Ejecta streaks — HIGH
+
+The streaks look like black liquid trails rather than material blasted outward.
+
+Reduce from 9 to 6–7 prominent streaks.
+
+Start 3–4 studs wide, tapering to approximately 0.5–1.5 studs.
+
+Break each into 2–3 irregular sections.
+
+Use dark charcoal rather than near-black, with small debris at their ends.
+
+3. Detached plates and cracks — MEDIUM
+
+The detached plates don't yet stand out as wreck components, and the glowing ground fractures are almost invisible in the elevated view.
+
+Put one 12 × 6-stud plate roughly 15 studs forward-left of the wreck, tilted 30°; put the second 8 × 5-stud plate approximately 12 studs forward-right, tilted 45°.
+
+Give both a visible inset cyan fracture.
+
+Make three primary radial cracks approximately 0.5–0.7 studs wide and 12–20 studs long, with restrained violet/cyan accents.
+
+C. Decision
+
+GO — move on to the next area. No need to block the hub build for these changes.
+
+The structural wreck, crater and impact treatment now form a reasonable foundation. Implement the three adjustments during the crater polish pass.
+
+One remaining visual concern is that the shell itself still resembles a neatly installed portal, but that was already accepted for progression. Don't restart its modelling.
+
+Keep the terrain-based scar. It's far more suitable for phones than layering dozens of decals and transparent meshes across the ground.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High

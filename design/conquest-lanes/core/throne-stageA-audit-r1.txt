@@ -1,0 +1,146 @@
+ChatGPT said:
+Crater Throne — Stage A Audit
+GO WITH CHANGES — 1 blocker
+
+Score: 8.8/10. The crater remains recognisable, all eight ramps are positioned correctly, and the reactor's original silhouette is preserved. The animation architecture also looks sound from the specifications.
+
+A. Audit results
+
+Component
+
+	
+
+Verdict
+
+
+
+
+Eight radial entrances
+
+	
+
+PASS
+
+
+
+
+Ramp slope and width
+
+	
+
+PASS
+
+
+
+
+Terrace r47–72
+
+	
+
+PASS provisionally
+
+
+
+
+Natural basalt rim preserved
+
+	
+
+PASS
+
+
+
+
+Wreck and impact scar
+
+	
+
+PASS
+
+
+
+
+Ring, halo and orb motion
+
+	
+
+PASS provisionally
+
+
+
+
+Core, beams and floating rocks
+
+	
+
+PASS provisionally
+
+
+
+
+Spawn pockets and pylon shelves
+
+	
+
+CHANGE REQUIRED
+
+B. Numbered fixes
+
+1. Flatten the functional spawn/pylon surfaces — REQUIRED
+
+Your measured −1.1 to +4.7 height variation is too large for an 18 × 22 spawn pocket or a 14 × 14 pylon shelf.
+
+Four spawn pockets: flatten the usable 18 × 22 floor to Y −2 ±0.4.
+
+Prefer shifting spawn centres inward from r64 to approximately r60, so their 22-stud radial footprints fit within the r47–72 terrace.
+
+Two pylon shelves: preserve their planned centres at (0, −67) and (0, +67). Carve a local 14 × 14 level shelf at approximately Y −2, extending slightly into the rim where necessary.
+
+Keep the raised natural basalt lips outside the usable footprints.
+
+Maintain gentle transitions to the surrounding terrace.
+
+This prevents spawning units inside sloping terrain or trapping them against the rim.
+
+2. Verify the animation using different timestamps — MINOR
+
+Your rest and t=25 screenshots look almost identical, but that isn't necessarily a bug.
+
+At 0.6 RPM, the ring rotates exactly 90° in 25 seconds. Since it has four roughly symmetrical segments, it can look unchanged.
+
+Check the ring at t=7, 13 and 19 seconds, and confirm its tilt remains fixed while rotating. Also confirm the moving decorative meshes never affect server-owned hitboxes.
+
+3. Test crowding before building decorative buttresses — REQUIRED GAMEPLAY CHECK
+
+The combat annulus is only 25 studs wide.
+
+Run a 32-matter garrison against a representative attacking army, including F3/F4 units, and verify that they can pass around the wreck and reach both pylon positions.
+
+Don't add rock buttresses until this passes. Place any new buttresses outside the r72 combat boundary wherever possible.
+
+C. What to build next
+
+After flattening those six functional surfaces:
+
+Model the two shield pylons from R4, reusing Crystal Canyon basalt.
+
+Build the four spawn rings and low rock lips.
+
+Add the R3 shield links, damage states, shield collapse and core-break sequence.
+
+Keep the existing crater visuals and animation values unchanged. No additional terrain redesign is justified.
+
+Final verdict
+
+GO WITH CHANGES. The crater and motion stage are visually approved, but the spawn/pylon floor heights must be corrected before combat.
+
+Once the surfaces and army-navigation test pass, proceed directly to the pylons and R3 effects.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High

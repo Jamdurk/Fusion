@@ -1,0 +1,164 @@
+{
+ "generated_utc": "2026-10-30T11:29:52.519Z",
+ "dir": "D:/Roblox Game Venture/Games/Alien Fusion",
+ "places": [
+  {
+   "file": "AlienFusion-AI-Testing.pre-29Oct.rbxl",
+   "bytes": 1346978,
+   "sha256": "f25ac0dc6fb08f53b76bcb2137c8d6c59017c49b4ea69f1295d0dcad4a1a631b",
+   "mtime": "2026-10-28T10:23:18.968Z"
+  },
+  {
+   "file": "AlienFusion-AI-Testing.rbxl",
+   "bytes": 2165012,
+   "sha256": "c98c633aa0faa31500338c5362234f913ca59985b6e2f0594296e8a87f786b12",
+   "mtime": "2026-10-29T13:49:09.210Z"
+  },
+  {
+   "file": "AlienFusion-map.pre-save-29Oct.rbxl",
+   "bytes": 1356578,
+   "sha256": "e3618c0410c18a1539856ac280715e0046ad6f11d940c14600563c3f68cae8f1",
+   "mtime": "2026-10-28T10:49:22.974Z"
+  },
+  {
+   "file": "AlienFusion-map.rbxl",
+   "bytes": 2677663,
+   "sha256": "3823ac981d60492d20ccf752b19a0c55fee4ea0a28156d4d0e819879333e5e23",
+   "mtime": "2026-10-30T11:17:44.803Z"
+  }
+ ],
+ "files": [
+  {
+   "file": "src/assets.json",
+   "bytes": 581,
+   "sha256": "db5efd8ef9c3de1f2867055b8cfce17d2ac5fa9d18f61668db6345d6795b1267",
+   "mtime": "2026-10-27T02:14:58.611Z"
+  },
+  {
+   "file": "src/ReplicatedStorage.AlienFusion.AttachPoints.module.luau",
+   "bytes": 40832,
+   "sha256": "e0caffd61e4be81cf7dd26ec79c20142942547466b9e0595a03b86c968b2bedd",
+   "mtime": "2026-10-28T14:34:06.190Z"
+  },
+  {
+   "file": "src/ReplicatedStorage.AlienFusion.Attacks.module.luau",
+   "bytes": 181396,
+   "sha256": "1867efc899c870d4127e97e975a009d925940b0400c843f2d669a04d2cd585c5",
+   "mtime": "2026-10-29T12:01:49.254Z"
+  },
+  {
+   "file": "src/ReplicatedStorage.AlienFusion.AttacksCrunch.module.luau",
+   "bytes": 93029,
+   "sha256": "240835eb2caf3bf2b87330e71f126340df9f68f342348e40db726fa207bc3f6d",
+   "mtime": "2026-10-29T11:31:18.774Z"
+  },
+  {
+   "file": "src/ReplicatedStorage.AlienFusion.AttacksDrip.module.luau",
+   "bytes": 109283,
+   "sha256": "3dae6b23bf8f2d4c3cebbfd198303bcb066d0900b2f3f1f9c184582f216d576a",
+   "mtime": "2026-10-29T01:06:14.064Z"
+  },
+  {
+   "file": "src/ReplicatedStorage.AlienFusion.AttacksTitan.module.luau",
+   "bytes": 49091,
+   "sha256": "47b412e38fa98c53ad0d25614f07395cacf9e4d84287a5b8ce842eaa8c142d85",
+   "mtime": "2026-10-29T13:44:33.603Z"
+  },
+  {
+   "file": "src/ReplicatedStorage.AlienFusion.Gaits.module.luau",
+   "bytes": 45058,
+   "sha256": "3585e484c18c4b64e1fb58df8cb351d7a9e654c68a9f4831776c2f2733c66510",
+   "mtime": "2026-10-27T16:43:54.490Z"
+  },
+  {
+   "file": "src/ReplicatedStorage.AlienFusion.GooMesh.module.luau",
+   "bytes": 12708,
+   "sha256": "e0bc162c8dc051daa3d0877be0fc50fb8fe8f202970f5a399931ac5d5c3288f6",
+   "mtime": "2026-10-28T12:36:32.521Z"
+  },
+  {
+   "file": "src/ServerScriptService.WalkTest.server.luau",
+   "bytes": 12511,
+   "sha256": "7980ed7ecdd5632044668420c7c0ea00d77dcce5d16a17bb654064956abdba44",
+   "mtime": "2026-10-28T16:22:06.069Z"
+  },
+  {
+   "file": "src/StarterPlayer.StarterPlayerScripts.AlienAnimator.client.luau",
+   "bytes": 84639,
+   "sha256": "f7bff83303ef0406131a23b332d3eb362d66c17b63548bd868f324791912e3bc",
+   "mtime": "2026-10-29T11:10:30.107Z"
+  },
+  {
+   "file": "src/StarterPlayer.StarterPlayerScripts.MoonLook.client.luau",
+   "bytes": 1013,
+   "sha256": "e3624e29e3d793a6dc0f62cbbbd3356e585620524ec228e31f2bf20b5bbe1752",
+   "mtime": "2026-10-27T03:09:02.736Z"
+  },
+  {
+   "file": "src/tools/build-map.luau",
+   "bytes": 7810,
+   "sha256": "a016d20b04bb04b7fffa76675b36827b20c8e5968c1bc1c5f99d6a8dc111da0f",
+   "mtime": "2026-10-27T03:46:35.356Z"
+  },
+  {
+   "file": "src/tools/build-terrain-hub.luau",
+   "bytes": 2295,
+   "sha256": "4b8f1d39a5733c0ffded0273f89dc6de15980ccc3e2f2b45a86d5ceaddd6abab",
+   "mtime": "2026-10-30T10:38:08.263Z"
+  },
+  {
+   "file": "src/tools/build-terrain.luau",
+   "bytes": 2343,
+   "sha256": "1def9fd6ce6fc8de12f392627bff612a4209e57411becb3c404bc97fbaca777d",
+   "mtime": "2026-10-27T02:06:17.614Z"
+  },
+  {
+   "file": "src/tools/hub-crater-place.luau",
+   "bytes": 7596,
+   "sha256": "d5f3ffa3e128476ec99ecfca518d443c97a960446c05d6ed6e2480451b096503",
+   "mtime": "2026-10-30T07:05:14.509Z"
+  },
+  {
+   "file": "src/tools/hub-crater-scar.luau",
+   "bytes": 6539,
+   "sha256": "4a5558ce54d8a4ba97a62471076d1a381d9a3d4058c73808bbf28a222951bee3",
+   "mtime": "2026-10-30T08:13:28.088Z"
+  },
+  {
+   "file": "src/tools/hub-greybox.luau",
+   "bytes": 6674,
+   "sha256": "79af4b0d8bd576d2fe2425b6c552022c2272cb6bec46906b03d86b7bcad8aa16",
+   "mtime": "2026-10-30T10:38:28.349Z"
+  },
+  {
+   "file": "src/tools/hub-moonwood-place.luau",
+   "bytes": 13816,
+   "sha256": "f3cc32d01a3c6a68cd711aee49ae070805260152d19e0e6148da5ce3a4c90823",
+   "mtime": "2026-10-30T11:07:57.114Z"
+  },
+  {
+   "file": "src/tools/hub-moonwood-place.r3.luau",
+   "bytes": 13404,
+   "sha256": "9a42096311e1a7a76cb9265c9d6fd421399a7b050ac7fb8a45d87ae7bc92f98c",
+   "mtime": "2026-10-30T11:07:30.021Z"
+  },
+  {
+   "file": "src/tools/hub-moonwood-tex-swap.luau",
+   "bytes": 4254,
+   "sha256": "6e1b02232165509ec3b5e757478294d62b667b19c53a8b77aa3c84de0f87e184",
+   "mtime": "2026-10-30T10:15:04.029Z"
+  },
+  {
+   "file": "src/tools/install-scripts.luau",
+   "bytes": 1709,
+   "sha256": "917bb186e4ee465724304675c305edee109f8809fd3ee25b88624fc11b6fca8e",
+   "mtime": "2026-10-27T11:53:12.827Z"
+  },
+  {
+   "file": "src/tools/perf-p5-templates.luau",
+   "bytes": 1585,
+   "sha256": "92644f517a9c49aa6d96f47ba78ba40d9c09630efda53ef8d269118fa673b80e",
+   "mtime": "2026-10-29T11:02:03.522Z"
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+RACE MIRROR: Squish Fn vs Crunch Fn (target 0.90-1.10)
+   F1 1.02
+   F2 1.03
+   F3 1.05
+   F4 1.02
+LOOP: counter side's edge, 4 race combos (target 1.40-3.00: clear, not a wipe)
+   F1>F4 1.99  2.63  1.90  2.69
+   F4>F3 2.23  2.23  2.31  2.26
+   F3>F2 2.81  2.14  2.23  2.79
+   F2>F1 2.32  2.20  2.32  2.20
+DIAGONALS: edge (target 0.77-1.30: close)
+   F1vF3 1.01  1.01  0.94  1.13
+   F2vF4 0.88  0.83  0.83  0.88
+ALL TARGETS MET

@@ -1,0 +1,203 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alien Fusion Power Graph</title>
+<style>
+:root{--bg:#fcfcfb;--card:#ffffff;--ink:#0b0b0b;--ink2:#52514e;--muted:#7a7974;--line:#e4e3df;--mid:#f0efec;--squish:#2a78d6;--crunch:#eb6834;--track:#ecebe7}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1a1a19;--card:#232322;--ink:#f0efec;--ink2:#c3c2b7;--muted:#9a998f;--line:#3a3a37;--mid:#383835;--squish:#3987e5;--crunch:#d95926;--track:#33332f}}
+:root[data-theme="dark"]{--bg:#1a1a19;--card:#232322;--ink:#f0efec;--ink2:#c3c2b7;--muted:#9a998f;--line:#3a3a37;--mid:#383835;--squish:#3987e5;--crunch:#d95926;--track:#33332f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 60px}h1{font-size:28px;margin:0 0 4px}h2{font-size:19px;margin:36px 0 10px}h3{margin:0;font-size:18px}
+.sub{color:var(--ink2);margin:0 0 8px}.muted{color:var(--muted)}
+.loop{display:grid;grid-template-columns:minmax(0,420px) 1fr;gap:20px;align-items:center}@media(max-width:760px){.loop{grid-template-columns:1fr}}
+.ring{width:100%;height:auto}.node{fill:var(--card);stroke:var(--ink2);stroke-width:2}.nodet{font-weight:700;font-size:15px;fill:var(--ink)}.nodes{font-size:12px;fill:var(--muted)}
+.arr{stroke:var(--ink);stroke-width:2.5}.ahp{fill:var(--ink)}.arrlab{font-size:14px;font-weight:700;fill:var(--ink)}.diag{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:4 5}.diaglab{font-size:12px;fill:var(--muted)}.diagbg{fill:var(--bg)}
+.tierrow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}@media(max-width:760px){.tierrow{grid-template-columns:1fr}}
+.tierlab{grid-column:1/-1;font-weight:700;margin:10px 0 -4px;color:var(--ink2)}
+.card{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--squish);border-radius:10px;padding:14px}.card.crunch{border-top-color:var(--crunch)}
+.card header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}.tier{color:var(--muted);font-size:13px}
+.stats{display:flex;gap:10px;flex-wrap:wrap;color:var(--ink2);font-size:13px;margin:4px 0 6px}
+ul{list-style:none;padding:0;margin:0}.ab{border-top:1px solid var(--line);padding:9px 0}.ab p{margin:3px 0 5px;color:var(--ink2)}
+.abhead{display:flex;gap:8px;align-items:center}.slot{font-size:11px;font-weight:700;letter-spacing:.04em;padding:2px 6px;border-radius:4px;border:1px solid var(--line);color:var(--ink2)}
+.slot-C{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.facts{display:flex;flex-wrap:wrap;gap:4px}.facts span{font-size:12px;background:var(--mid);border-radius:4px;padding:1px 6px;color:var(--ink)}
+.wt{display:flex;align-items:center;gap:8px;margin-top:6px}.bar{flex:0 0 120px;height:8px;background:var(--track);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:0 4px 4px 0}.squish .bar i{background:var(--squish)}.crunch .bar i{background:var(--crunch)}.wt small{color:var(--muted)}
+.grid{border-collapse:separate;border-spacing:2px;width:100%;max-width:640px}.grid th,.grid td{padding:8px;text-align:center;border-radius:6px}
+.grid th{font-weight:600;font-size:13px}.grid small{display:block;font-weight:400;font-size:11px;color:var(--ink2)}.grid td b{font-size:15px}
+.legend{display:flex;gap:16px;font-size:13px;color:var(--ink2);margin:6px 0}.sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}ol,.box ul{padding-left:20px}.box ul{list-style:disc}
+</style></head><body><main>
+<h1>Alien Fusion: Power Graph</h1>
+<p class="sub">8 aliens × 3 abilities. Checked in a battle simulator (equal 32-matter armies, thousands of fights), backed by ChatGPT deep research, audited by ChatGPT.</p>
+<p class="muted">How to read "2.2x": the winning side is as strong as an army with 2.2x its HP. Close to 1.00x = an even fight.</p>
+
+<h2>The counter loop</h2>
+<div class="loop"><svg viewBox="0 0 420 310" class="ring" role="img" aria-label="Counter loop: Swarm beats Titan, Titan beats Brute, Brute beats Pack, Pack beats Swarm">
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="ahp"/></marker></defs>
+  <line x1="142" y1="60" x2="278" y2="60" class="arr" marker-end="url(#ah)"/><text x="210" y="90" class="arrlab" text-anchor="middle">2.47x</text><line x1="330" y1="112" x2="330" y2="198" class="arr" marker-end="url(#ah)"/><text x="304" y="159" class="arrlab" text-anchor="middle">2.29x</text><line x1="278" y1="250" x2="142" y2="250" class="arr" marker-end="url(#ah)"/><text x="210" y="228" class="arrlab" text-anchor="middle">2.34x</text><line x1="90" y1="198" x2="90" y2="112" class="arr" marker-end="url(#ah)"/><text x="116" y="159" class="arrlab" text-anchor="middle">2.20x</text>
+  <line x1="120" y1="90" x2="300" y2="220" class="diag"/><line x1="120" y1="220" x2="300" y2="90" class="diag"/>
+  <rect x="150" y="134" width="120" height="20" rx="4" class="diagbg"/><text x="210" y="148" text-anchor="middle" class="diaglab">close: 1.19 / 1.21</text>
+  <g><circle cx="90" cy="60" r="40" class="node"/><text x="90" y="58" text-anchor="middle" class="nodet">Swarm</text><text x="90" y="75" text-anchor="middle" class="nodes">F1</text></g><g><circle cx="90" cy="250" r="40" class="node"/><text x="90" y="248" text-anchor="middle" class="nodet">Pack</text><text x="90" y="265" text-anchor="middle" class="nodes">F2</text></g><g><circle cx="330" cy="250" r="40" class="node"/><text x="330" y="248" text-anchor="middle" class="nodet">Brute</text><text x="330" y="265" text-anchor="middle" class="nodes">F3</text></g><g><circle cx="330" cy="60" r="40" class="node"/><text x="330" y="58" text-anchor="middle" class="nodet">Titan</text><text x="330" y="75" text-anchor="middle" class="nodes">F4</text></g></svg>
+<div class="box"><b>Each alien has three abilities:</b><ul>
+<li><b>PASSIVE</b>: how it attacks. It makes its counter job obvious.</li>
+<li><b>AUTO</b>: a skill it uses by itself.</li>
+<li><b>ORDER</b>: the one button per form. Every unit of that form does it together.</li></ul>
+<p class="muted">At most 4 buttons on a phone. Cooldowns belong to the player + form, so splitting and fusing never reset them.</p></div></div>
+
+<h2>The aliens</h2>
+<div class="tierrow"><div class="tierlab">F1 Swarm: kills Titans</div><article class="card squish">
+    <header><h3>Drip</h3><span class="tier">F1 Swarm · SQUISH</span></header>
+    <div class="stats"><span>100 HP</span><span>12 DPS</span><span>speed 22</span><span>1 matter</span></div>
+    <ul><li class="ab">
+      <div class="abhead"><span class="slot slot-A">PASSIVE</span><b>CLING</b></div>
+      <p>Drips hop on and stick. 6+ Drips on a big one = GOOED: they hit it much harder (x1.75 Titan, x2 Brute).</p>
+      <div class="facts"><span>6 dmg / 0.5s</span><span>x1.75 Titan / x2 Brute when 6+ on it</span></div>
+      <div class="wt" title="Army is 87% stronger with it, in its best matchup (vs Brute)"><div class="bar"><i style="width:87.41676341102998%"></i></div><small>+87% at its best (vs Brute)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-B">AUTO</span><b>BOING</b></div>
+      <p>About to be hit by a Titan? Boing! It springs to the nearest edge of the danger zone, up to 10 studs (if it can't get clear, it squashes flat and takes half).</p>
+      <div class="facts"><span>50% less dmg</span><span>every 10s</span></div>
+      <div class="wt" title="Army is 12% stronger with it, in its best matchup (vs Titan)"><div class="bar"><i style="width:12.043775240960674%"></i></div><small>+12% at its best (vs Titan)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-C">ORDER</span><b>BOING BOMBS</b></div>
+      <p>Every Drip springs onto the nearest big enemy and lands with a splat.</p>
+      <div class="facts"><span>+15 first hit</span><span>range 12</span><span>warn 0.55s</span><span>every 24s</span></div>
+      <div class="wt" title="Army is 10% stronger with it, in its best matchup (vs Titan)"><div class="bar"><i style="width:10.238258330784088%"></i></div><small>+10% at its best (vs Titan)</small></div>
+    </li></ul></article><article class="card crunch">
+    <header><h3>Pebble</h3><span class="tier">F1 Swarm · CRUNCH</span></header>
+    <div class="stats"><span>100 HP</span><span>12 DPS</span><span>speed 22</span><span>1 matter</span></div>
+    <ul><li class="ab">
+      <div class="abhead"><span class="slot slot-A">PASSIVE</span><b>CHIP</b></div>
+      <p>Mandibles chip cracks in rock (and bite chunks out of goo). 6+ Pebbles on a big one = CRACKED: they hit it much harder (x1.75 Titan, x2 Brute).</p>
+      <div class="facts"><span>6 dmg / 0.5s</span><span>x1.75 Titan / x2 Brute when 6+ on it</span></div>
+      <div class="wt" title="Army is 82% stronger with it, in its best matchup (vs Brute)"><div class="bar"><i style="width:82.41033854070533%"></i></div><small>+82% at its best (vs Brute)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-B">AUTO</span><b>CURL UP</b></div>
+      <p>About to be hit by a Titan? Curls into a stone ball and stays put: the hit mostly bounces off its shell (70 % less).</p>
+      <div class="facts"><span>70% less dmg</span><span>every 12s</span></div>
+      <div class="wt" title="Army is 14% stronger with it, in its best matchup (vs Titan)"><div class="bar"><i style="width:14.49721444318044%"></i></div><small>+14% at its best (vs Titan)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-C">ORDER</span><b>ROLL OUT</b></div>
+      <p>Every Pebble curls up and rolls at the nearest big enemy (hard to hurt while rolling), then pops open with a horn jab.</p>
+      <div class="facts"><span>+20 first hit</span><span>30% less dmg</span><span>range 16</span><span>warn 0.55s</span><span>every 24s</span></div>
+      <div class="wt" title="Army is 16% stronger with it, in its best matchup (vs Brute)"><div class="bar"><i style="width:15.74400736337509%"></i></div><small>+16% at its best (vs Brute)</small></div>
+    </li></ul></article></div><div class="tierrow"><div class="tierlab">F2 Pack: cleans up swarms</div><article class="card squish">
+    <header><h3>Twin</h3><span class="tier">F2 Pack · SQUISH</span></header>
+    <div class="stats"><span>235 HP</span><span>20 DPS</span><span>speed 19</span><span>2 matter</span></div>
+    <ul><li class="ab">
+      <div class="abhead"><span class="slot slot-A">PASSIVE</span><b>DOUBLE SLAP</b></div>
+      <p>Both tendrils slap at once: hits two little ones together.</p>
+      <div class="facts"><span>20 dmg / 1s</span><span>2 targets</span></div>
+      <div class="wt" title="Army is 57% stronger with it, in its best matchup (vs Swarm)"><div class="bar"><i style="width:56.74696399655528%"></i></div><small>+57% at its best (vs Swarm)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-B">AUTO</span><b>STICKY FLOOR</b></div>
+      <p>Spreads its puddle wide: everything in it gets stuck and slow.</p>
+      <div class="facts"><span>25% slow 2.5s</span><span>warn 0.5s</span><span>every 9s</span></div>
+      <div class="wt" title="Army is 10% stronger with it, in its best matchup (vs Swarm)"><div class="bar"><i style="width:9.642908181637688%"></i></div><small>+10% at its best (vs Swarm)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-C">ORDER</span><b>BOING SLAM</b></div>
+      <p>Every Twin bounces sky-high and belly-flops into a crowd, tossing little ones up.</p>
+      <div class="facts"><span>20 dmg</span><span>max 3 hit</span><span>0.4s stun</span><span>range 14</span><span>warn 0.8s</span><span>every 22s</span></div>
+      <div class="wt" title="Army is 20% stronger with it, in its best matchup (vs Pack)"><div class="bar"><i style="width:20.21567314527033%"></i></div><small>+20% at its best (vs Pack)</small></div>
+    </li></ul></article><article class="card crunch">
+    <header><h3>Pincer</h3><span class="tier">F2 Pack · CRUNCH</span></header>
+    <div class="stats"><span>235 HP</span><span>20 DPS</span><span>speed 19</span><span>2 matter</span></div>
+    <ul><li class="ab">
+      <div class="abhead"><span class="slot slot-A">PASSIVE</span><b>SCISSOR SNAP</b></div>
+      <p>Each claw snaps a different target: hits two little ones together.</p>
+      <div class="facts"><span>20 dmg / 1s</span><span>2 targets</span></div>
+      <div class="wt" title="Army is 83% stronger with it, in its best matchup (vs Swarm)"><div class="bar"><i style="width:83.40080864093422%"></i></div><small>+83% at its best (vs Swarm)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-B">AUTO</span><b>CLAW BLOCK</b></div>
+      <p>Swarmed (by little ones or Packs)? Raises both claws like a shield: takes less damage for a moment.</p>
+      <div class="facts"><span>30% less dmg</span><span>every 10s</span></div>
+      <div class="wt" title="Army is 22% stronger with it, in its best matchup (vs Swarm)"><div class="bar"><i style="width:22.18460329727574%"></i></div><small>+22% at its best (vs Swarm)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-C">ORDER</span><b>SIDE SWEEP</b></div>
+      <p>Every Pincer plants its legs and swings both claws in a wide sideways sweep, batting little ones and Packs aside.</p>
+      <div class="facts"><span>20 dmg</span><span>max 3 hit</span><span>warn 0.7s</span><span>every 22s</span></div>
+      <div class="wt" title="Army is 10% stronger with it, in its best matchup (vs Swarm)"><div class="bar"><i style="width:9.642908181637688%"></i></div><small>+10% at its best (vs Swarm)</small></div>
+    </li></ul></article></div><div class="tierrow"><div class="tierlab">F3 Brute: smashes Packs</div><article class="card squish">
+    <header><h3>Brute</h3><span class="tier">F3 Brute · SQUISH</span></header>
+    <div class="stats"><span>560 HP</span><span>44 DPS</span><span>speed 16</span><span>4 matter</span></div>
+    <ul><li class="ab">
+      <div class="abhead"><span class="slot slot-A">PASSIVE</span><b>KNUCKLE POUND</b></div>
+      <p>Two-fist pound: extra hard on Packs (x1.5 vs F2).</p>
+      <div class="facts"><span>55 dmg / 1.25s</span><span>x1.5 vs Pack</span></div>
+      <div class="wt" title="Army is 56% stronger with it, in its best matchup (vs Pack)"><div class="bar"><i style="width:55.900440023783695%"></i></div><small>+56% at its best (vs Pack)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-B">AUTO</span><b>STRETCH GRAB</b></div>
+      <p>A stretchy goo arm grabs a runner, yanks it in and slams it down.</p>
+      <div class="facts"><span>30 dmg</span><span>0.5s stun</span><span>range 14</span><span>warn 0.5s</span><span>every 8s</span></div>
+      <div class="wt" title="Army is 40% stronger with it, in its best matchup (vs Swarm)"><div class="bar"><i style="width:39.897967253831126%"></i></div><small>+40% at its best (vs Swarm)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-C">ORDER</span><b>CHEST THUMP</b></div>
+      <p>Every Brute beats its chest: a goo shield for it and its friends, and it punches faster.</p>
+      <div class="facts"><span>shield 70 (+30 friends)</span><span>+20% attack speed</span><span>warn 0.8s</span><span>every 26s</span></div>
+      <div class="wt" title="Army is 28% stronger with it, in its best matchup (vs Swarm)"><div class="bar"><i style="width:28.287001607877826%"></i></div><small>+28% at its best (vs Swarm)</small></div>
+    </li></ul></article><article class="card crunch">
+    <header><h3>Ram</h3><span class="tier">F3 Brute · CRUNCH</span></header>
+    <div class="stats"><span>560 HP</span><span>44 DPS</span><span>speed 16</span><span>4 matter</span></div>
+    <ul><li class="ab">
+      <div class="abhead"><span class="slot slot-A">PASSIVE</span><b>HORN GORE</b></div>
+      <p>Horn hook: extra hard on Packs (x1.5 vs F2).</p>
+      <div class="facts"><span>55 dmg / 1.25s</span><span>x1.5 vs Pack</span></div>
+      <div class="wt" title="Army is 38% stronger with it, in its best matchup (vs Pack)"><div class="bar"><i style="width:38.390988196383226%"></i></div><small>+38% at its best (vs Pack)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-B">AUTO</span><b>HOOF STAMP</b></div>
+      <p>A Pack or Brute close by? Rears and stamps: the ground jolts and stuns it for a blink (little ones only get dusted).</p>
+      <div class="facts"><span>30 dmg</span><span>max 2 hit</span><span>0.5s stun</span><span>warn 0.5s</span><span>every 9s</span></div>
+      <div class="wt" title="Army is 10% stronger with it, in its best matchup (vs Pack)"><div class="bar"><i style="width:9.642908181637688%"></i></div><small>+10% at its best (vs Pack)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-C">ORDER</span><b>RAM CHARGE</b></div>
+      <p>Every Ram paws the ground, then charges in a line at a Pack (or a Brute) and smashes it.</p>
+      <div class="facts"><span>90 dmg</span><span>20 to others</span><span>max 3 hit</span><span>x1.5 vs Pack</span><span>warn 0.85s</span><span>every 24s</span></div>
+      <div class="wt" title="Army is 12% stronger with it, in its best matchup (vs Pack)"><div class="bar"><i style="width:12.043775240960697%"></i></div><small>+12% at its best (vs Pack)</small></div>
+    </li></ul></article></div><div class="tierrow"><div class="tierlab">F4 Titan: crushes Brutes + bases</div><article class="card squish">
+    <header><h3>Titan</h3><span class="tier">F4 Titan · SQUISH</span></header>
+    <div class="stats"><span>2400 HP</span><span>100 DPS</span><span>speed 8</span><span>16 matter</span></div>
+    <ul><li class="ab">
+      <div class="abhead"><span class="slot slot-A">PASSIVE</span><b>TENTACLE SLAM</b></div>
+      <p>Its attack: two tentacles crush the ground in front: huge on a Brute, wasted on a tiny Drip.</p>
+      <div class="facts"><span>400 dmg / 4s</span><span>max 2 hit</span><span>x2.5 vs Brute</span><span>warn 0.9s</span></div>
+      <div class="wt" title="Army is 125% stronger with it, in its best matchup (vs Brute)"><div class="bar"><i style="width:100%"></i></div><small>+125% at its best (vs Brute)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-B">AUTO</span><b>GOO BOMB</b></div>
+      <p>Nothing in reach? Spits a giant goo ball far away (Brutes first, x2.5 vs bases); it leaves a sticky puddle.</p>
+      <div class="facts"><span>160 dmg</span><span>max 3 hit</span><span>25% slow 2.5s</span><span>x2.5 vs bases</span><span>range 30</span><span>warn 1s</span><span>every 12s</span></div>
+      <div class="wt" title="Army is 5% stronger with it, in its best matchup (vs Titan)"><div class="bar"><i style="width:4.994408580068743%"></i></div><small>+5% at its best (vs Titan)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-C">ORDER</span><b>GOO TSUNAMI</b></div>
+      <p>Rears up and crashes forward: a goo wave flattens the first big enemy and slows the rest.</p>
+      <div class="facts"><span>300 dmg</span><span>60 to others</span><span>max 4 hit</span><span>x2.5 vs Brute</span><span>25% slow 2s</span><span>x2.5 vs bases</span><span>warn 1.1s</span><span>every 28s</span></div>
+      <div class="wt" title="Army is 4% stronger with it, in its best matchup (vs Brute)"><div class="bar"><i style="width:4.4273782427413755%"></i></div><small>+4% at its best (vs Brute)</small></div>
+    </li></ul></article><article class="card crunch">
+    <header><h3>Colossus</h3><span class="tier">F4 Titan · CRUNCH</span></header>
+    <div class="stats"><span>2400 HP</span><span>100 DPS</span><span>speed 8</span><span>16 matter</span></div>
+    <ul><li class="ab">
+      <div class="abhead"><span class="slot slot-A">PASSIVE</span><b>GROUND SHATTER</b></div>
+      <p>Its attack: both fists smash down in front and crystals burst up: huge on a Brute, wasted on a tiny Pebble.</p>
+      <div class="facts"><span>400 dmg / 4s</span><span>max 2 hit</span><span>x2.5 vs Brute</span><span>0.3s stun</span><span>warn 1s</span></div>
+      <div class="wt" title="Army is 112% stronger with it, in its best matchup (vs Brute)"><div class="bar"><i style="width:100%"></i></div><small>+112% at its best (vs Brute)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-B">AUTO</span><b>BOULDER HURL</b></div>
+      <p>Nothing in reach? Rips a boulder out of the ground and throws it far (Brutes first, x2.5 vs bases).</p>
+      <div class="facts"><span>160 dmg</span><span>max 3 hit</span><span>x2.5 vs bases</span><span>range 30</span><span>warn 1s</span><span>every 12s</span></div>
+      <div class="wt" title="Army is 0% stronger with it, in its best matchup (vs Swarm)"><div class="bar"><i style="width:0%"></i></div><small>+0% at its best (vs Swarm)</small></div>
+    </li><li class="ab">
+      <div class="abhead"><span class="slot slot-C">ORDER</span><b>SOLAR STRIKE</b></div>
+      <p>Charges a mini sun over its fist, then a beam blasts the first big enemy and leaves the ground burning.</p>
+      <div class="facts"><span>300 dmg</span><span>50 to others</span><span>max 4 hit</span><span>x2.5 vs Brute</span><span>burns 8/s</span><span>x2.5 vs bases</span><span>range 30</span><span>warn 1.2s</span><span>every 28s</span></div>
+      <div class="wt" title="Army is 6% stronger with it, in its best matchup (vs Titan)"><div class="bar"><i style="width:5.564517836055716%"></i></div><small>+6% at its best (vs Titan)</small></div>
+    </li></ul></article></div>
+
+<h2>Every form vs every form (Squish vs Crunch)</h2>
+<div class="legend"><span><i class="sw" style="background:var(--squish)"></i>Squish side stronger</span><span><i class="sw" style="background:var(--crunch)"></i>Crunch side stronger</span><span><i class="sw" style="background:var(--mid)"></i>even</span></div>
+<table class="grid"><thead><tr><th>Squish ↓ vs Crunch →</th><th>Pebble<small>F1</small></th><th>Pincer<small>F2</small></th><th>Ram<small>F3</small></th><th>Colossus<small>F4</small></th></tr></thead><tbody>
+<tr><th>Drip<small>F1</small></th><td style="background:color-mix(in oklab, var(--crunch) 4%, var(--mid))" title="Pebble is 1.04x stronger"><b>1.04x</b><small>Pebble</small></td><td style="background:color-mix(in oklab, var(--crunch) 73%, var(--mid))" title="Pincer is 2.20x stronger"><b>2.20x</b><small>Pincer</small></td><td style="background:color-mix(in oklab, var(--squish) 12%, var(--mid))" title="Drip is 1.14x stronger"><b>1.14x</b><small>Drip</small></td><td style="background:color-mix(in oklab, var(--squish) 82%, var(--mid))" title="Drip is 2.41x stronger"><b>2.41x</b><small>Drip</small></td></tr><tr><th>Twin<small>F2</small></th><td style="background:color-mix(in oklab, var(--squish) 73%, var(--mid))" title="Twin is 2.20x stronger"><b>2.20x</b><small>Twin</small></td><td style="background:color-mix(in oklab, var(--crunch) 2%, var(--mid))" title="Pincer is 1.02x stronger"><b>1.02x</b><small>Pincer</small></td><td style="background:color-mix(in oklab, var(--crunch) 69%, var(--mid))" title="Ram is 2.09x stronger"><b>2.09x</b><small>Ram</small></td><td style="background:color-mix(in oklab, var(--crunch) 17%, var(--mid))" title="Colossus is 1.20x stronger"><b>1.20x</b><small>Colossus</small></td></tr><tr><th>Brute<small>F3</small></th><td style="background:color-mix(in oklab, var(--crunch) 20%, var(--mid))" title="Pebble is 1.24x stronger"><b>1.24x</b><small>Pebble</small></td><td style="background:color-mix(in oklab, var(--squish) 85%, var(--mid))" title="Brute is 2.59x stronger"><b>2.59x</b><small>Brute</small></td><td style="background:color-mix(in oklab, var(--squish) 4%, var(--mid))" title="Brute is 1.05x stronger"><b>1.05x</b><small>Brute</small></td><td style="background:color-mix(in oklab, var(--crunch) 75%, var(--mid))" title="Colossus is 2.23x stronger"><b>2.23x</b><small>Colossus</small></td></tr><tr><th>Titan<small>F4</small></th><td style="background:color-mix(in oklab, var(--crunch) 85%, var(--mid))" title="Pebble is 2.52x stronger"><b>2.52x</b><small>Pebble</small></td><td style="background:color-mix(in oklab, var(--squish) 18%, var(--mid))" title="Titan is 1.21x stronger"><b>1.21x</b><small>Titan</small></td><td style="background:color-mix(in oklab, var(--squish) 79%, var(--mid))" title="Titan is 2.33x stronger"><b>2.33x</b><small>Titan</small></td><td style="background:color-mix(in oklab, var(--squish) 1%, var(--mid))" title="Titan is 1.01x stronger"><b>1.01x</b><small>Titan</small></td></tr>
+</tbody></table>
+<p class="muted">Same form vs same form (the diagonal) is the race check: each is within 5% of even.</p>
+
+<h2>Mixed armies</h2>
+<div class="box"><p>44 army mixes (22 per race) all fought each other. Overall: <b>Squish 51.6%</b>, <b>Crunch 48.4%</b>. Every mix has a counter that beats it.</p>
+<p class="muted">Best mixes and what beats them (T = Titan, B = Brute, P = Pack, S = Swarm):</p><ul><li><b>77%</b> Squish 0T 4B 4P 8S <span class="muted">→ beaten by Squish 0T 6B 4P 0S (100%)</span></li><li><b>76%</b> Squish 0T 6B 4P 0S <span class="muted">→ beaten by Squish 0T 8B 0P 0S (100%)</span></li><li><b>72%</b> Crunch 0T 6B 4P 0S <span class="muted">→ beaten by Squish 0T 8B 0P 0S (100%)</span></li><li><b>72%</b> Squish 0T 8B 0P 0S <span class="muted">→ beaten by Squish 2T 0B 0P 0S (100%)</span></li><li><b>72%</b> Squish 0T 4B 8P 0S <span class="muted">→ beaten by Squish 0T 6B 0P 8S (100%)</span></li></ul></div>
+</main></body></html>

@@ -1,0 +1,276 @@
+ChatGPT said:
+Crystal Canyon — Blender r2 Audit
+GO — Proceed to Studio
+
+Overall: 8.2/10, up from 7/10.
+
+All five previous fixes have improved the kit. The crystals have better amber depth, the nest is recognisably hollow, the columns are less artificial, and the seam plates have more natural boundaries.
+
+No remaining Blender-stage blockers. I would not request another rebake before testing under the actual moon lighting.
+
+A. Updated scores
+
+Asset
+
+	
+
+r1
+
+	
+
+r2
+
+
+
+
+Landmark spire
+
+	
+
+7
+
+	
+
+8.5
+
+
+
+
+Large crystal cluster
+
+	
+
+7.5
+
+	
+
+8.5
+
+
+
+
+Small crystal cluster
+
+	
+
+8
+
+	
+
+8.5
+
+
+
+
+Ground shards
+
+	
+
+7.5
+
+	
+
+8
+
+
+
+
+Column A / B
+
+	
+
+5.5
+
+	
+
+7.5
+
+
+
+
+Boulder A / B / C
+
+	
+
+7–7.5
+
+	
+
+7.5
+
+
+
+
+Amber DNA vein
+
+	
+
+6
+
+	
+
+8
+
+
+
+
+Crystal nest
+
+	
+
+5
+
+	
+
+7.5
+
+
+
+
+Seam plates A / B
+
+	
+
+6.5
+
+	
+
+8
+
+
+
+
+Basalt arch
+
+	
+
+7
+
+	
+
+7.5 provisional
+
+The arch is partly cropped in the sheet, so its final geometry and clearance still need Studio verification.
+
+B. Three remaining improvements — non-blocking
+
+1. Nest tunnel — watch for the bullseye effect
+
+The angular ribs are an improvement, but the front view still looks somewhat like a glowing hexagonal aperture.
+
+In Studio, test at 10–20 studs. If it still reads as a target, offset the inner rib centres slightly (approximately 0.3–0.7 studs), reduce the centre emission 20%, and create deeper asymmetrical shadowing.
+
+Do not rebuild the tunnel yet.
+
+2. Columnar basalt — improve placement variation
+
+Individual columns are better, but the assembled outcrops still have fairly regular stepped silhouettes.
+
+Rotate repeated outcrop instances by 20–60°, vary their scale approximately ±10–15%, and partially bury some into the canyon walls.
+
+This can be done during placement rather than in Blender.
+
+3. Spire foundations and seam edges
+
+The landmark has a noticeably straight lower boundary in the modelling sheet. Bury its base approximately 2–4 studs into prepared terrain and scatter some detached basalt fragments around the footprint.
+
+For seam plates, bury the outer edges rather than leaving them raised above the sand.
+
+C. Studio acceptance tests
+
+Test
+
+	
+
+Pass condition
+
+
+
+
+Spire from Plots 5–8
+
+	
+
+Orange silhouette distinguishable at player height
+
+
+
+
+Crystal material at 10 studs
+
+	
+
+Orange-red roots, amber body, pale tips; no washed-out yellow
+
+
+
+
+Basalt in shade
+
+	
+
+Mid-grey texture visible; no black-hole effect
+
+
+
+
+Nest at 10–20 studs
+
+	
+
+Clear tunnel depth, not a flat glowing disc
+
+
+
+
+DNA vein
+
+	
+
+Clearly distinct from decorative crystal clusters
+
+
+
+
+Arch
+
+	
+
+Both abutments seated; minimum 12-stud headroom
+
+
+
+
+Seams
+
+	
+
+Embedded into terrain, no floating slab edges
+
+
+
+
+Phone rendering
+
+	
+
+No disappearing emission masks or excessive glow
+
+One particular risk: The crystals still look quite pale in Blender Standard view. Don't change the colour ramp again until you see them under Roblox moon lighting.
+
+Final verdict
+
+GO — Blender kit approved for Studio import.
+
+The structural work is sufficient. The next gate is visual integration: amber crystal depth, basalt contrast, tunnel readability and landmark visibility from the plots.
+
+Don't populate the entire canyon immediately. Place one spire, one nest, one vein, one column outcrop and two seam plates for the first Studio test.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High

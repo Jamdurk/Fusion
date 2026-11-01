@@ -1,0 +1,2 @@
+old: team 0 wins 48.4 % of 500 mirror fights
+new: team 0 wins 54.4 % of 500 mirror fights

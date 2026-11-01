@@ -1,0 +1,19 @@
+22 compositions x 2 races, 8 fights per pair
+TOP 8 (and its hardest counter):
+  73%  SQUISH 0T 6B 4P 0S    countered by SQUISH 1T 2B 0P 8S (100%)
+  72%  SQUISH 0T 8B 0P 0S    countered by SQUISH 2T 0B 0P 0S (100%)
+  66%  SQUISH 0T 4B 4P 8S    countered by SQUISH 0T 6B 0P 8S (100%)
+  65%  SQUISH 0T 4B 8P 0S    countered by SQUISH 0T 6B 0P 8S (100%)
+  65%  SQUISH 0T 6B 0P 8S    countered by SQUISH 1T 0B 8P 0S (100%)
+  64%  SQUISH 1T 2B 4P 0S    countered by CRUNCH 0T 0B 0P 32S (100%)
+  63%  CRUNCH 0T 4B 4P 8S    countered by SQUISH 0T 6B 0P 8S (100%)
+  63%  CRUNCH 0T 4B 0P 16S   countered by SQUISH 0T 2B 4P 16S (100%)
+Every composition has a counter that beats it >= 65%
+BOTTOM 5:
+  34%  SQUISH 1T 2B 0P 8S
+  24%  CRUNCH 1T 0B 0P 16S
+  22%  SQUISH 1T 0B 4P 8S
+  22%  CRUNCH 1T 0B 4P 8S
+  13%  SQUISH 1T 0B 0P 16S
+Cross-race overall: SQUISH 53.5%  CRUNCH 46.5%
+DONE

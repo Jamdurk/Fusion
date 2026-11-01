@@ -1,0 +1,138 @@
+the 3 most important remaining fixes, exact. Short.
+ChatGPT said:
+Crater r4 — Round 2 Verdict
+GO WITH CHANGES — Proceed to G2
+A. Updated scores
+
+Category
+
+	
+
+v3
+
+	
+
+r4
+
+
+
+
+Match to B/B2
+
+	
+
+4/10
+
+	
+
+6.5/10
+
+
+
+
+Landmark spectacle
+
+	
+
+5/10
+
+	
+
+7/10
+
+
+
+
+Mobile readability
+
+	
+
+6/10
+
+	
+
+7.5/10
+
+
+
+
+Geometry/performance
+
+	
+
+9/10
+
+	
+
+9/10
+
+All three previous blockers are sufficiently addressed. The 131-stud view now exposes the shell, violet core and suspended ring. The asymmetry is improved, and the branching cyan cracks are substantially better than the old crosses.
+
+The remaining weakness is artistic: it still reads somewhat like an alien portal rather than a crashed spacecraft. However, I would not hold up the entire map over this.
+
+B. Three most important remaining fixes
+
+1. Make the upper ring's metal segments readable — HIGH
+
+At 131 studs, I mainly see two thin cyan ellipses and a blue orb. The four substantial broken segments disappear into the black sky.
+
+Tilt the segmented ring another 10–15° toward the plot-side camera.
+
+Add a muted slate-grey edge highlight to the outer faces, without increasing Neon brightness.
+
+Keep the four gaps at least 4 studs.
+
+Make the thin continuous halo approximately 30% dimmer than the segment strips.
+
+Target: Four distinct broken metallic arcs must be recognisable from 131 studs.
+
+2. Make the wreck look crashed rather than installed — MEDIUM
+
+The six petals still form a relatively neat, upright enclosure.
+
+Offset the three largest petals vertically by approximately 3–5 studs.
+
+Bury one lower petal an additional 5 studs.
+
+Add two large detached hull plates (roughly 8 × 5 and 12 × 6 studs) lying at 20–35° around the wreck.
+
+Add the planned irregular, dark impact scar, approximately 50–60 studs across.
+
+This introduces a clear direction of impact without remodelling the entire shell.
+
+3. Improve the core and orb materials — MEDIUM
+
+Both spheres currently look like relatively flat Neon objects, especially the bright magenta core.
+
+Change the main sphere surfaces from full Neon to SmoothPlastic or a lightly emissive material treatment.
+
+Keep Neon only for the inset hexagonal lattice lines.
+
+Reduce the violet core from 13 to approximately 11 studs.
+
+Give the core a darker violet body with a bright pink-violet centre.
+
+Ensure the cyan upper orb's hexagonal pattern remains visible at medium distance.
+
+This should bring them closer to the faceted, internally illuminated technology in B2.
+
+C. Final decision
+
+GO to the G2 showcase plot now.
+
+Do not rebuild the shell again. The current geometry is good enough to establish the world's landmark.
+
+The remaining work can be completed in a later landmark polish pass alongside animation: 0.6 RPM ring, 1.2 RPM halo, pulsing beams, bobbing stones and meteor impacts.
+
+One important distinction: the static landmark is approved for map-development progression, not final release. Animation and an actual phone-device test remain required.
+
+The biggest improvement from v3 is that the landmark now has three readable vertical levels: violet crash core → cyan energy beams → suspended reactor ring. Preserve that hierarchy as you build the plots around it.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High

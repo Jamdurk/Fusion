@@ -1,0 +1,96 @@
+### check.mjs 60 (new AI, v2 = audit r1 fixes)
+RACE MIRROR: Squish Fn vs Crunch Fn (target 0.90-1.10)
+   F1 0.96
+   F2 1.03
+   F3 1.04
+   F4 1.05
+LOOP: counter side's edge, 4 race combos (target 1.40-3.00: clear, not a wipe)
+   F1>F4 1.94  2.57  1.98  2.57
+   F4>F3 2.46  2.23  2.40  2.36
+   F3>F2 2.81  2.11  2.23  2.72
+   F2>F1 2.20  2.20  2.20  2.20
+DIAGONALS: edge (target 0.77-1.30: close)
+   F1vF3 1.07  1.10  0.98  1.19
+   F2vF4 0.83  0.82  0.82  0.83
+ALL TARGETS MET
+
+### formations.mjs 30 (new AI)
+
+== SPREAD
+mirror F1 1.02  F2 1.00  F3 1.05  F4 1.04
+F1>F4  2.04  2.67  1.92  2.66
+F4>F3  2.36  2.11  2.21  2.23
+F3>F2  2.59  2.22  2.46  2.59
+F2>F1  2.20  2.01  2.20  2.01
+F1vF3  1.01  1.08  0.96  1.17
+F2vF4  0.90  0.85  0.85  0.90
+
+== LANE
+mirror F1 0.96  F2 1.05  F3 1.05  F4 1.04
+F1>F4  1.92  2.41  1.89  2.42
+F4>F3  2.79  2.87  2.95  3.06
+F3>F2  2.93  2.11  2.14  2.72
+F2>F1  2.60  2.40  2.60  2.40
+F1vF3  1.08  1.08  0.98  1.21
+F2vF4  0.69  0.67  0.67  0.69
+
+### metrics.mjs 20
+
+== OPEN (20 fights each, Squish A v Crunch B, sides alternate)
+Swarm v Titan  old  fight 58.6%  stuck  0.0%  overkill 17.4%  pred  4.6%  switch11.51  stacked12.76  secs  13  A-win 100%
+               new  fight 53.8%  stuck  6.2%  overkill 21.5%  pred  5.3%  switch14.35  stacked 1.66  secs  14  A-win 100%
+                   moving 26.5%  yielding  7.1%  waiting  2.9%  path-fail  0.0%  BLOCKED  0.3%  longest trap 1.6 s
+Titan v Brute  old  fight 50.1%  stuck  1.7%  overkill 38.0%  pred 52.6%  switch 5.06  stacked 0.77  secs  17  A-win 100%
+               new  fight 44.7%  stuck  5.1%  overkill 36.6%  pred 45.3%  switch 2.79  stacked 0.51  secs  19  A-win 100%
+                   moving 28.3%  yielding  4.5%  waiting  0.8%  path-fail  0.0%  BLOCKED  0.0%  longest trap 0.0 s
+Brute v Pack   old  fight 64.9%  stuck  0.1%  overkill  8.6%  pred 44.6%  switch24.50  stacked 2.38  secs  12  A-win 100%
+               new  fight 55.1%  stuck  7.5%  overkill  9.3%  pred 38.9%  switch 9.64  stacked 0.90  secs  14  A-win 100%
+                   moving 23.0%  yielding  9.9%  waiting  1.2%  path-fail  0.0%  BLOCKED  0.0%  longest trap 0.0 s
+Pack v Swarm   old  fight 60.2%  stuck  0.1%  overkill  0.1%  pred 43.3%  switch43.67  stacked 5.60  secs   9  A-win 100%
+               new  fight 50.5%  stuck  8.3%  overkill  0.1%  pred 38.2%  switch13.04  stacked 1.38  secs  11  A-win 100%
+                   moving 27.2%  yielding 11.4%  waiting  1.5%  path-fail  0.0%  BLOCKED  0.0%  longest trap 1.6 s
+Swarm v Brute  old  fight 68.3%  stuck  0.0%  overkill  3.6%  pred  0.0%  switch22.86  stacked 5.72  secs  16  A-win  75%
+               new  fight 60.7%  stuck  6.3%  overkill  4.1%  pred  0.0%  switch15.20  stacked 0.96  secs  20  A-win  65%
+                   moving 22.8%  yielding  9.6%  waiting  0.9%  path-fail  0.0%  BLOCKED  0.0%  longest trap 1.6 s
+Mirror swarm   old  fight 75.9%  stuck  0.0%  overkill  1.8%  pred  0.0%  switch43.64  stacked 4.27  secs  19  A-win  40%
+               new  fight 65.2%  stuck  4.9%  overkill  1.9%  pred  0.0%  switch14.29  stacked 0.74  secs  24  A-win  60%
+                   moving 17.7%  yielding 13.5%  waiting  1.0%  path-fail  0.0%  BLOCKED  0.1%  longest trap 1.6 s
+Mixed A v B    old  fight 67.6%  stuck  0.1%  overkill 25.0%  pred 29.3%  switch20.00  stacked 0.79  secs  26  A-win  50%
+               new  fight 58.5%  stuck  4.4%  overkill 28.0%  pred 20.0%  switch 8.30  stacked 0.33  secs  30  A-win  15%
+                   moving 21.1%  yielding  4.4%  waiting  1.0%  path-fail  0.0%  BLOCKED  0.2%  longest trap 3.2 s
+Mixed C v D    old  fight 69.4%  stuck  0.1%  overkill 22.6%  pred 28.0%  switch29.59  stacked 2.21  secs  25  A-win  65%
+               new  fight 56.9%  stuck  7.4%  overkill 20.5%  pred 20.0%  switch 9.53  stacked 0.50  secs  28  A-win  60%
+                   moving 21.3%  yielding  8.5%  waiting  2.0%  path-fail  0.0%  BLOCKED  0.2%  longest trap 3.0 s
+Mixed E v E    old  fight 53.3%  stuck  0.0%  overkill 24.2%  pred 29.4%  switch33.43  stacked 0.38  secs  37  A-win  65%
+               new  fight 34.6%  stuck 12.3%  overkill 30.0%  pred 16.3%  switch27.08  stacked 0.21  secs  41  A-win  40%
+                   moving 36.4%  yielding  9.6%  waiting  2.1%  path-fail  0.0%  BLOCKED  4.6%  longest trap 4.8 s
+
+== BOULDERS (20 fights each, Squish A v Crunch B, sides alternate)
+Swarm v Titan  old  fight 58.1%  stuck  0.3%  overkill 17.4%  pred  4.7%  switch10.84  stacked12.60  secs  13  A-win 100%
+               new  fight 52.1%  stuck  8.1%  overkill 21.8%  pred  5.3%  switch14.48  stacked 1.77  secs  15  A-win 100%
+                   moving 26.1%  yielding  9.3%  waiting  3.2%  path-fail  0.0%  BLOCKED  0.4%  longest trap 3.2 s
+Titan v Brute  old  fight 46.9%  stuck  2.7%  overkill 39.0%  pred 49.4%  switch 6.18  stacked 0.87  secs  18  A-win 100%
+               new  fight 38.1%  stuck 10.5%  overkill 38.1%  pred 41.1%  switch 3.16  stacked 0.46  secs  20  A-win 100%
+                   moving 28.7%  yielding  9.5%  waiting  2.9%  path-fail  0.0%  BLOCKED  0.3%  longest trap 1.6 s
+Brute v Pack   old  fight 63.5%  stuck  0.6%  overkill  8.3%  pred 44.0%  switch27.71  stacked 2.49  secs  12  A-win 100%
+               new  fight 54.0%  stuck  8.4%  overkill  9.4%  pred 39.0%  switch 9.52  stacked 0.93  secs  15  A-win 100%
+                   moving 23.1%  yielding 12.0%  waiting  1.1%  path-fail  0.0%  BLOCKED  0.0%  longest trap 0.0 s
+Pack v Swarm   old  fight 59.9%  stuck  0.3%  overkill  0.1%  pred 43.3%  switch48.78  stacked 6.33  secs   9  A-win 100%
+               new  fight 49.3%  stuck  8.9%  overkill  0.1%  pred 37.4%  switch12.88  stacked 1.32  secs  11  A-win 100%
+                   moving 27.4%  yielding 12.7%  waiting  1.4%  path-fail  0.0%  BLOCKED  0.0%  longest trap 1.5 s
+Swarm v Brute  old  fight 66.2%  stuck  0.3%  overkill  3.5%  pred  0.0%  switch24.58  stacked 6.22  secs  15  A-win  75%
+               new  fight 56.6%  stuck  9.1%  overkill  4.0%  pred  0.0%  switch15.84  stacked 0.92  secs  21  A-win  85%
+                   moving 23.1%  yielding 13.5%  waiting  1.3%  path-fail  0.0%  BLOCKED  0.1%  longest trap 1.6 s
+Mirror swarm   old  fight 75.4%  stuck  0.1%  overkill  1.8%  pred  0.0%  switch47.10  stacked 4.37  secs  20  A-win  45%
+               new  fight 63.0%  stuck  6.0%  overkill  1.8%  pred  0.0%  switch13.90  stacked 0.88  secs  22  A-win  65%
+                   moving 18.0%  yielding 15.1%  waiting  1.2%  path-fail  0.0%  BLOCKED  0.1%  longest trap 3.1 s
+Mixed A v B    old  fight 66.4%  stuck  0.7%  overkill 24.8%  pred 29.8%  switch22.62  stacked 0.69  secs  28  A-win  75%
+               new  fight 54.6%  stuck  6.1%  overkill 29.6%  pred 18.5%  switch 8.26  stacked 0.33  secs  31  A-win   0%
+                   moving 22.4%  yielding  5.7%  waiting  1.4%  path-fail  0.0%  BLOCKED  0.4%  longest trap 1.6 s
+Mixed C v D    old  fight 67.6%  stuck  0.4%  overkill 23.3%  pred 26.8%  switch32.23  stacked 2.27  secs  28  A-win  80%
+               new  fight 56.5%  stuck  8.8%  overkill 22.4%  pred 21.7%  switch10.15  stacked 0.45  secs  29  A-win  50%
+                   moving 19.2%  yielding 11.0%  waiting  1.6%  path-fail  0.0%  BLOCKED  0.1%  longest trap 1.6 s
+Mixed E v E    old  fight 52.3%  stuck  0.4%  overkill 23.3%  pred 27.4%  switch35.67  stacked 0.44  secs  38  A-win  60%
+               new  fight 32.9%  stuck 15.6%  overkill 28.5%  pred 13.9%  switch24.45  stacked 0.20  secs  42  A-win  45%
+                   moving 35.4%  yielding 12.6%  waiting  2.2%  path-fail  0.1%  BLOCKED  3.8%  longest trap 4.8 s
+DONE

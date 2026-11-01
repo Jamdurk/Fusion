@@ -1,0 +1,115 @@
+ChatGPT said:
+Fort 1 — Studio r1 Audit
+GO WITH CHANGES — 2 blockers
+
+Overall: 8/10. The nest matches the Goo Marsh, the scale feels appropriate, and the wild/conquered states are recognisably different. Reusing the completed kit was the correct decision.
+
+Category
+
+	
+
+Score
+
+
+
+
+Match to L1 / L4
+
+	
+
+8/10
+
+
+
+
+Visual quality
+
+	
+
+8/10
+
+
+
+
+Readability from launch pad
+
+	
+
+7/10
+
+
+
+
+Combat layout
+
+	
+
+8/10 provisional
+
+
+
+
+Conquered transformation
+
+	
+
+7.5/10
+
+Required fixes
+
+1. Core visibility — BLOCKER
+
+The 600 HP objective is almost completely hidden behind its dark rock claws from the attacker's view.
+
+Raise the orb 2 studs.
+
+Reduce the front claw height by 40–50%.
+
+Ensure at least 70% of the orb silhouette is exposed from the lane at 5-stud eye height.
+
+Keep the 5-stud orb diameter and violet internal swirl.
+
+Verify the combat hitbox can be targeted without the decorative rocks intercepting attacks.
+
+The objective must immediately communicate "destroy this glowing thing."
+
+2. Confirm fort footprint and unit clearance — BLOCKER
+
+The overhead looks good, but the 36-wide nest plus a core 15 studs ahead of its mouth could extend beyond the 38 × 44 fort pad.
+
+Measure the actual combined footprint, including egg sacs and puddle.
+
+Keep at least 18 studs of clear approach for the army.
+
+Make the core accessible to small F1 units and larger F3 units without climbing the plinth.
+
+If necessary, extend the dark ground treatment forward rather than shrinking the nest.
+
+Later polish — non-blocking
+
+Wild flag: Darken the rag toward #352B4A and make its torn outline more irregular. Currently its blue colour resembles the conquered banner too closely.
+
+Conquered banner: Add a modest baked or emissive colour lift to the blue cloth. Keep the white chevron bright from either viewing side.
+
+Egg sacs: The black embryo shapes resemble cartoon eyes. Make the silhouettes more curled and irregular, and slightly reduce their contrast.
+
+Tiny drill: Acceptable. It can gain a small working animation during gameplay.
+
+Capture tint: Leave for the gameplay stage, as planned. Don't duplicate the nest model.
+
+Final verdict
+
+GO WITH CHANGES. Fix core visibility and validate combat clearance; then the visual build is approved.
+
+No need to remodel the nest, increase its size or add more decoration.
+
+The next stage should focus on the 600 HP core, six defending Drips and the actual capture transition. The model is sufficiently close to L4 to support gameplay.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High

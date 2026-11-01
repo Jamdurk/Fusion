@@ -1,0 +1,175 @@
+ChatGPT said:
+BLENDER AUDIT r2 — Verdict
+
+GO WITH CHANGES
+
+This is much better. The big problems from r1 are mostly solved.
+You are now at the point where Blender is good enough to move into Studio and judge under the real moon lighting. I would not hold up Studio import any further for more Blender-only work.
+
+The giant now reads much closer to D2b + D3. The nest is a big improvement. Pools are no longer “cracked ice,” though they still need one last check in Studio to be sure they read as goo rather than just soft blue liquid.
+
+Scores
+Category	Score	Note
+(a) Goo reads as soft wet glowing jelly, not plastic	7.5/10	Big improvement; nearly there
+(b) Gills	8.5/10	Strong; broad readable blades and nice colour
+(c) Stalk	8/10	Twist + pearl read well now
+(d) Pools / films	7/10	Fixed the ice issue; still need in-game read check
+(e) Rocks + crystals	6.5/10	Acceptable, but depends heavily on Studio lighting
+(f) Silhouettes vs D2b	8.5/10	Giant and nest silhouettes are good
+What is now working
+1. Giant mushroom
+
+This is now the strongest asset in the kit.
+
+Cap silhouette is good.
+Spots are less toy-like.
+Rim drips read correctly.
+Gill underside is attractive and readable.
+Stalk now feels much more like the pearl twisted fibrous form from D2b/D3.
+2. Nest
+
+This is the biggest improvement.
+
+The tunnel is now clearly a tunnel.
+The thick goo lip works.
+The inner ribbed violet lining helps a lot.
+The deeper glow at the back sells the “occupied / alive” feeling.
+3. Pools / films
+
+They are no longer reading as cracked ice, which was the critical fix.
+The darker centre + softer ripples was the right move.
+
+Remaining fixes before / during Studio checks
+
+These are smaller than last round. I would not stop import for them, but I would check them immediately in Studio.
+
+1. Cap top still slightly “surface-painted” in places
+
+You fixed this a lot, but the large cap still has a bit of a smooth airbrushed plastic dome feeling in some views.
+
+Fix if needed after Studio test:
+
+Darken the upper cap body another 5–10% in the thickest areas.
+Break the body colour a little more with very subtle internal clouding / thickness variation.
+Keep the bright wet sheen confined to the upper rim and high curvature areas only.
+
+If the emissive makes the whole cap look flat in Studio, this is the first thing to revisit.
+
+2. Pools may still read “clean liquid” rather than “goo”
+
+They are improved, but in the sheet they are still a bit too smooth / polite.
+
+What to check in Studio:
+
+At player height, do they read as viscous goo or just luminous water?
+Do the films read as a slumped jelly skin or as a flat decal-like puddle?
+
+If they are too clean in Studio:
+
+Add a tiny bit more thickness variation near the edges.
+Make the thin films slightly more irregular at the perimeter.
+Keep the centre darker and flatter.
+3. Nest outer dome is good, but still slightly uniform
+
+The new shape is correct, but the outer body could still use a touch more weight / slump.
+
+If needed:
+
+Push 2–3 lower lobes outward/downward slightly.
+Let 1–2 of the side masses spread more into the floor film.
+Keep the top bumps asymmetric.
+
+Not urgent; only fix if it still feels too “sculpted” in Studio.
+
+4. Rocks + DNA vein need Studio judgment
+
+Your pushback is fair. I agree do not force them charcoal-black in Blender.
+Judge them in Studio.
+
+Check specifically:
+
+Do the rocks still separate from the moon dust?
+Does the crystal vein read from a walking camera, or does it disappear?
+
+If they wash out in Studio:
+
+darken rock albedo slightly, or
+increase local crystal glow contrast at the crack/base instead of darkening the whole rock.
+5. From-below “star” is not a blocker
+
+I accept the pushback. Since players will not get that view, it is not a blocker.
+Same for the drip roots / rim dots: acceptable.
+
+What to check in Studio before you call the kit “done”
+
+These matter more now than more Blender polish.
+
+A. Giant mushroom test
+
+Check at:
+
+5–10 studs
+30–50 studs
+80–120 studs
+
+Pass condition:
+
+cap stays cyan with darker depth,
+gills stay distinctly lilac,
+stalk stays pale pearl and not flat grey,
+silhouette stays readable.
+B. Pool / film test
+
+This is the main risk.
+
+Pass condition:
+
+reads as goo, not water, not glass, not neon plate.
+rim glow stays on the edge, not across the whole surface.
+film patches feel slumped and soft.
+C. Nest tunnel test
+
+Pass condition:
+
+opening is immediately legible,
+inner tunnel depth is visible,
+back glow doesn’t flatten the whole tunnel into one bright disc.
+D. Emissive mask check
+
+Critical.
+
+Pass condition:
+
+emissive supports the material,
+it does not erase the thickness shading,
+caps and nests don’t become uniformly glowing cyan lumps.
+E. Moon lighting / shadow test
+
+Under your real hub lighting:
+
+stalk grooves must remain visible,
+gills must not go muddy,
+rocks must not vanish,
+blobs must not turn back into “toy lumps.”
+Priority fixes, in order
+Import to Studio and test pools / films first — biggest remaining uncertainty.
+Check giant cap under moon lighting — make sure it still feels jelly, not airbrushed plastic.
+Judge rocks + crystal contrast in Studio — your Blender choice may be right, but verify.
+Final call
+
+Blender stage: GO WITH CHANGES
+Meaning: approved to proceed to Studio checks now.
+
+I would not spend another round only in Blender unless Studio reveals a real problem.
+You’ve crossed the threshold where lighting + emissive in Roblox is now the thing that will determine whether it fully lands.
+
+If Studio passes, this kit is close enough to start population of the Goo Marsh.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High

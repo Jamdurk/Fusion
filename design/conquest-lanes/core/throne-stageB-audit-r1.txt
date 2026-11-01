@@ -1,0 +1,161 @@
+ChatGPT said:
+Crater Throne — Stage B Audit
+GO WITH CHANGES — 2 required fixes
+
+Score: 8.7/10. The arena looks substantially more purposeful. The pylons, spawn pockets and eight entrances are correctly integrated without overwhelming the existing reactor.
+
+A. Audit results
+
+Component
+
+	
+
+Verdict
+
+
+
+
+Four flattened spawn pockets
+
+	
+
+PASS
+
+
+
+
+Two shield pylons
+
+	
+
+PASS
+
+
+
+
+Eight ramps and crater rim
+
+	
+
+PASS
+
+
+
+
+Reactor motion and tilt
+
+	
+
+PASS
+
+
+
+
+Shield links
+
+	
+
+PASS
+
+
+
+
+Shield bubble readability
+
+	
+
+CHANGE
+
+
+
+
+Core exposed-target ring
+
+	
+
+PASS
+
+
+
+
+Held colour transformation
+
+	
+
+PARTIAL
+
+
+
+
+32-matter army clearance
+
+	
+
+UNVERIFIED
+
+B. Numbered fixes
+
+1. Shield bubble needs better visibility — REQUIRED
+
+In the ATTACKED screenshot, the shield is difficult to distinguish from the purple core and surrounding hull.
+
+Keep the 15-stud shield radius.
+
+Increase hex-pattern contrast approximately 30–40%.
+
+Add a thin cyan-violet outline visible around the exposed shield silhouette.
+
+Ensure the two pylon links visibly terminate at the shield.
+
+Test from 30–50 studs at player eye height.
+
+Don't enlarge the bubble to encompass the entire crashed wreck.
+
+2. Titan clearance — REQUIRED before combat approval
+
+The measured 15.9-stud passage with a 14-stud Titan leaves only 1.9 studs total clearance.
+
+That's geometrically possible, but insufficient evidence of navigability during combat with other units.
+
+Target 20–22 studs at that pinch if you can achieve it without modifying the wreck. Otherwise, use an explicit navigation route or clearance test for the F4 rather than assuming it can circulate freely.
+
+The real 32-matter army test remains the decisive gameplay gate.
+
+3. Held state — finish during Stage C
+
+The yellow-orange reactor transformation is visible and effective, but the lower violet core and upper blue orb still retain much of their original identity.
+
+On capture:
+
+Change the lower core and upper orb accents to the owner's colour.
+
+Add the crown hologram above the ring.
+
+Place 2–4 owner-coloured banners on the rim.
+
+Keep the dark basalt shell unchanged.
+
+This will make ownership unmistakable from the plots.
+
+C. Next-stage items — non-blocking now
+
+The destroyed pylon needs its cracked, dark crystal stump rather than merely having its lights switched off. Spawn flashes should last around 0.4–0.6 seconds per pocket. The meteor effect can remain cosmetic and be disabled during combat.
+
+For the core break, keep the shockwave non-damaging and ensure it doesn't obscure player targeting or other active fights.
+
+Final verdict
+
+GO WITH CHANGES — Stage B architecture approved.
+
+Fix the shield's visual readability, and resolve or test the Titan pinch point. Everything else can be finished in Stage C alongside the crown, banners, spawn effects and combat integration.
+
+Do not remodel the crater, move the pylons or add more buttresses. The physical arena is sufficiently developed; the remaining challenge is combat readability and gameplay validation.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High

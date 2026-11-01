@@ -1,0 +1,202 @@
+ChatGPT said:
+D3 — Goo Marsh Material Reference
+Blender / Roblox PBR colour targets
+
+All colours are hexadecimal sRGB values. Roughness is on a 0–1 scale, where 0 is mirror-smooth and 1 is fully matte.
+
+Material
+
+	
+
+Base
+
+	
+
+Deep
+
+	
+
+Glow
+
+	
+
+Highlight
+
+	
+
+Roughness
+
+
+
+
+1. Goo cap top
+
+	
+
+#31D9FF
+
+	
+
+#0A6B8F
+
+	
+
+#9EF7FF
+
+	
+
+#E6FCFF
+
+	
+
+0.25
+
+
+
+
+2. Violet gills
+
+	
+
+#B884FF
+
+	
+
+#6B27D9
+
+	
+
+#F7A8FF
+
+	
+
+#FFE7FF
+
+	
+
+0.45
+
+
+
+
+3. Pearl stalk
+
+	
+
+#E7E2F7
+
+	
+
+#C5B4E6
+
+	
+
+#9A7EC6
+
+	
+
+#F9F7FF
+
+	
+
+0.60
+
+
+
+
+4. Goo pool
+
+	
+
+#29D6FF
+
+	
+
+#0C6A8D
+
+	
+
+#8EF4FF
+
+	
+
+#DFFAFF
+
+	
+
+0.20
+
+
+
+
+5. Goo drips
+
+	
+
+#2ED8FF
+
+	
+
+#0B6D90
+
+	
+
+#8DF5FF
+
+	
+
+#E3FAFF
+
+	
+
+0.28
+
+
+
+
+6. DNA crystals
+
+	
+
+#4DEBFF
+
+	
+
+#0B7CAA
+
+	
+
+#A9F8FF
+
+	
+
+#E7FDFF
+
+	
+
+0.30
+
+Important implementation notes
+
+Metalness = 0 for all six materials. Avoid repeating the Moonwood metalness-map problem.
+
+Goo depth: Bake darker teal into the thick regions, brighter cyan into thin edges, and subtle internal bubbles into the ColorMap.
+
+Wet highlights: Localise the lowest roughness around rims and drips. Avoid uniformly shiny surfaces.
+
+Gills: Use violet shadows between the blades, with selective Neon accents deep inside.
+
+Stalk: Maintain its fibrous directional normal map and pale colour even in shadow.
+
+Crystals: Use frosted cyan facets with a small emissive centre rather than making the entire mesh Neon.
+
+For mobile: Fake subsurface scattering through baked colour gradients and carefully placed emissive geometry. Avoid relying on multiple overlapping transparent goo surfaces to reproduce the reference.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High

@@ -1,0 +1,216 @@
+ChatGPT said:
+Conquest Lanes — Stage 1 Final Audit
+GO — LOCK STAGE 1
+
+Score: 9.2/10. The migration looks successful. All eight plot-to-crater sightlines pass visually, the biome transitions appear preserved, and the new radial arrangement is a better foundation for conquest gameplay.
+
+A. Audit results
+
+Component
+
+	
+
+Verdict
+
+	
+
+Assessment
+
+
+
+
+Eight radial plots
+
+	
+
+PASS
+
+	
+
+Correct ring arrangement and orientation
+
+
+
+
+Plot size 85 × 95
+
+	
+
+PASS
+
+	
+
+Preserves the full tycoon footprint
+
+
+
+
+Eight crater sightlines
+
+	
+
+PASS
+
+	
+
+Reactor ring visible from all eight
+
+
+
+
+Fort pads
+
+	
+
+PASS
+
+	
+
+All 16 levelled, good radial spacing
+
+
+
+
+Lane grading
+
+	
+
+PASS
+
+	
+
+2.2 studs per 20 is a manageable slope
+
+
+
+
+Biome preservation
+
+	
+
+PASS
+
+	
+
+Excellent voxel-level migration validation
+
+
+
+
+Canyon entrance
+
+	
+
+PASS
+
+	
+
+No obvious repeat of the old ridge problem
+
+
+
+
+NW highland pass
+
+	
+
+PASS visually
+
+	
+
+Still needs traversability test
+
+
+
+
+Prop relocation
+
+	
+
+PASS provisionally
+
+	
+
+Float checks and cleanup completed
+
+
+
+
+Crater preservation
+
+	
+
+PASS
+
+	
+
+Original landmark and terrain retained
+
+The method change was correct. Stretching the existing finished heightfield rather than regenerating shifted biomes removes the major risk of introducing new terrain boundaries.
+
+The 1.8-million-voxel read-back with zero differences, together with the backups, is strong evidence that the terrain data survived intact.
+
+B. Three checks before Fort 1
+
+1. Combat clearance — REQUIRED
+
+The pads fit the proposed fort structures, but leave limited room around them.
+
+Fort 1's approximately 40 × 34-stud nest must be oriented to fit the 38 × 44 pad.
+
+Fort 2's 48 × 44 structure nearly fills its 48 × 52 pad.
+
+Reserve approximately 60–70 studs of unobstructed combat space around each fort, including the adjacent lane approaches.
+
+This does not require making the entire area flat.
+
+2. Test actual army movement — REQUIRED
+
+Run one representative army along a full lane, including a 14-stud F4 unit and accompanying smaller units.
+
+Verify:
+
+No snagging at the plot-to-lane transition.
+
+No terrain trapping along the graded path.
+
+No congestion around the Fort 1 and Fort 2 positions.
+
+No unintended crossing into neighbouring lanes.
+
+The existing 20-stud lane width is acceptable for the initial build, but actual unit movement must confirm it.
+
+3. Resolve the crater entry design — IMPORTANT FOR LATER
+
+Your original crater has primarily east/west rim breaches, while eight independent conquest lanes now terminate at r125.
+
+The reactor is visible from every plot, but visibility does not establish a traversable route into the crater.
+
+Before the throne stage, choose between eight dedicated rim approaches and a shared circular route connecting to existing entrances. I favour eight short dedicated approaches to preserve lane independence.
+
+No need to carve these during Fort 1 construction.
+
+C. Non-blocking polish
+
+The open centre looks sparse in the top-down view, but that's expected before the forts are constructed. Don't fill it with decorative rocks yet.
+
+Likewise, leave the existing biome positions and skyline alone. The forest, marsh and canyon still read as distinct destinations.
+
+Final decision
+
+GO — Stage 1 approved. Save and proceed to Fort 1 on one lane.
+
+No further terrain stretching or biome revisions required.
+
+For Stage 2, build one complete Hatchling Nest with its defending units, core, capture transition and conquered appearance, then test combat and navigation before replicating it across all eight lanes.
+
+That single-lane prototype is the correct next approval gate.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High

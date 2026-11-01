@@ -1,0 +1,169 @@
+GO / NO-GO for this landmark (to move on to the plots), or what must change first. Short.
+Worked for 1m 51s
+ChatGPT said:
+Crater Landmark v3 — Audit
+
+Verdict: NO-GO for final approval. The technical foundation is sound, but the visual silhouette still needs work before moving to the plots.
+
+A. Scores
+
+Category
+
+	
+
+Score
+
+
+
+
+Match to B/B2
+
+	
+
+4/10
+
+
+
+
+Most impressive landmark
+
+	
+
+5/10
+
+
+
+
+Mobile readability
+
+	
+
+6/10
+
+
+
+
+Geometry/performance
+
+	
+
+9/10
+
+The biggest problem: the reference looks like an enormous alien spacecraft that violently crashed into the moon. The build looks like an upright alien portal.
+
+At 131 studs, the ring and orb are readable, but the shell and violet core are largely hidden. The distance test therefore still fails the full landmark requirement.
+
+B. Top five fixes, in priority order
+
+Priority
+
+	
+
+Problem
+
+	
+
+Exact change
+
+
+
+
+P1 — Critical
+
+	
+
+The foreground rim hides the wreck at plot distance.
+
+	
+
+Cut a 20–25-stud-wide shallow entry notch into the near rim, lowering its crest approximately 7–10 studs locally. Preserve the rest of the crater. Retest until at least the upper half of the shell and part of the violet core are visible from 131 studs.
+
+
+
+
+P2 — Critical
+
+	
+
+Six symmetrical upright petals create an egg/portal silhouette.
+
+	
+
+Tilt the crashed shell approximately 30–40° away from its current upright orientation. Make three plates dominant, stagger the remaining three, bury the rear 8–12 studs and expose an 8–10-stud violet core opening. Target a roughly 55 × 34 × 30-stud wreck.
+
+
+
+
+P3 — Critical
+
+	
+
+The upper ring looks like thin orbital wires.
+
+	
+
+Make four clearly separated, dark metallic curved segments approximately 3–4 studs thick, with 3–5-stud gaps and inset cyan strips. Keep one thin rotating halo. Preserve the current overall ring diameter and height until the distance test passes.
+
+
+
+
+P4
+
+	
+
+Cyan markings look like straight painted crosses rather than fractured technology.
+
+	
+
+Replace horizontal/vertical strip intersections with irregular branching seams, roughly 0.3–0.5 studs wide. Use 1–2 main cracks per plate. Reduce cyan brightness slightly and make the violet core the lower focal point.
+
+
+
+
+P5
+
+	
+
+The impact site lacks wreckage and destruction.
+
+	
+
+Add 6–10 large angular broken shell fragments, 3–8 studs high, around the crash site; a few half-buried plates; and a dark fractured impact scar approximately 45–55 studs across. Keep the surrounding excavation accessible.
+
+Do not raise the ring any higher. At +74 it already solves the upper-silhouette problem. The next improvement must come from the shell and terrain, not additional vertical scaling.
+
+C. Phone and performance
+
+9k triangles, two shadowless PointLights and three Beams are excellent starting numbers. No geometry reduction is needed yet.
+
+The main mobile concerns are:
+
+Thin cyan seams and orb lattice: They will shimmer or disappear at distance. Simplify the orb lattice to larger facets and avoid extremely thin geometry.
+
+Energy beams: The current straight, solid-looking violet columns resemble structural supports. Use softer transparent beams with a gentle gradient and pulse.
+
+Contrast: In the close screenshot the shell is predominantly flat grey, with very limited surface definition. A restrained cool edge highlight or subtle roughness variation would help.
+
+Crystals: The small cyan and amber clusters are fine near the player but shouldn't need to render in full detail from distant plots.
+
+Animation: Rotate the ring and bob rocks client-side without physics or server replication.
+
+Do not spend more triangles trying to match B's cinematic rubble and particles. Solve the main shapes first.
+
+D. Release decision
+NO-GO — 3 blocking visual fixes
+
+P1, P2 and P3 must be done before I would approve this landmark and move to the plots. P4 and P5 are worthwhile polish, but not blockers.
+
+The most important retest is the 131-stud, 5-stud-eye screenshot after changing the near rim and shell orientation. It should show a broken suspended ring above a recognisable crashed spacecraft with an exposed violet core—not just a floating blue orb above a mound.
+
+You have the right foundation. Keep the 130-stud terrain crater and the 9k-triangle budget. Fix the silhouette, not the level of detail.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High

@@ -1,0 +1,609 @@
+
+===== FILE: 00-BRIEF.md =====
+# Alien Fusion perf build r1: please audit the BUILT code (you approved the plan as "SOUND WITH CHANGES" earlier in this chat)
+
+Built tonight, exactly the four you approved first, plus a phone menu fix James asked for mid-way. Nothing else changed.
+
+1. P9a one source: AlienAnimator / AttacksCrunch / AttacksDrip moved from src-aitest\ into src\ (the AI-test copies were
+   strict supersets of src\: src\ versions 03:00-11:44, AI copies made from them at ~12:00). Verified at install: all 7
+   scripts in the AI-test place are byte-identical to the files. src-aitest\ now holds only the harness (server, Brain, menu).
+2. P1 glow: `setGlow(st, es)` (see animator.diff) replaces the 3 per-frame `EmissiveStrength` writes. 3 levels per form:
+   out (es < 0.5 x base) -> 0, base, bright (es >= base + 0.25) -> base + 0.6. Written only when the level changes.
+   Form bases are 1.0-2.0. Attack beats add +0.4 / +0.8; Thump flare glowMul up to ~1.9; hurt dip glowMul 0.88; defeat
+   glowMul -> 0; idle breath +0.10-0.12 (now below the threshold, so gone); MOVE TEST footfall pulse +0.6.
+   NOT touched (P7 territory, short-lived effect parts): the gooed overlay pulse (one per gooed target), the defeat
+   rubble seams (1.7 s).
+3. P5 templates (perf-p5-templates.luau): all 15 templates: mesh + Hitbox CanCollide / CanTouch / CanQuery off, mesh
+   CollisionFidelity Box, Hitbox CastShadow off, F1 / F2 meshes CastShadow off. Checked every script in the place for
+   Raycast / Hitbox / Touched / GetPartsIn / Mouse.Target: ground rays include Terrain only; the Drip's surface rays
+   include ONLY the target's mesh and set `mp.CanQuery = true` client-locally themselves; PolishKit Looks rays are an
+   Exclude-list lighting probe. No click selection exists.
+4. P3a bones: `e.inv` = rest:Inverse() cached at setup. In runAttack the idle pose under an attack (apply(ip) + an idle
+   solveLegs + the `held` snapshot) now runs only when the blend weight w < 1 (blend-in 0.2 s, blend-out 0.25 s, and
+   after the body ends). w is computed BEFORE (same formula, moved up; 0 once tt >= dur). Full runAttack and solveLegs
+   are attached so you can check the state side effects of skipping the idle solve (leg.stand, leg.from handoff T,
+   plants, lastK, st.over, drawnP). Note: non-travel attacks called the idle solve and the attack solve with IDENTICAL
+   arguments; travel attacks (Ram charge) called the idle solve with (base, 0, at, standing) then the travel solve with
+   (pivot, trS, trAt, trStand). The Titan contact re-apply (0.26 s window) is left as is.
+5. Phone menu (menu.diff + the MOVE TEST part of animator.diff): James on his phone: "menus massive, can't minimise the
+   AI one, can't scroll it" (it was ~800 tall on a ~390-tall screen, only an inner list scrolled). Now a title bar with
+   [-] fold, one ScrollingFrame body capped to the screen, UIScale clamp(viewportY / 600, 0.8, 1); MOVE TEST starts
+   folded on touch-only screens. Tested in Studio: fits (1391 of 1471), canvas 1788 scrolls, fold -> 30 tall, unfold ok.
+
+## Measured (Studio Play on James's PC, 64 units = 32 a side, all 8 forms, same session, same fight script)
+| build | standing fps | fight start fps | mid-fight fps (13 samples x 2 runs) | animator ms mid-fight |
+|---|---|---|---|---|
+| ORIGINAL animator (P5 templates in place) | 49-62 | 50-56 | 30-46, median ~38 | 8-16 |
+| NEW animator + P5 | 116-129 | 99-114 | 36-69, median ~47 | 7-13 |
+| NEW animator, P5 reverted | 114-124 | 100-107 | 36-72, median ~50 | 7-13 |
+Static glow (no writes at all) vs the 3 levels, standing: 123-129 vs 116-129 (same within noise).
+Mid-fight switch test (new build): DbgNoBones 72-81, DbgNoPivot 39-62, DbgNoAnim 119-141 -> the remaining fight cost is
+attack posing (script ~10 ms), i.e. P2 / P4 territory, waiting on the phone test as you ordered.
+P5 shows no PC gain (honest); kept because it is the standard cheap setting and may matter on phones.
+
+## Questions
+A. Any correctness bug in setGlow, P3a's skip, or the menu? (Especially: P3a state side effects for travel attacks and
+   for the first frame after a resetFeet; setGlow when st.glow is 0; UIScale + AbsoluteContentSize math.)
+B. Is keeping P5 (no measured PC gain) right, or revert it?
+C. Verdict: ROBUST / ROBUST WITH CHANGES / NOT ROBUST, with exact required changes. Plain, no over-engineering.
+
+===== FILE: animator.diff =====
+--- backups/pre-P9a-29Oct/src-aitest/StarterPlayer.StarterPlayerScripts.AlienAnimator.client.luau	2026-10-29 21:39:38.416647500 +1100
++++ src/StarterPlayer.StarterPlayerScripts.AlienAnimator.client.luau	2026-10-29 21:54:03.090184700 +1100
+@@ -163,7 +163,8 @@
+ 	for _, b in m:GetDescendants() do
+ 		if b:IsA("Bone") then
+ 			-- the bone's rest frame in model space: a model-space rotation R becomes rest^-1 * R * rest in the bone's own frame
+-			bones[b.Name] = { b = b, rest = pivot:ToObjectSpace(b.WorldCFrame).Rotation }
++			local rest = pivot:ToObjectSpace(b.WorldCFrame).Rotation
++			bones[b.Name] = { b = b, rest = rest, inv = rest:Inverse() }
+ 			n += 1
+ 		end
+ 	end
+@@ -277,6 +278,16 @@
+ end
+ 
+ local BONE_WRITES, DBG_NOBONES, DBG_NOPIVOT, DBG_NOGLOW, PROF_EV, PROF_FX = 0, false, false, false, 0, 0              -- (perf audit readouts, see the RenderStepped loop)
++
++-- (perf P1, 29 Oct: units whose EmissiveStrength differs can't be drawn in one batch, so the per-frame breath / pulse /
++-- attack glow halved the frame rate: 64 units 55 -> 113 fps without it. The glow now snaps to 3 shared levels per form,
++-- out / base / bright, written only when the level changes)
++local function setGlow(st, es)
++	local lv = (es < st.glow * 0.5) and 0 or (es >= st.glow + 0.25) and 2 or 1
++	if lv == st.glowLv or DBG_NOGLOW then return end
++	st.glowLv = lv
++	st.sa.EmissiveStrength = (lv == 0) and 0 or (lv == 2) and st.glow + 0.6 or st.glow
++end
+ local function apply(st, pose)
+ 	if DBG_NOBONES then return end
+ 	for name, e in st.bones do
+@@ -286,7 +297,7 @@
+ 		if name == "Root" then v = { pose.pitch, pose.yaw, pose.roll, pose.side, pose.lift, -pose.fwd } end
+ 		if v then
+ 			local r = CFrame.Angles(rad(v[1]), rad(v[2]), rad(v[3]))
+-			local inv = e.rest:Inverse()
++			local inv = e.inv
+ 			e.b.Transform = CFrame.new(inv * Vector3.new(v[4], v[5], v[6])) * (inv * r * e.rest)
+ 		else
+ 			e.b.Transform = CFrame.identity
+@@ -826,7 +837,12 @@
+ 			st.traveling = trOn
+ 			resetFeet(st, true)
+ 		end
+-		apply(st, ip); if st.legs then solveLegs(st, base, 0, at, true, now) end
++		-- (gameplay lock, power graph 09: after it the body blends back in 0.25 s while the effects play on)
++		local lockT = (atk.testLock and ctx.m:GetAttribute("MoveTest")) and atk.testLock or atk.lock
++		local w = (tt < atk.dur) and smooth(tt / 0.2) * (lockT and (1 - smooth((tt - lockT) / 0.25)) or (1 - smooth((tt - (atk.dur - 0.25)) / 0.25))) or 0
++		-- (perf P3a, 29 Oct: the idle pose under an attack is only seen while it blends in / out (w < 1); fully blended in,
++		-- posing it was a whole extra pass over every bone + a leg solve each frame)
++		if w < 1 then apply(st, ip); if st.legs then solveLegs(st, base, 0, at, true, now) end end
+ 		if tt < atk.dur then
+ 			-- (batch 4: PLACE: the whole unit put on a frame the attack returns: the Drip hopping onto a big enemy and stuck to
+ 			-- it, its BOING escape. Bones then pose as usual on top; ctx.base stays the ground spot it started from)
+@@ -835,8 +851,8 @@
+ 				if cf then ctx.m:PivotTo(cf) end
+ 			end
+ 			-- blended in over 0.2 s and out over the last 0.25 s, over the idle
+-			local held = {}
+-			for name, e in st.bones do held[name] = e.b.Transform end
++			local held
++			if w < 1 then held = {}; for name, e in st.bones do held[name] = e.b.Transform end end
+ 			pose = attackPose(Attacks.pose(atk, tt, ctx))
+ 			addHurt(st, pose, ht, hsg, (tt < (((atk.testLock and ctx.m:GetAttribute("MoveTest")) and atk.testLock or atk.lock) or atk.dur)) and 0.35 or 1)
+ 			st.limbTargets = atk.limbs and atk.limbs(tt, ctx) or nil
+@@ -922,10 +938,7 @@
+ 					if tR then reachArm(st.arms.R, tR, base, w) end
+ 				end
+ 			end
+-			-- (gameplay lock, power graph 09: after it the body blends back in 0.25 s while the effects play on)
+-			local lockT = (atk.testLock and ctx.m:GetAttribute("MoveTest")) and atk.testLock or atk.lock
+-			local w = smooth(tt / 0.2) * (lockT and (1 - smooth((tt - lockT) / 0.25)) or (1 - smooth((tt - (atk.dur - 0.25)) / 0.25)))
+-			if w < 1 then for name, e in st.bones do e.b.Transform = held[name]:Lerp(e.b.Transform, w) end end
++			if held then for name, e in st.bones do e.b.Transform = held[name]:Lerp(e.b.Transform, w) end end
+ 			if fz and st.arms then                                      -- (test readouts while frozen)
+ 				local tip, knee = ctx.tip("R"), ctx.bonePos("ShinR")
+ 				ctx.m:SetAttribute("DbgTipR", tip.Y - groundY(tip.X, tip.Z, st.y))
+@@ -942,10 +955,7 @@
+ 			end
+ 		end
+ 	end
+-	if st.sa then
+-		local es = st.glow * (pose.glowMul or 1) + pose.glow
+-		if not DBG_NOGLOW and math.abs(es - st.sa.EmissiveStrength) > 0.01 then st.sa.EmissiveStrength = es end
+-	end
++	if st.sa then setGlow(st, st.glow * (pose.glowMul or 1) + pose.glow) end
+ end
+ 
+ -- ===== AI TEST units (AlienFusion-AI-Testing only) =====
+@@ -1017,10 +1027,7 @@
+ 		solveLegs(st, base, here, at, not moving, now)
+ 	end
+ 	st.aiMoving = moving
+-	if st.sa then
+-		local es = st.glow * (pose.glowMul or 1) + pose.glow
+-		if not DBG_NOGLOW and math.abs(es - st.sa.EmissiveStrength) > 0.01 then st.sa.EmissiveStrength = es end
+-	end
++	if st.sa then setGlow(st, st.glow * (pose.glowMul or 1) + pose.glow) end
+ 	if stepFx and st.fx then
+ 		for i = #st.fx, 1, -1 do
+ 			local fx = st.fx[i]
+@@ -1274,8 +1281,7 @@
+ 			if st.sa then
+ 				local t = now - (st.pulseAt or -9)
+ 				local pulse = (t < 0.08) and t / 0.08 or (t < 0.3) and 1 - (t - 0.08) / 0.22 or 0
+-				local es = st.glow * (pose.glowMul or 1) + 0.6 * pulse + pose.glow
+-				if not DBG_NOGLOW and math.abs(es - st.sa.EmissiveStrength) > 0.01 then st.sa.EmissiveStrength = es end
++				setGlow(st, st.glow * (pose.glowMul or 1) + 0.6 * pulse + pose.glow)
+ 			end
+ 		end
+ 		if st.fx and #st.fx > 0 then                                -- (the hurt chips and sparks)
+@@ -1362,9 +1368,14 @@
+ local bpad = Instance.new("UIPadding", body)
+ bpad.PaddingTop, bpad.PaddingBottom, bpad.PaddingLeft, bpad.PaddingRight = UDim.new(0, 6), UDim.new(0, 8), UDim.new(0, 8), UDim.new(0, 10)
+ local blist = Instance.new("UIListLayout", body); blist.Padding = UDim.new(0, 5); blist.SortOrder = Enum.SortOrder.LayoutOrder
++-- (James's phone test, 29 Oct: "the menus are massive": smaller on a short screen; AbsoluteContentSize is on-screen
++-- pixels, after the UIScale, Size is before it)
++local mscale = Instance.new("UIScale", panel)
+ local function fit()                                             -- (as tall as its content, at most 75 % of the screen)
+-	local h = blist.AbsoluteContentSize.Y + 16
+-	body.Size = UDim2.new(1, 0, 0, math.min(h, workspace.CurrentCamera.ViewportSize.Y * 0.75))
++	local vs = workspace.CurrentCamera.ViewportSize
++	if vs.Y >= 50 then mscale.Scale = math.clamp(vs.Y / 600, 0.8, 1) end
++	local h = blist.AbsoluteContentSize.Y / mscale.Scale + 16
++	body.Size = UDim2.new(1, 0, 0, math.min(h, vs.Y * 0.75 / mscale.Scale))
+ end
+ blist:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(fit)
+ -- (29 Oct: at load the camera's ViewportSize can still be 1 x 1, so the body was sized 0 tall and never grew: the menu
+@@ -1382,6 +1393,8 @@
+ 	fold.Text = body.Visible and "-" or "+"
+ 	fit()
+ end)
++-- (a touch screen opens it folded: it covered the left of a phone)
++if UIS.TouchEnabled and not UIS.KeyboardEnabled then body.Visible = false; fold.Text = "+" end
+ 
+ local order = 0
+ local function button(parent, text, color, fn)
+
+===== FILE: menu.diff =====
+--- backups/pre-P9a-29Oct/src-aitest/StarterPlayer.StarterPlayerScripts.AITestMenu.client.luau	2026-10-29 21:39:38.406156200 +1100
++++ src-aitest/StarterPlayer.StarterPlayerScripts.AITestMenu.client.luau	2026-10-29 21:54:03.010489300 +1100
+@@ -11,15 +11,54 @@
+ 
+ local gui = Instance.new("ScreenGui")
+ gui.Name = "AITestMenu"; gui.ResetOnSpawn = false; gui.Parent = player:WaitForChild("PlayerGui")
+-local panel = Instance.new("Frame")
+-panel.Size = UDim2.fromOffset(260, 0); panel.AutomaticSize = Enum.AutomaticSize.Y
+-panel.AnchorPoint = Vector2.new(1, 0); panel.Position = UDim2.new(1, -12, 0, 80)
+-panel.BackgroundColor3 = Color3.fromRGB(18, 20, 28); panel.BackgroundTransparency = 0.15; panel.Parent = gui
+-Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 8)
++local outerPanel = Instance.new("Frame")
++outerPanel.Size = UDim2.fromOffset(260, 0); outerPanel.AutomaticSize = Enum.AutomaticSize.Y
++outerPanel.AnchorPoint = Vector2.new(1, 0); outerPanel.Position = UDim2.new(1, -12, 0, 60)
++outerPanel.BackgroundColor3 = Color3.fromRGB(18, 20, 28); outerPanel.BackgroundTransparency = 0.15; outerPanel.Parent = gui
++Instance.new("UICorner", outerPanel).CornerRadius = UDim.new(0, 8)
++Instance.new("UIListLayout", outerPanel).SortOrder = Enum.SortOrder.LayoutOrder
++-- (James's phone test, 29 Oct: "the menus are massive, I can't minimise the AI one, I can't scroll it": it was ~800 tall on
++-- a ~390-tall screen. Now: a title bar with [-] to fold it, ONE scrolling body capped to the screen, smaller on phones)
++local scale = Instance.new("UIScale", outerPanel)
++local title = Instance.new("TextLabel")
++title.Size = UDim2.new(1, 0, 0, 30); title.LayoutOrder = 0; title.BackgroundColor3 = Color3.fromRGB(32, 36, 50)
++title.Font = Enum.Font.GothamBold; title.TextSize = 14; title.TextColor3 = Color3.fromRGB(150, 220, 255)
++title.Text = "   AI TEST"; title.TextXAlignment = Enum.TextXAlignment.Left; title.Parent = outerPanel
++Instance.new("UICorner", title).CornerRadius = UDim.new(0, 8)
++local fold = Instance.new("TextButton")
++fold.Size = UDim2.fromOffset(36, 26); fold.Position = UDim2.new(1, -40, 0, 2)
++fold.BackgroundColor3 = Color3.fromRGB(55, 60, 80); fold.Text = "-"; fold.Font = Enum.Font.GothamBold; fold.TextSize = 18
++fold.TextColor3 = Color3.new(1, 1, 1); fold.Parent = title
++Instance.new("UICorner", fold).CornerRadius = UDim.new(0, 5)
++local panel = Instance.new("ScrollingFrame")
++panel.LayoutOrder = 1; panel.BackgroundTransparency = 1; panel.BorderSizePixel = 0
++panel.Size = UDim2.new(1, 0, 0, 0); panel.CanvasSize = UDim2.new(); panel.AutomaticCanvasSize = Enum.AutomaticSize.Y
++panel.ScrollBarThickness = 6; panel.ScrollingDirection = Enum.ScrollingDirection.Y; panel.Parent = outerPanel
+ local pad = Instance.new("UIPadding", panel)
+-pad.PaddingTop, pad.PaddingBottom, pad.PaddingLeft, pad.PaddingRight = UDim.new(0, 8), UDim.new(0, 8), UDim.new(0, 8), UDim.new(0, 8)
++pad.PaddingTop, pad.PaddingBottom, pad.PaddingLeft, pad.PaddingRight = UDim.new(0, 8), UDim.new(0, 8), UDim.new(0, 8), UDim.new(0, 12)
+ local layout = Instance.new("UIListLayout", panel)
+ layout.Padding = UDim.new(0, 5); layout.SortOrder = Enum.SortOrder.LayoutOrder
++local function fit()                       -- (as tall as its content, at most the screen below the panel's top)
++	local cam = workspace.CurrentCamera
++	local vs = cam and cam.ViewportSize or Vector2.new(1000, 800)
++	if vs.Y < 50 then return end           -- (at load the viewport can still be 1 x 1)
++	scale.Scale = math.clamp(vs.Y / 600, 0.8, 1)
++	-- (AbsoluteContentSize is on-screen pixels, after the UIScale; Size is before it)
++	panel.Size = UDim2.new(1, 0, 0, math.min(layout.AbsoluteContentSize.Y / scale.Scale + 16, (vs.Y - 80) / scale.Scale - 30))
++end
++layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(fit)
++local function watchCam()
++	local cam = workspace.CurrentCamera
++	if cam then cam:GetPropertyChangedSignal("ViewportSize"):Connect(fit) end
++	fit()
++end
++watchCam()
++workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(watchCam)
++task.delay(1, fit)
++fold.MouseButton1Click:Connect(function()
++	panel.Visible = not panel.Visible
++	fold.Text = panel.Visible and "-" or "+"
++end)
+ 
+ local order = 0
+ local function label(text, parent)
+@@ -43,7 +82,6 @@
+ local TEAM_COL = { A = Color3.fromRGB(40, 110, 200), B = Color3.fromRGB(200, 110, 30), ALL = Color3.fromRGB(180, 40, 40) }
+ local TEAM_TXT = { A = "TEAM A", B = "TEAM B", ALL = "HOSTILE TO ALL" }
+ 
+-label("AI TEST")
+ -- the team the NEXT spawn joins
+ local spawnTeam = "A"
+ local teamBtn
+@@ -105,10 +143,9 @@
+ button("CLEAR AI", Color3.fromRGB(150, 40, 40), function() remote:FireServer("clear") end, row2, UDim2.new(0.5, -3, 1, 0))
+ 
+ label("UNITS")
+--- (scrolls: a swarm is a lot of rows)
+-local listBox = Instance.new("ScrollingFrame")
+-listBox.Size = UDim2.new(1, 0, 0, 300); listBox.BackgroundTransparency = 1; listBox.BorderSizePixel = 0
+-listBox.CanvasSize = UDim2.new(); listBox.AutomaticCanvasSize = Enum.AutomaticSize.Y; listBox.ScrollBarThickness = 6
++-- (the whole menu scrolls, so the rows just stack: a scroll inside a scroll fought touch on the phone)
++local listBox = Instance.new("Frame")
++listBox.Size = UDim2.new(1, 0, 0, 0); listBox.AutomaticSize = Enum.AutomaticSize.Y; listBox.BackgroundTransparency = 1
+ order += 1; listBox.LayoutOrder = order; listBox.Parent = panel
+ local ll = Instance.new("UIListLayout", listBox); ll.Padding = UDim.new(0, 4); ll.SortOrder = Enum.SortOrder.LayoutOrder
+ 
+
+===== FILE: perf-p5-templates.luau =====
+-- Perf P5 (29 Oct): the alien templates in ServerStorage.Aliens.Forms are moved every frame, so keep them out of the
+-- physics engine. Visible mesh: no collide / touch / query, Box collision. Hitbox: no collide / touch / query / shadow
+-- (nothing queries it: checked every script 29 Oct; the Drip's own ray turns its target mesh's CanQuery on locally).
+-- Shadows off on the small forms (F1 / F2); F3 / F4 keep them (they read better grounded).
+-- Before (29 Oct): Hitbox col + query on everywhere, + touch on the v5s; SquishF1v5 / F2v5 mesh col / query / touch on;
+-- CrunchF4, CrunchF3v5, SquishF3v5, SquishF4v5 mesh PreciseConvexDecomposition. Run in Edit (command bar / MCP).
+local forms = game:GetService("ServerStorage").Aliens.Forms
+local n = 0
+for _, m in forms:GetChildren() do
+	local small = m.Name:match("F[12]") ~= nil
+	for _, d in m:GetDescendants() do
+		if d:IsA("BasePart") then
+			d.CanCollide, d.CanTouch, d.CanQuery = false, false, false
+			if d.Name == "Hitbox" then
+				d.CastShadow = false
+			else
+				if d:IsA("MeshPart") then d.CollisionFidelity = Enum.CollisionFidelity.Box end
+				d.CastShadow = not small
+			end
+			n += 1
+		end
+	end
+end
+return "P5 applied to " .. n .. " parts"
+
+===== FILE: runAttack-full.luau =====
+-- one frame of an ATTACK unit: it stands in its idle; from T0 it plays its attack, then 2.2 s of idle, on repeat
+local function runAttack(st, base: CFrame, at, now: number, t0: number)
+	local atk = st.attack
+	-- (test hook: FreezeTT holds the attack at that moment, for stills; set on the client only)
+	local fz = st.ctx.m:GetAttribute("FreezeTT")
+	if fz then now = t0 + ((now - t0) // (atk.cycle or atk.dur + 2.2)) * (atk.cycle or atk.dur + 2.2) + fz end
+	local ip = newPose()
+	st.gait.fn(now - t0, ip)
+	local ht, hsg = hurtTick(st, base, now, t0)
+	addHurt(st, ip, ht, hsg, 1)
+	st.kneel, st.limbTargets = nil, nil
+	local tt = now - t0
+	local pose = ip
+	if tt < 0 then
+		apply(st, ip); if st.legs then solveLegs(st, base, 0, at, true, now) end
+	else
+		local cycle = (now - t0) // (atk.cycle or atk.dur + 2.2)
+		tt %= atk.cycle or atk.dur + 2.2
+		local ctx = st.ctx
+		ctx.base = base
+		if not st.lastTT or tt < st.lastTT then
+			if st.lastTT then stopFx(st) end
+			st.lastTT = -1                    -- (a new repeat: its t = 0 events must fire too)
+			-- (MOVE TEST: an aimed attack picks a new target point each repeat, marked by a little post)
+			local aim
+			if atk.aims and ctx.m:GetAttribute("AimTest") then
+				local list = (atk.testAims and Attacks[atk.testAims]) or Attacks.TEST_AIMS
+				local d = list[(cycle % #list) + 1]
+				local p = base * (CFrame.Angles(0, math.rad(d[2]), 0) * Vector3.new(0, 0, -d[1]))
+				aim = Vector3.new(p.X, groundY(p.X, p.Z, st.y), p.Z)
+				ctx.marker = Instance.new("Part")
+				ctx.marker.Anchored, ctx.marker.CanCollide, ctx.marker.CanQuery = true, false, false
+				ctx.marker.Size, ctx.marker.Color, ctx.marker.Material = Vector3.new(0.6, 5, 0.6), Color3.fromRGB(70, 160, 255), Enum.Material.Neon
+				ctx.marker.CFrame = CFrame.new(aim + Vector3.new(0, 2.5, 0)); ctx.marker.Parent = ctx.holder
+			end
+			if not aim and atk.aims and ctx.m:GetAttribute("AiAimX") then   -- (AI TEST: aimed at the server's target point)
+				local ax, az = ctx.m:GetAttribute("AiAimX"), ctx.m:GetAttribute("AiAimZ")
+				aim = Vector3.new(ax, groundY(ax, az, st.y), az)
+			end
+			Attacks.setAim(atk, ctx, aim)
+		end
+		for _, ev in atk.events do
+			if ev.t > (st.lastTT or -1) and ev.t <= tt then
+				local pc0 = os.clock(); local ok, f = pcall(ev.fn, ctx); PROF_EV += os.clock() - pc0
+				if ok and f then f.world = ev.world; table.insert(st.fx, f) elseif not ok then warn("attack event", ev.t, f) end
+			end
+		end
+		st.lastTT = tt
+		-- (batch 7 TRAVEL: on starting / leaving a travel the footholds are dropped, so the feet plant along the new line, then
+		-- again at the cast spot)
+		local trOn = (atk.travel ~= nil) and tt < atk.dur and atk.travel(ctx, tt) ~= nil
+		if st.legs and trOn ~= (st.traveling == true) then
+			st.traveling = trOn
+			resetFeet(st, true)
+		end
+		-- (gameplay lock, power graph 09: after it the body blends back in 0.25 s while the effects play on)
+		local lockT = (atk.testLock and ctx.m:GetAttribute("MoveTest")) and atk.testLock or atk.lock
+		local w = (tt < atk.dur) and smooth(tt / 0.2) * (lockT and (1 - smooth((tt - lockT) / 0.25)) or (1 - smooth((tt - (atk.dur - 0.25)) / 0.25))) or 0
+		-- (perf P3a, 29 Oct: the idle pose under an attack is only seen while it blends in / out (w < 1); fully blended in,
+		-- posing it was a whole extra pass over every bone + a leg solve each frame)
+		if w < 1 then apply(st, ip); if st.legs then solveLegs(st, base, 0, at, true, now) end end
+		if tt < atk.dur then
+			-- (batch 4: PLACE: the whole unit put on a frame the attack returns: the Drip hopping onto a big enemy and stuck to
+			-- it, its BOING escape. Bones then pose as usual on top; ctx.base stays the ground spot it started from)
+			if atk.place then
+				local cf = atk.place(ctx, tt, base)
+				if cf then ctx.m:PivotTo(cf) end
+			end
+			-- blended in over 0.2 s and out over the last 0.25 s, over the idle
+			local held
+			if w < 1 then held = {}; for name, e in st.bones do held[name] = e.b.Transform end end
+			pose = attackPose(Attacks.pose(atk, tt, ctx))
+			addHurt(st, pose, ht, hsg, (tt < (((atk.testLock and ctx.m:GetAttribute("MoveTest")) and atk.testLock or atk.lock) or atk.dur)) and 0.35 or 1)
+			st.limbTargets = atk.limbs and atk.limbs(tt, ctx) or nil
+			if atk.kneel then
+				local k = atk.kneel
+				st.kneel = { side = k.side, back = k.back, up = k.up, toe = k.toe, w = smooth((tt - k.t0) / (k.t1 - k.t0)) }
+			end
+			apply(st, pose)
+			-- (batch 7 TRAVEL: an attack that carries the whole unit along a line (the Ram's charge) gives its legs that line:
+			-- atk.travel(ctx, tt) -> distance along it, at(distance) -> the ground frame there, standing (true while it stands
+			-- at the end); the feet gallop / plant along it instead of staying at the cast spot)
+			local trS, trAt, trStand, trIk = nil, nil, nil, nil
+			if atk.travel then trS, trAt, trStand, trIk = atk.travel(ctx, tt) end
+			if st.legs then
+				if trS then
+					if trStand then for _, leg in st.legs do leg.stand = trAt(trS) end end      -- (standing at the line's end)
+					-- (its own leg timing while it travels: an attack unit stands in its IDLE gait, whose feet never swing)
+					local g0 = st.gait
+					if trIk then st.gait = { ik = trIk, fn = g0.fn } end
+					solveLegs(st, ctx.m:GetPivot(), trS, trAt, trStand, now)
+					st.gait = g0
+				else solveLegs(st, base, 0, at, true, now) end
+			end
+			-- (batch 2 audit r1: tentacle tips that must touch the ground at the hit: the measured tip height is pulled to the
+			-- target by turning the chain's root, at most maxDeg; the FK keys do the rest. Weighted in t0-t1, out t2-t3)
+			local c = atk.contact
+			if c and tt > c.t0 and tt < c.t3 then
+				local w = (tt < c.t1) and smooth((tt - c.t0) / (c.t1 - c.t0)) or (1 - smooth((tt - c.t2) / (c.t3 - c.t2)))
+				local over = 0
+				for _, ch in c.chains do
+					-- (a chain: "TentFL" (its root's rx raises it: the Titan) or { name, axis, sign, perDeg }: the Twin's
+					-- tendrils drop with +rz on the left, -rz on the right)
+					local cs = (type(ch) == "table") and ch or { name = ch, axis = 1, sign = 1 }
+					local tip, v = st.bones[cs.name .. "3"], pose.bones[cs.name .. "1"]
+					if tip and v then
+						local p = tip.b.TransformedWorldCFrame.Position
+						local deg = ((p.Y - groundY(p.X, p.Z, st.y)) - c.target) / (cs.perDeg or c.perDeg)
+						over = math.max(over, math.abs(deg) - c.maxDeg)
+						v[cs.axis] -= cs.sign * math.clamp(deg, -c.maxDeg, c.maxDeg) * w
+					end
+				end
+				apply(st, pose)
+				if fz then ctx.m:SetAttribute("ContactOver", over) end          -- (> 0: the correction saturated)
+			elseif c and fz and tt <= c.t0 then
+				ctx.m:SetAttribute("ContactOver", 0)                           -- (a fresh slam starts clean)
+			end
+			-- (batch 5: SETTLE: the whole unit nudged AFTER its attack pose is on (place runs over the idle pose): the Pebble's
+			-- horn tip / mandibles pulled onto the surface point; the attack returns the corrected pivot)
+			if atk.settle then
+				local cf = atk.settle(ctx, tt)
+				if cf then ctx.m:PivotTo(cf) end
+			end
+			-- (batch 6: POST: the attack nudges single bones AFTER the pose is on (the Pincer's claws turned onto their targets'
+			-- surfaces, its jaws closed onto the blade); gets the bone table { [name] = { b = Bone } })
+			if atk.post then atk.post(ctx, tt, st.bones) end
+			-- (batch 3: REACH BY STRETCH: a goo chain's bones slide so its tip lands on a world point (the Twin's two slaps,
+			-- the Brute's stretch grab). Each bone takes an equal share of the move; children inherit it, so the tip gets it
+			-- all and the goo skin stretches between. Weighted in t0-t1, held, out t2-t3; at most `max` studs)
+			for _, rc in atk.reach or {} do
+				if tt > rc.t0 and tt < rc.t3 then
+					local w = (tt < rc.t1) and smooth((tt - rc.t0) / (rc.t1 - rc.t0)) or (1 - smooth((tt - rc.t2) / (rc.t3 - rc.t2)))
+					local target = rc.target(ctx, tt)
+					local tipE = st.bones[rc.chain[#rc.chain]]
+					if target and tipE and w > 0 then
+						local d = (target - tipE.b.TransformedWorldCFrame.Position) * w
+						if rc.max and d.Magnitude > rc.max then d = d.Unit * rc.max end
+						for _, name in rc.chain do
+							local e = st.bones[name]
+							if e then
+								local pcf = e.b.Parent:IsA("Bone") and (e.b.Parent :: Bone).TransformedWorldCFrame or ctx.m:GetPivot()
+								local frame = (pcf * e.b.CFrame).Rotation
+								e.b.Transform = CFrame.new(frame:Inverse() * (d / #rc.chain)) * e.b.Transform
+							end
+						end
+						if fz then ctx.m:SetAttribute("Reach" .. rc.chain[#rc.chain], (target - tipE.b.TransformedWorldCFrame.Position).Magnitude) end
+					end
+				end
+			end
+			if atk.ik and st.arms then
+				local w, tL, tR = atk.ik(tt, ctx)
+				if w and w > 0 then
+					if tL then reachArm(st.arms.L, tL, base, w) end
+					if tR then reachArm(st.arms.R, tR, base, w) end
+				end
+			end
+			if held then for name, e in st.bones do e.b.Transform = held[name]:Lerp(e.b.Transform, w) end end
+			if fz and st.arms then                                      -- (test readouts while frozen)
+				local tip, knee = ctx.tip("R"), ctx.bonePos("ShinR")
+				ctx.m:SetAttribute("DbgTipR", tip.Y - groundY(tip.X, tip.Z, st.y))
+				ctx.m:SetAttribute("DbgKneeR", knee.Y - groundY(knee.X, knee.Z, st.y))
+				ctx.m:SetAttribute("IKOver", st.over or 0)
+			end
+		end
+		for i = #st.fx, 1, -1 do
+			local f = st.fx[i]
+			local pc0 = os.clock(); local ok, alive = pcall(f.step, f, tt); PROF_FX += os.clock() - pc0
+			if not ok or alive == false then
+				if not ok then warn("attack effect", alive) end
+				pcall(f.stop, f); table.remove(st.fx, i)
+			end
+		end
+	end
+	if st.sa then setGlow(st, st.glow * (pose.glowMul or 1) + pose.glow) end
+end
+
+
+===== FILE: solveLegs-context.luau =====
+	local m = st.ctx and st.ctx.m
+	if m then m:SetAttribute("FeetResets", (m:GetAttribute("FeetResets") or 0) + 1) end   -- (test readout)
+	poseHandoff(st)
+	for _, leg in st.legs do
+		leg.stand = nil
+		if plantsToo then table.clear(leg.plants); leg.lastK = nil end
+		local p, r = leg.renderedP or leg.drawnP, leg.renderedR or leg.drawnR
+		if p then leg.from = { p = p, r = r, t = os.clock() } end
+	end
+end
+
+-- the legs: s = studs walked; at(u) = the ground frame on the path u studs along (facing along it)
+local function solveLegs(st, base: CFrame, s: number, at, standing: boolean, now: number)
+	if DBG_NOBONES then return end
+	local ik = st.gait.ik
+	local fwdv = base.LookVector
+	for side, leg in st.legs do
+		BONE_WRITES += 3
+		local pole = leg.back and -fwdv or fwdv                           -- (the knee forward; a hock back)
+		local x = s / ik.stride - leg.off
+		local k = math.floor(x)
+		local q = x - k
+		local function plant(n)
+			local f = leg.plants[n]
+			if not f then
+				f = at((n + leg.off) * ik.stride + ik.front + leg.front)
+				leg.plants[n] = f
+				leg.plants[n - 3] = nil
+			end
+			return f
+		end
+		local ankle, rot
+		if standing then
+			leg.stand = leg.stand or at(s)
+			ankle, rot = place(leg, leg.stand, 0), leg.stand.Rotation * leg.footRest
+		elseif q < ik.stance then
+			-- planted: heel strike rolling flat, flat, then up onto the toe
+			local pitch = 0
+			if q < 0.08 then pitch = ik.heel * (1 - smooth(q / 0.08))
+			elseif q > ik.stance - 0.14 then pitch = -ik.toe * smooth((q - (ik.stance - 0.14)) / 0.14) end
+			local F = plant(k)
+			ankle, rot = place(leg, F, pitch), F.Rotation * CFrame.Angles(math.rad(pitch), 0, 0) * leg.footRest
+			if leg.lastK and k > leg.lastK then footfall(st, F * Vector3.new(leg.ankle.X, 0, leg.ankle.Z - 0.3), now) end
+			leg.lastK = k
+		else
+			-- swinging: from the toe-off to the next heel strike, in an arc
+			local t = (q - ik.stance) / (1 - ik.stance)
+			local A, B = plant(k), plant(k + 1)
+			-- (leaves fast, brakes into the contact: a pure smootherstep starts at rest, so the trailing foot fell
+			-- further behind than the leg reaches while the body kept walking: 0.2 studs over in the test)
+			local e = 0.5 * (1 - (1 - t) ^ 2) + 0.5 * smoother(t)
+			local pitch = -ik.toe + (ik.toe + ik.heel) * smooth(t)
+			ankle = place(leg, A, -ik.toe):Lerp(place(leg, B, ik.heel), e) + UP * ik.lift * math.sin(math.pi * t)
+			rot = A.Rotation:Lerp(B.Rotation, e) * CFrame.Angles(math.rad(pitch), 0, 0) * leg.footRest
+		end
+		-- (batch 3 TARGET mode: an attack pulls this limb's end to a world point, weight w; the IK below bends to it)
+		local tg = st.limbTargets and st.limbTargets[side]
+		-- (the target is where the fist / foot TOUCHES; its bone rides its rest height above that: 1.45 on the Brute's fists)
+		if tg and tg.w > 0 then ankle = ankle:Lerp(tg.p + UP * (tg.raw and 0 or leg.ankle.Y), tg.w) end
+		-- (DEFEAT: a kneeling leg's ankle is pulled back and tipped onto the toe, so the knee comes down to the ground)
+		local kn = st.kneel and st.kneel.side == side and st.kneel
+		if kn and kn.w > 0 then
+			local flat = CFrame.lookAt(base.Position, base.Position + Vector3.new(fwdv.X, 0, fwdv.Z)).Rotation
+			local p = base * Vector3.new(leg.ankle.X, 0, leg.ankle.Z + kn.back)
+			local kAnkle = Vector3.new(p.X, groundY(p.X, p.Z, st.y) + kn.up, p.Z)
+			ankle = ankle:Lerp(kAnkle, kn.w)
+			rot = rot:Lerp(flat * CFrame.Angles(math.rad(kn.toe), 0, 0) * leg.footRest, kn.w)
+		end
+		-- (29 Oct HANDOFF: a foothold reset (resetFeet: attack start, a travel starting / ending, walk <-> idle, the legs
+		-- changing owner) teleported a foot caught mid-stride to its new spot in one frame, up to 3-4 studs. It now steps
+		-- there from where it was RENDERED last frame, in a low arc. Applied last (after attack targets and the kneel) so
+		-- nothing re-adds a jump; its length grows with the distance so a foot never moves faster than 15 studs/s at the
+		-- smoothstep's peak 1.5 d / T (0.5 a frame at 30 fps, audit r2 + r3: no upper cap, it broke the bound past 3.5 studs).
+		-- A gap over FOOT_TELEPORT x the leg's reach is a real teleport of the whole unit (a hop-on, a place()), not a step:
+		-- not smoothed (a flat 4 studs snapped real Colossus / Ram steps of 4.3-4.8, measured).
+		-- os.clock, so a frozen / clamped attack clock can't stall it)
+		local hf = leg.from
+		if hf and not hf.T then
+			local d = (hf.p - ankle).Magnitude
+			if d > FOOT_TELEPORT * (leg.l1 + leg.l2) then leg.from, hf = nil, nil else hf.T = math.max(FOOT_HANDOFF, d / 10) end
+		end
+		if hf then
+			local k = (os.clock() - hf.t) / hf.T
+			if k >= 1 then
+				leg.from = nil
+			else
+				local e = smooth(k)
+				local lift = math.min(ik.lift or 0.5, (hf.p - ankle).Magnitude * 0.3)
+				ankle = hf.p:Lerp(ankle, e) + UP * lift * math.sin(math.pi * k)
+				rot = hf.r:Lerp(rot, e)
+			end
+		end
+		-- 2-bone IK, knee forward
+		local hipsCF = leg.thigh.Parent:IsA("Bone") and (leg.thigh.Parent :: Bone).TransformedWorldCFrame or base
+		local w0t = hipsCF * leg.thigh.CFrame
+		local hip = w0t.Position
+		local to = ankle - hip
+		local reach = leg.l1 + leg.l2 - 0.02
+		local over = to.Magnitude - reach
+		if over > (st.over or 0) then st.over, st.overQ = over, q end
+		local d = math.clamp(to.Magnitude, math.abs(leg.l1 - leg.l2) + 0.05, reach)
+		local u = to.Unit
+		local w = (pole - u * pole:Dot(u)).Unit
+		local c = math.clamp((leg.l1 * leg.l1 + d * d - leg.l2 * leg.l2) / (2 * leg.l1 * d), -1, 1)
+		local knee = hip + (u * c + w * math.sqrt(1 - c * c)) * leg.l1
+		aim(leg.thigh, w0t, leg.dirT, leg.fwdT, knee - hip, fwdv)
+		local w0s = w0t * leg.thigh.Transform * leg.shin.CFrame
+		aim(leg.shin, w0s, leg.dirS, leg.fwdS, (hip + u * d) - knee, fwdv)
+		local w0f = w0s * leg.shin.Transform * leg.foot.CFrame
+		leg.foot.Transform = w0f.Rotation:Inverse() * rot
+		leg.drawnP, leg.drawnR = hip + u * d, rot                      -- (the ankle as solved, reach-clamped = what renders)
+	end
+end
+
+-- ===== attacks (James, 27 Oct: three for the Colossus v4 pilot; the Attacks module holds the timelines + effects) =====
+-- an arm reaching its gauntlet's tip for `target` (world): 2-bone IK, the elbow bending back and out, blended over the
+-- posed arm by w (ChatGPT: the fists must really meet the ground / the boulder, not just get close by angles)
+local function reachArm(a, target: Vector3, base: CFrame, w: number)
+	local fkA, fkH = a.arm.Transform, a.hand.Transform
+	local w0a = (a.arm.Parent :: Bone).TransformedWorldCFrame * a.arm.CFrame
+	local sh = w0a.Position
+	local to = target - sh
+	local d = math.clamp(to.Magnitude, math.abs(a.l1 - a.l2) + 0.05, a.l1 + a.l2 - 0.02)
+	local u = to.Unit
+	local pole = (-base.LookVector + base.RightVector * a.sx * 0.6).Unit
+	local wv = (pole - u * pole:Dot(u)).Unit
+	local c = math.clamp((a.l1 * a.l1 + d * d - a.l2 * a.l2) / (2 * a.l1 * d), -1, 1)
+	local elbow = sh + (u * c + wv * math.sqrt(1 - c * c)) * a.l1
+	aim(a.arm, w0a, a.dirA, a.fwdA, elbow - sh, base.LookVector)
+	local w0h = w0a * a.arm.Transform * a.hand.CFrame
+	aim(a.hand, w0h, a.dirH, a.fwdH, (sh + u * d) - elbow, base.LookVector)

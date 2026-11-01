@@ -1,0 +1,8 @@
+SQUISH F1 Drip      A:CLING avg 49% / best 87% vs F3 | B:BOING avg 3% / best 12% vs F4 | C:BOING BOMBS avg 3% / best 10% vs F4
+SQUISH F2 Twin      A:DOUBLE SLAP avg 14% / best 57% vs F1 | B:STICKY FLOOR avg 6% / best 10% vs F1 | C:BOING SLAM avg 12% / best 20% vs F2
+SQUISH F3 Brute     A:KNUCKLE POUND avg 19% / best 56% vs F2 | B:STRETCH GRAB avg 13% / best 40% vs F1 | C:CHEST THUMP avg 11% / best 28% vs F1
+SQUISH F4 Titan     A:TENTACLE SLAM avg 44% / best 125% vs F3 | B:GOO BOMB avg 2% / best 5% vs F4 | C:GOO TSUNAMI avg 1% / best 4% vs F3
+CRUNCH F1 Pebble    A:CHIP avg 45% / best 82% vs F3 | B:CURL UP avg 4% / best 14% vs F4 | C:ROLL OUT avg 5% / best 16% vs F3
+CRUNCH F2 Pincer    A:SCISSOR SNAP avg 21% / best 83% vs F1 | B:CLAW BLOCK avg 8% / best 22% vs F1 | C:SIDE SWEEP avg 0% / best 10% vs F1
+CRUNCH F3 Ram       A:HORN GORE avg 2% / best 38% vs F2 | B:HOOF STAMP avg 5% / best 10% vs F2 | C:RAM CHARGE avg 5% / best 12% vs F2
+CRUNCH F4 Colossus  A:GROUND SHATTER avg 39% / best 112% vs F3 | B:BOULDER HURL avg -0% / best 0% vs F1 | C:SOLAR STRIKE avg 1% / best 6% vs F4

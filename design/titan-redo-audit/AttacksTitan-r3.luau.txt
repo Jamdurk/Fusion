@@ -1,0 +1,807 @@
+-- Alien Fusion: the SQUISH TITAN, REDONE (29 Oct 2026; James: "finish off titan redo", built from ChatGPT's reference
+-- sheets design/concepts/titan/attacks-v2/ J1 TENTACLE SLAM, J2 GOO BOMB, J3 GOO TSUNAMI, J4 HURT + DEFEAT, K EFFECTS and
+-- its spec design/20-TITAN-REDO-SPEC-chatgpt-raw.md, readable copy 20-TITAN-REDO-SPEC-compact.md). Replaces the batch 2
+-- Titan in A.FOR.SquishF4v5; the old A.TSlam / A.Bomb / A.Wave / A.THurt / A.TDefeat stay in Attacks as the fallback.
+-- Gameplay timing is the server's (AITest KITS + BODY): slam hit 1.64, lock 3.40; bomb spit 2.55, hit 3.40, lock 2.60,
+-- slow to 5.90; tsunami release 2.10, hit 3.20, lock 3.20, slow to 5.20. Keys after a lock blend back (the animator).
+-- Effects are the authored K meshes in FX.GooMeshes (assets/blender/scripts/titan_k.py); no lights, no camera shake.
+-- The spec's keys in this rig's axes (measured 29 Oct, spec gate G1: each chain turned 20 deg about each axis):
+--   front tentacle: spec rx (+ = swing down / forward) = -X; spec rz (+ = down / inward) = +Z on the +X side (FL)
+--   back tentacle:  spec rx (+ = forward) = +Y; spec rz (+ = down) = -Z on the +X side (BL); the -X side mirrors (a, -b, -c)
+--   Body / Top: spec rx (+ = lean forward) = -X; root P (+ = forward) = -pitch; root F (+ = forward) = fwd
+return function(A, E)
+local smooth, clamp01 = E.smooth, E.clamp01
+local GSND, SND, LID_FULL = E.GSND, E.SND, E.LID_FULL
+local gooWedge, gooCircle, gooLane, droplets, bubbles = E.gooWedge, E.gooCircle, E.gooLane, E.droplets, E.bubbles
+local sin, cos, pi, rad = math.sin, math.cos, math.pi, math.rad
+local YAW180 = CFrame.Angles(0, pi, 0)
+local Debris = game:GetService("Debris")
+local GM = game:GetService("ReplicatedStorage"):WaitForChild("AlienFusion"):WaitForChild("FX"):WaitForChild("GooMeshes")
+
+-- ===== sound (spec 9): licensed ProSoundEffects clips; spatial at the contact, roll-off 10-85, lows cut / mids lifted
+-- for a phone speaker, pitch +-4 % per cast. The spec's gains are 0-1 starting values: x2 here, this game's level (the
+-- batch 2 slam was 2.6); hierarchy kept: Tsunami crash > Slam > Bomb.
+local TS = {
+	roar29 = "9113980644",   -- Creature Mix, Giant Crab Monster, Roar Growl 4 (2.9 s)
+	roar41 = "9113980319",   -- Creature Mix, Giant Crab Monster, Roar Growl 1 (4.1 s)
+	fall = "9113524242",     -- Body Impact 3: fall, hard hit / thump (2.0 s)
+	mushy = "9114519760",    -- Food Valley 5 (cartoon): huge, mushy, wet, thudding impacts (1.8 s): the MAIN impact body
+	                         -- (r3, ChatGPT: the wet slap is the accent, not the impact)
+}
+local function snd(id, pos, gain, pitch, from, cut)
+	local at = Instance.new("Attachment"); at.WorldPosition = pos; at.Parent = workspace.Terrain
+	local s = Instance.new("Sound")
+	s.SoundId = "rbxassetid://" .. id; s.Volume = gain * 2; s.PlaybackSpeed = pitch * (0.96 + math.random() * 0.08)
+	s.RollOffMinDistance, s.RollOffMaxDistance = 10, 85
+	local eq = Instance.new("EqualizerSoundEffect"); eq.LowGain, eq.MidGain, eq.HighGain = -6, 2, 0; eq.Parent = s
+	s.Parent = at
+	if from and from > 0 then s.TimePosition = from end
+	s:Play()
+	if cut then                                          -- (long clips: faded out over 0.3 s from `cut`, never a tail past the move)
+		task.delay(cut, function()
+			local v0 = s.Volume
+			for i = 1, 6 do task.wait(0.05); if not s.Parent then return end; s.Volume = v0 * (1 - i / 6) end
+			s:Stop()
+		end)
+	end
+	Debris:AddItem(at, (cut and cut + 0.6) or 8)
+end
+
+-- ===== the K meshes: clone, then place by the mesh's AUTHORED origin (attribute C = its centre in authored space; the
+-- 3D importer turned every mesh 180 deg about Y). frame's -Z = the authored -Z. k = scale (number or Vector3), a = opacity
+local function mesh(ctx, name)
+	local t = GM:FindFirstChild(name)
+	if not t then return nil end
+	local p = t:Clone(); p.Transparency = 1; p.Parent = ctx.holder
+	return { p = p, s0 = t.Size, c = t:GetAttribute("C") or Vector3.zero }
+end
+-- (measured 29 Oct, 4 Titans fighting: writing Size / CFrame / Transparency on every effect mesh every frame (cracks,
+-- puddles and the flood hold still for seconds) cost ~half the frame rate, the same per-frame property churn as the old glow.
+-- A write happens only when the value really changed; opacity in 0.05 steps)
+local function put(m, frame: CFrame, k, a)
+	if not m then return end
+	local s = (typeof(k) == "Vector3") and k or Vector3.one * (k or 1)
+	local tr = math.floor((1 - clamp01(a or 1)) * 20 + 0.5) / 20
+	if tr ~= m.tr then m.tr = tr; m.p.Transparency = tr end
+	if tr >= 1 then return end
+	if not m.s or (m.s - s).Magnitude > 0.004 then m.s = s; m.p.Size = m.s0 * s end
+	local cf = frame * CFrame.new(m.c * s) * YAW180
+	if not m.cf or (m.cf.Position - cf.Position).Magnitude > 0.01 or m.cf.LookVector:Dot(cf.LookVector) < 0.99995 or m.cf.UpVector:Dot(cf.UpVector) < 0.99995 then
+		m.cf = cf; m.p.CFrame = cf
+	end
+end
+local function hide(m) if m and m.tr ~= 1 then m.tr = 1; m.p.Transparency = 1 end end
+local function kill(list) for _, m in list do if m and m.p then m.p:Destroy() end end end
+-- a spec curve: { { u, value }, ... } eased between keys
+local function curve(keys, u)
+	if u <= keys[1][1] then return keys[1][2] end
+	for i = 1, #keys - 1 do
+		local a, b = keys[i], keys[i + 1]
+		if u <= b[1] then return a[2] + (b[2] - a[2]) * smooth((u - a[1]) / (b[1] - a[1])) end
+	end
+	return keys[#keys][2]
+end
+local function flat(v) local f = Vector3.new(v.X, 0, v.Z); return (f.Magnitude > 1e-3) and f.Unit or Vector3.new(0, 0, -1) end
+local function onG(ctx, p) return Vector3.new(p.X, ctx.ground(p.X, p.Z), p.Z) end
+-- the cast frame: fixed at t = 0 on the ground under the Titan, facing its cast direction (spec: aims lock at the cast)
+local function castAt(ctx)
+	local o = ctx.base.Position
+	local g = onG(ctx, o)
+	ctx.tcast = CFrame.lookAt(g, g + flat(ctx.base.LookVector))
+	return ctx.tcast
+end
+local function cast(ctx) return ctx.tcast or castAt(ctx) end
+local function groundFrame(ctx, p, look) local g = onG(ctx, p); return CFrame.lookAt(g, g + flat(look)) end
+
+-- K3 debris: deterministic cosmetic paths from the real contact points (spec 8.5), K4 drops ride the same way
+local DEBRIS = {
+	slam = { n = 7, size = { 0.35, 1.2 }, out = { 7, 13 }, up = { 9, 16 }, spin = { 180, 400 }, life = 0.85 },
+	bomb = { n = 5, size = { 0.30, 0.85 }, out = { 5, 11 }, up = { 7, 14 }, spin = { 150, 350 }, life = 0.75 },
+	wave = { n = 9, size = { 0.45, 1.4 }, out = { 8, 16 }, up = { 10, 18 }, spin = { 200, 450 }, life = 1.10 },
+}
+local function debris(ctx, kind, origins, away: Vector3?, t0, seed)
+	local D = DEBRIS[kind]
+	local rnd = Random.new(seed)
+	local list = {}
+	for i = 1, D.n do
+		local o = origins[(i - 1) % #origins + 1]
+		local m = mesh(ctx, "titanRock" .. ((i - 1) % 4 + 1))
+		if not m then break end
+		local a = (away and math.atan2(away.Z, away.X) or rnd:NextNumber(0, 2 * pi)) + rnd:NextNumber(-1.1, 1.1)
+		local sp = rnd:NextNumber(D.out[1], D.out[2])
+		list[i] = { m = m, o = o + Vector3.new(0, 0.3, 0), v = Vector3.new(cos(a) * sp, rnd:NextNumber(D.up[1], D.up[2]), sin(a) * sp),
+			s = rnd:NextNumber(D.size[1], D.size[2]), axis = rnd:NextUnitVector(), w = rad(rnd:NextNumber(D.spin[1], D.spin[2])) }
+	end
+	-- a few drops along with the rocks (K4)
+	for i = 1, 3 do
+		local m = mesh(ctx, "titanDrop" .. i)
+		if not m then break end
+		local a = rnd:NextNumber(0, 2 * pi); local o = origins[(i - 1) % #origins + 1]
+		table.insert(list, { m = m, drop = true, o = o + Vector3.new(0, 0.5, 0), v = Vector3.new(cos(a) * 5, 12, sin(a) * 5), s = 1, axis = Vector3.yAxis, w = 0 })
+	end
+	return { step = function(_, t)
+		local e = t - t0
+		if e > D.life then return false end
+		for _, d in list do
+			local p = d.o + d.v * e + Vector3.new(0, -14 * e * e, 0)   -- (cosmetic gravity 28)
+			local gy = onG(ctx, p).Y
+			if p.Y < gy + 0.2 then p = Vector3.new(p.X, gy + 0.2, p.Z) end
+			local look = (d.drop and d.v + Vector3.new(0, -28 * e, 0)) or nil
+			local cf = look and CFrame.lookAt(p, p + look) * CFrame.Angles(-pi / 2, 0, 0) or (CFrame.new(p) * CFrame.fromAxisAngle(d.axis, d.w * e))
+			if not d.sized then d.sized = true; d.m.p.Size = d.m.s0 * d.s; d.m.p.Transparency = 0 end   -- (size once; perf note above)
+			d.m.p.CFrame = cf * YAW180
+			if e > D.life - 0.15 then d.m.p.Transparency = smooth((e - (D.life - 0.15)) / 0.15) end
+		end
+		return true
+	end, stop = function() for _, d in list do d.m.p:Destroy() end end }
+end
+
+-- ===== keys: one spec row { t, ease, Y, F, P, bodyRx, bodyOy, topRx, topOy, lid } + tentacle rows
+-- { rx = { s1, s2, s3 }, rz = { s1, s2, s3 } } for the front and the back pairs (spec tables, +X side; the -X side mirrors)
+local EZ = { E = "smooth", O = "out", I = "in", L = "lin" }
+local function keys(rows, front, back)
+	assert(#front == #rows and #back == #rows, "Titan key rows mismatch")
+	local out = {}
+	for i, r in rows do
+		local b = {}
+		b.Body = { -r[6], 0, 0, 0, r[7], 0 }
+		b.Top = { -r[8], 0, 0, 0, r[9], 0 }
+		b.Lid = { LID_FULL * r[10] / 60, 0, 0 }
+		local f, k = front[i], back[i]
+		for s = 1, 3 do
+			b["TentFL" .. s] = { -f[1][s], 0, f[2][s] }
+			b["TentFR" .. s] = { -f[1][s], 0, -f[2][s] }
+			b["TentBL" .. s] = { 0, k[1][s], -k[2][s] }
+			b["TentBR" .. s] = { 0, -k[1][s], k[2][s] }
+		end
+		out[i] = { t = r[1], ease = EZ[r[2]] or "smooth", root = { r[3], 0, r[4], -r[5], 0, 0 }, bones = b }
+	end
+	return out
+end
+local Z3 = { 0, 0, 0 }
+local function T(rx, rz) return { rx or Z3, rz or Z3 } end
+local function mix3(a, b, u) return { a[1] + (b[1] - a[1]) * u, a[2] + (b[2] - a[2]) * u, a[3] + (b[3] - a[3]) * u } end
+local function mixT(a, b, u) return { mix3(a[1], b[1], u), mix3(a[2], b[2], u) } end
+
+-- ===== the world-space tip contact (spec 4.4 / 6.3): after the pose, each chain's end bone (its "3" bone, the contact
+-- point the batch 2 solver and James's approval used) is pulled onto a ground target by its joints 2 and 1, at most 16 deg
+-- each x the weight (the spec's 8 deg per joint per pass, two passes). An exact two-bone solve: joint 2 bends to the
+-- target's distance (law of cosines), then joint 1 aims (measured: a CCD only turns toward the target and could not
+-- shorten a reach, 0.6-2.2 studs left over)
+local MAXC = rad(16)
+local MAXC_BACK = rad(30)    -- (the back chains: the spec's own caveat, "rear tips require a proper reach test"; their rest
+                             -- tips curl UP beside the body, 4.5 studs from a spot the 9-stud chain must fold onto)
+local function turnBone(e, q: CFrame)
+	local W = e.b.TransformedWorldCFrame
+	local P = W * e.b.Transform:Inverse()
+	e.b.Transform = P:Inverse() * (CFrame.new(W.Position) * q * W.Rotation)
+end
+local function angleOf(a: Vector3, b: Vector3) return math.acos(math.clamp(a.Unit:Dot(b.Unit), -1, 1)) end
+local function reachTip(bones, chain, target: Vector3, w)
+	local e1, e2, e3 = bones[chain .. "1"], bones[chain .. "2"], bones[chain .. "3"]
+	if not (e1 and e2 and e3) or w <= 0 then return nil end
+	local cap = chain:find("B") and MAXC_BACK or MAXC
+	local J1, J2, Tp = e1.b.TransformedWorldCFrame.Position, e2.b.TransformedWorldCFrame.Position, e3.b.TransformedWorldCFrame.Position
+	local l1, l2 = (J2 - J1).Magnitude, (Tp - J2).Magnitude
+	local d = math.clamp((target - J1).Magnitude, math.abs(l1 - l2) + 0.05, l1 + l2 - 0.05)
+	local n = (J1 - J2):Cross(Tp - J2)
+	if n.Magnitude > 1e-4 then                                  -- (joint 2: open / close the bend to the target's distance)
+		local want = math.acos(math.clamp((l1 * l1 + l2 * l2 - d * d) / (2 * l1 * l2), -1, 1))
+		local need = want - angleOf(J1 - J2, Tp - J2)
+		if e1.b.Parent and e1.b:FindFirstAncestorOfClass("Model"):GetAttribute("FreezeTT") then          -- (tuning readout: the raw pose's need)
+			local mdl = e1.b:FindFirstAncestorOfClass("Model")
+			local dv = mdl:GetPivot():VectorToObjectSpace(Tp - target)
+			mdl:SetAttribute("TNeed" .. chain, string.format("bend %.1f aim %.1f raw %.2f (tip - target, model axes: %.2f, %.2f, %.2f)", math.deg(need),
+				math.deg(angleOf(Tp - J1, target - J1)), (Tp - target).Magnitude, dv.X, dv.Y, dv.Z))
+		end
+		turnBone(e2, CFrame.fromAxisAngle(n.Unit, math.clamp(need, -cap, cap) * w))
+	end
+	Tp = e3.b.TransformedWorldCFrame.Position                  -- (joint 1: aim the chain at the target)
+	local a, b = Tp - J1, target - J1
+	local ax = a:Cross(b)
+	if ax.Magnitude > 1e-4 then turnBone(e1, CFrame.fromAxisAngle(ax.Unit, math.min(angleOf(a, b), cap) * w)) end
+	return (e3.b.TransformedWorldCFrame.Position - target).Magnitude
+end
+local function window(t, t0, t1, t2, t3)
+	if t <= t0 or t >= t3 then return 0 end
+	if t < t1 then return smooth((t - t0) / (t1 - t0)) end
+	if t <= t2 then return 1 end
+	return 1 - smooth((t - t2) / (t3 - t2))
+end
+local function contacts(list, t0, t1, t2, t3)
+	return function(ctx, t, bones)
+		local w = window(t, t0, t1, t2, t3)
+		if w <= 0 or not ctx.tcast then return end
+		local worst = 0
+		for _, c in list do
+			local p = ctx.tcast * c[2]
+			local err = reachTip(bones, c[1], Vector3.new(p.X, ctx.ground(p.X, p.Z) + (c[3] or 0.12), p.Z), w)
+			if err then worst = math.max(worst, err) end
+		end
+		if ctx.m:GetAttribute("FreezeTT") then ctx.m:SetAttribute("TContactErr", worst) end   -- (test readout)
+	end
+end
+
+-- the mouth (batch 2 measurement: 6.7 ahead of the Top bone and 2.07 up at rest), carried by the Top bone's real turn
+-- (r2, ChatGPT: a fixed offset left the ball off the mouth while the head leaned / aimed)
+local function restCF(b: Bone): CFrame
+	local cf = b.CFrame
+	local p = b.Parent
+	while p and p:IsA("Bone") do cf = p.CFrame * cf; p = p.Parent end
+	return cf
+end
+local MOUTH = Vector3.new(0, 2.07, -6.7)
+local function mouthAt(ctx)
+	local top = ctx.topBone or ctx.m:FindFirstChild("Top", true)
+	ctx.topBone = top
+	local mesh = top and top:FindFirstAncestorWhichIsA("BasePart")
+	if not mesh then return ctx.bonePos("Top") + Vector3.new(0, 2.07, 0) end
+	local W = top.TransformedWorldCFrame
+	local restW = mesh.CFrame * restCF(top)
+	return W.Position + (W.Rotation * restW.Rotation:Inverse()) * ctx.m:GetPivot():VectorToWorldSpace(MOUTH)   -- (MOUTH is in model axes)
+end
+
+-- ===================================================== J1: TENTACLE SLAM =====================================================
+-- (measured 29 Oct in Play: the spec's strike rx on segment 1 (+28 / +30 / +15) buried the tips 5 studs under the ground on
+-- this rig (the body's forward lunge + lean carry the shoulders down); segment 1 is lifted 65 deg at the contact (the
+-- spec: "change the upstream pose"), the curl of segments 2-3 kept; the solver's raw-pose readout drove the number)
+local SLAM_FRONT = {
+	-- (r2: the wind-up flares the tentacles wide (rz -40 / -30 at 1.48, measured: at the spec's -14 / -18 their elbows stood
+	-- 5.7 studs in front of the eye and hid the face from the front)
+	T(), T({ -12, -18, -12 }, { -6, -9, -10 }), T({ -21, -28, -16 }, { -22, -20, -14 }), T({ -28, -32, -22 }, { -34, -27, -15 }),
+	T({ -32, -35, -25 }, { -40, -30, -16 }), T({ -14, -10, 8 }, { 3, 8, 12 }), T({ -37, 37, 22 }, { 12, 16, 14 }),
+	T({ -35, 39, 20 }, { 14, 18, 15 }), T({ -20, 22, 12 }, { 8, 10, 8 }), T({ 4, 7, 4 }, { 3, 4, 2 }), T(),
+}
+local SB = { [0] = T(), [0.74] = T({ -5, -8, -10 }, { 6, 8, 6 }), [1.48] = T({ -10, -14, -12 }, { 12, 12, 8 }), [1.64] = T({ 12, 16, 8 }, { 15, 16, 10 }) }
+local SLAM_BACK = {   -- (spec 4.3 keys at 0 / 0.74 / 1.48 / 1.64 / 1.82 / 2.08 / 2.65 / 3.40; 0.28, 1.20, 1.56 interpolated)
+	SB[0], mixT(SB[0], SB[0.74], 0.378), SB[0.74], mixT(SB[0.74], SB[1.48], 0.62), SB[1.48], mixT(SB[1.48], SB[1.64], 0.5), SB[1.64],
+	T({ 15, 18, 10 }, { 18, 18, 12 }), T({ -5, -9, -6 }, { -6, -8, -6 }), T({ 3, 5, 3 }, { 4, 5, 3 }), T(),
+}
+A.TiSlam = {
+	boneKeys = true, dur = 3.8, lock = 3.4,
+	keys = keys({
+		{ 0.00, "E", 0, 0, 0, 0, 0, 0, 0, 0 },
+		-- (r2, ChatGPT build audit: root P and Body rx STACK on this rig: 29 deg back at 1.48 hid the face; now 18 = P -9, Body -9)
+		{ 0.28, "O", 0.10, -0.08, -2.6, -3, 0.05, 3, 0.10, 12 },
+		{ 0.74, "E", 0.42, -0.35, -5.8, -6, 0.18, 6, 0.30, 24 },
+		{ 1.20, "E", 0.58, -0.55, -7.7, -7.8, 0.24, 9, 0.42, 32 },
+		{ 1.48, "O", 0.62, -0.60, -9, -9, 0.27, 10, 0.48, 38 },
+		{ 1.56, "I", 0.42, -0.25, -5, 5, 0.10, -4, 0.30, 30 },
+		{ 1.64, "I", -0.18, 1.20, 13, 15, -0.28, -10, -0.30, 16 },
+		{ 1.82, "O", -0.24, 1.30, 11, 13, -0.35, -8, -0.42, 22 },
+		{ 2.08, "O", -0.10, 0.92, 6, 7, -0.20, 5, 0.06, 12 },
+		{ 2.65, "E", 0.08, 0.28, -2, -3, 0.12, 3, 0.15, 5 },
+		{ 3.40, "E", 0, 0, 0, 0, 0, 0, 0, 0 },
+	}, SLAM_FRONT, SLAM_BACK),
+	-- both front tips onto (+-4.5, -12) in the cast frame: in 1.56-1.64, held to 1.88, out by 2.08 (spec 4.4)
+	post = contacts({ { "TentFL", Vector3.new(4.5, 0, -12) }, { "TentFR", Vector3.new(-4.5, 0, -12) } }, 1.56, 1.64, 1.88, 2.08),
+	-- the cyan veins rise to 1.25x through the wind-up (the shared glow levels show it as BRIGHT), back by 2.08
+	extra = function(t, p)
+		p.glowMul = 1 + 0.25 * smooth((t - 0.28) / 0.6) * (1 - smooth((t - 1.64) / 0.44))
+		-- (r2: the front tentacles rise SWEPT OUT to the sides (segment 1 turned 35 deg about Y, measured: rz alone barely
+		-- moved them), so the eye and mouth show between them at the peak; folded back in for the whip 1.48-1.56)
+		local fw = 35 * smooth((t - 0.28) / 0.9) * (1 - smooth((t - 1.48) / 0.08))
+		if p.bones.TentFL1 then p.bones.TentFL1[2] -= fw; p.bones.TentFR1[2] += fw end
+	end,
+	events = {
+		{ t = 0, fn = function(ctx)
+			local c = castAt(ctx)
+			return gooWedge(ctx, c.Position, c.LookVector, 0.0, 1.64)          -- (120 deg, radius 16, the server's wedge)
+		end },
+		{ t = 0.28, fn = function(ctx) snd(GSND.gurgle, ctx.base.Position, 0.26, 0.84) end },
+		{ t = 0.90, fn = function(ctx) snd(TS.roar29, ctx.bonePos("Top"), 0.36, 0.90, 0.05) end },
+		{ t = 1.48, fn = function(ctx) snd(GSND.thump, ctx.base.Position, 0.28, 0.88) end },
+		-- two whip ribbons as the tentacles crack down (1.56-1.68), from each front shoulder through the swing
+		{ t = 1.56, fn = function(ctx)
+			snd(GSND.slap, ctx.base.Position, 0.44, 1.12)
+			local rs = { mesh(ctx, "titanWhip1"), mesh(ctx, "titanWhip1") }
+			return { step = function(_, t)
+				if t > 1.68 then return false end
+				local a = 0.75 * smooth((t - 1.56) / 0.04) * (1 - smooth((t - 1.62) / 0.06))
+				for i, n in { "TentFL1", "TentFR1" } do
+					put(rs[i], CFrame.new(ctx.bonePos(n)) * cast(ctx).Rotation * CFrame.Angles(0, rad(90), 0), 1, a)
+				end
+				return true
+			end, stop = function() kill(rs) end }
+		end },
+		-- IMPACT (1.64): two crowns + two crack discs at the planted tips, one connected shockwave, debris
+		{ world = true, t = 1.64, fn = function(ctx)
+			local c = cast(ctx)
+			local pts = { onG(ctx, c * Vector3.new(4.5, 0, -12)), onG(ctx, c * Vector3.new(-4.5, 0, -12)) }
+			ctx.tslamPts = pts
+			snd(TS.mushy, (pts[1] + pts[2]) / 2, 0.82, 0.94); snd(GSND.slap, (pts[1] + pts[2]) / 2, 0.30, 1.05)
+			snd(SND.avalanche, (pts[1] + pts[2]) / 2, 0.38, 1.04, 0.08, 1.2)
+			local crowns, cracks, glows = {}, {}, {}
+			for i, p in pts do
+				crowns[i] = mesh(ctx, "titanCrown1"); cracks[i] = mesh(ctx, "titanCrack1"); glows[i] = mesh(ctx, "titanCrackGlow1")
+			end
+			return { step = function(_, t)
+				if t > 3.80 then return false end
+				local uc = (t - 1.64) / 0.95
+				local uk = (t - 1.64) / 2.16
+				for i, p in pts do
+					local f = CFrame.lookAt(p, p + c.LookVector)
+					if uc < 1 then
+						put(crowns[i], f, curve({ { 0, 0.55 }, { 0.12, 1.0 }, { 0.38, 1.12 }, { 0.75, 0.90 }, { 1, 0.72 } }, uc),
+							curve({ { 0, 0 }, { 0.05, 1 }, { 0.40, 1 }, { 0.80, 0.35 }, { 1, 0 } }, uc))
+					else hide(crowns[i]) end
+					local ka = curve({ { 0, 0 }, { 0.08, 1 }, { 0.72, 0.8 }, { 1, 0 } }, uk)
+					local ks = curve({ { 0, 0.8 }, { 0.08, 1 }, { 1, 1 } }, uk)
+					put(cracks[i], f + Vector3.new(0, 0.02, 0), ks, ka)
+					put(glows[i], f + Vector3.new(0, 0.01, 0), ks, ka)
+				end
+				return true
+			end, stop = function() kill(crowns); kill(cracks); kill(glows) end }
+		end },
+		-- the shockwave: 12 authored goo segments round the 120-degree arc, radius 4 -> 16 (spec 8.4), no second hit
+		{ world = true, t = 1.66, fn = function(ctx)
+			local c = cast(ctx)
+			local segs = {}
+			for i = 1, 16 do segs[i] = mesh(ctx, "titanShockSeg1") end   -- (16 x 7.5 deg; a 4-Titan dip measured 29 Oct was a background-window frame cap)
+			-- (r2, measured: at the spec's 0.8 high / 1.4 thick the 12 pieces read as separate small rolls; now 16 overlapping
+			-- pieces, up to 2.0 high and 3.0 thick: one continuous rolling goo rim)
+			local R = { { 0, 4.0 }, { 0.08, 7.0 }, { 0.18, 11.5 }, { 0.32, 15.0 }, { 0.42, 16.0 }, { 0.55, 16.0 } }
+			local TH = { { 0, 3.0 }, { 0.08, 2.8 }, { 0.18, 2.6 }, { 0.32, 2.0 }, { 0.42, 1.3 }, { 0.55, 0.8 } }
+			local H = { { 0, 0.8 }, { 0.08, 1.5 }, { 0.18, 2.0 }, { 0.32, 1.4 }, { 0.42, 0.5 }, { 0.55, 0.0 } }
+			return { step = function(_, t)
+				local age = t - 1.64
+				if age > 0.55 then return false end
+				local r, th, h = curve(R, age), curve(TH, age), curve(H, age)
+				for i, m in segs do
+					local a = rad(-60 + (i - 0.5) * 7.5)
+					local d = c:VectorToWorldSpace(Vector3.new(sin(a), 0, -cos(a)))
+					local p = onG(ctx, c.Position + d * r)
+					put(m, CFrame.lookAt(p, p + d), Vector3.new(r * rad(7.5) * 1.3, math.max(0.02, h), th), 0.95 * (1 - smooth((age - 0.42) / 0.13)))
+				end
+				return true
+			end, stop = function() kill(segs) end }
+		end },
+		{ world = true, t = 1.69, fn = function(ctx)
+			local pts = ctx.tslamPts or { cast(ctx).Position }
+			return debris(ctx, "slam", pts, cast(ctx).LookVector, 1.69, 41)
+		end },
+		{ world = true, t = 1.70, fn = function(ctx) snd(GSND.splash, (ctx.tslamPts and ctx.tslamPts[1]) or ctx.base.Position, 0.53, 0.92) end },
+		{ world = true, t = 1.78, fn = function(ctx) snd(SND.quake, ctx.base.Position, 0.22, 1.00, 0.50, 1.3) end },
+		{ t = 2.08, fn = function(ctx) snd(TS.fall, ctx.base.Position, 0.30, 0.96) end },
+		{ t = 2.65, fn = function(ctx) snd(GSND.gurgle, ctx.base.Position, 0.15, 0.90) end },
+	},
+}
+
+-- ===================================================== J2: GOO BOMB =====================================================
+local BOMB_FRONT = {
+	T(), T({ 4, 6, 5 }, { 8, 8, 5 }), T({ 9, 12, 8 }, { 12, 14, 8 }), T({ 14, 16, 10 }, { 16, 16, 10 }), T({ 16, 18, 12 }, { 18, 18, 12 }),
+	T({ -14, -20, -12 }, { -10, -12, -8 }), T({ -8, -10, -6 }, { -5, -6, -4 }), T({ 4, 6, 3 }, { 4, 4, 3 }), T(), T(),
+}
+local BOMB_BACK = {
+	T(), T({ -3, -5, -5 }, { 5, 6, 4 }), T({ -8, -12, -8 }, { 9, 10, 7 }), T({ -12, -16, -10 }, { 12, 12, 8 }), T({ -14, -18, -12 }, { 14, 14, 9 }),
+	T({ 14, 18, 12 }, { 16, 18, 12 }), T({ 8, 10, 6 }, { 8, 10, 6 }), T({ -4, -6, -4 }, { -4, -5, -3 }), T(), T(),
+}
+-- the K5 ball's path (spec 5.4): share of the way to the target, and height over the ground, at each time
+local BOMB_PATH = { { 2.55, 0, nil }, { 2.70, 0.176, 9.3 }, { 3.00, 0.529, 13.4 }, { 3.20, 0.765, 9.3 }, { 3.40, 1, 1.5 } }
+local function bombAt(t, from: Vector3, hit: Vector3, gyFrom)
+	local k = 1
+	for i = 1, #BOMB_PATH - 1 do if t <= BOMB_PATH[i + 1][1] then k = i; break end end
+	local a, b = BOMB_PATH[k], BOMB_PATH[k + 1]
+	local u = clamp01((t - a[1]) / (b[1] - a[1]))
+	local f = a[2] + (b[2] - a[2]) * u
+	local ha = a[3] or (from.Y - gyFrom)
+	-- (height: eased up to the apex at 3.00 with a flat tangent there, then a steep fall)
+	local hu = (k <= 2) and (1 - (1 - u) ^ 2) or (u * u)
+	if k == 1 then hu = 1 - (1 - u) ^ 1.5 end
+	local h = ha + (b[3] - ha) * hu
+	local xz = from:Lerp(hit, f)
+	return Vector3.new(xz.X, 0, xz.Z), h
+end
+A.TiBomb = {
+	boneKeys = true, dur = 6.1, lock = 2.6, aims = true,
+	keys = keys({
+		{ 0.00, "E", 0, 0, 0, 0, 0, 0, 0, 0 },
+		{ 0.40, "O", -0.08, -0.10, -3, -5, -0.12, 4, 0.08, 12 },
+		{ 1.20, "E", -0.32, -0.28, -7, -9, -0.30, 8, 0.10, 22 },
+		{ 2.20, "E", -0.45, -0.35, -10, -12, -0.38, 10, 0.14, 30 },
+		{ 2.40, "O", -0.48, -0.38, -11, -13, -0.40, 10, 0.16, 34 },
+		{ 2.55, "I", 0.28, 0.82, 17, 18, 0.16, -12, -0.12, 10 },
+		{ 2.70, "O", 0.18, 0.48, 10, 12, 0.10, -8, 0, 18 },
+		{ 3.00, "E", -0.08, 0.12, -3, -4, -0.08, 4, 0.08, 8 },
+		{ 3.40, "E", 0.04, 0, 1, 2, 0.04, -2, 0, 0 },
+		{ 3.90, "E", 0, 0, 0, 0, 0, 0, 0, 0 },
+	}, BOMB_FRONT, BOMB_BACK),
+	-- aimed: the root, body and crown turn toward the target over 0.40-1.85 (batch 2's), held through the spit
+	extra = function(t, p, ctx)
+		p.glowMul = 1 + 0.3 * smooth((t - 0.40) / 1.8) * (1 - smooth((t - 2.55) / 0.3))   -- (the throat charges)
+		if not (ctx and ctx.aimTheta) then return end
+		local s = (ctx.aimTheta / 30) * smooth((t - 0.40) / 1.45)
+		p.root[6] += 10 * s
+		p.bones.Body[2] += 8 * s; p.bones.Top[2] += 12 * s
+	end,
+	events = {
+		-- the radius-5 landing circle on the locked target, from the cast (kept if the Titan dies after the spit)
+		{ t = 0, fn = function(ctx)
+			castAt(ctx)
+			local a = ctx.aim or (ctx.tcast * Vector3.new(0, 0, -16))
+			ctx.tbomb = onG(ctx, a)
+			local w = gooCircle(ctx, ctx.tbomb, 5, 0.0, 3.40)
+			w.worldAt = 2.55
+			return w
+		end },
+		{ t = 0.40, fn = function(ctx) snd(GSND.gurgle, ctx.base.Position, 0.28, 0.80); bubbles(ctx, ctx.bonePos("Top"), 2) end },
+		{ t = 1.20, fn = function(ctx) snd(TS.roar29, ctx.bonePos("Top"), 0.23, 0.84, 0.10) end },
+		-- (r2) the throat swells under the mouth as it charges: a K5 goo lobe 3.0 x 2.3 x 1.3 (spec 5.3's size), 0.40 bulge
+		-- by 2.40, gone into the spit
+		{ t = 1.20, fn = function(ctx)
+			local th = mesh(ctx, "titanBall1")
+			return { step = function(_, t)
+				if t >= 2.62 then return false end
+				local g = smooth((t - 1.20) / 1.2) * (1 - smooth((t - 2.50) / 0.12))
+				local pv = ctx.m:GetPivot()
+				local at = mouthAt(ctx) + pv:VectorToWorldSpace(Vector3.new(0, -2.0, 0.9))
+				put(th, CFrame.new(at) * pv.Rotation, Vector3.new(1.0, 0.77, 0.43) * (0.6 + 0.4 * g), 0.95 * g)
+				return true
+			end, stop = function() kill({ th }) end }
+		end },
+		-- the bomb forms in the mouth: a seed at 1.80, the full 3-stud ball at 2.20, held till the spit
+		{ t = 1.80, fn = function(ctx)
+			local b = mesh(ctx, "titanBall1")
+			return { step = function(_, t)
+				if t >= 2.55 then return false end
+				local g = smooth((t - 1.80) / 0.40)
+				local wob = 1 + 0.04 * sin(t * 24) * smooth((t - 2.2) / 0.1)
+				put(b, CFrame.new(mouthAt(ctx)), (0.15 + 0.85 * g) * wob, 1)
+				return true
+			end, stop = function() kill({ b }) end }
+		end },
+		{ t = 2.20, fn = function(ctx) snd(GSND.gurgle, mouthAt(ctx), 0.32, 1.02) end },
+		{ t = 2.52, fn = function(ctx) snd(GSND.slap, mouthAt(ctx), 0.40, 1.08) end },
+		-- the SPIT: the K5 ball flies the spec's arc to the locked target, an authored trail of drops behind it
+		{ world = true, t = 2.55, fn = function(ctx)
+			local from = mouthAt(ctx)
+			local hit = ctx.tbomb or onG(ctx, cast(ctx) * Vector3.new(0, 0, -16))
+			local gyFrom = ctx.ground(from.X, from.Z)
+			snd(GSND.splash, from, 0.46, 1.18, 0.05)
+			droplets(ctx, from, 3, 5)
+			local ball = mesh(ctx, "titanBall1")
+			-- (r3: the trail is 8 drop meshes reused in turn, not a new one every 0.05 s)
+			local trail, nextD, last, prev = {}, 1, 2.55, nil
+			for i = 1, 8 do trail[i] = { m = mesh(ctx, "titanDrop" .. ((i - 1) % 3 + 1)), t0 = -9 } end
+			return { step = function(_, t)
+				if t >= 3.44 then return false end
+				local xz, h = bombAt(math.min(t, 3.40), from, hit, gyFrom)
+				local p = Vector3.new(xz.X, ctx.ground(xz.X, xz.Z) + h, xz.Z)
+				local wob = (t > 3.0) and rad(10) * sin((t - 3.0) * 28) or 0
+				-- (r3 handoff: the ball stays opaque on the ground at 3.40 and fades out by 3.44 while the splat comes up)
+				put(ball, CFrame.new(p) * CFrame.Angles(wob, t * 3, -wob), curve({ { 0, 1 }, { 0.42, 1.06 }, { 0.70, 0.97 }, { 1, 1 } }, (t - 2.55) / 0.85),
+					1 - clamp01((t - 3.40) / 0.04))
+				if t - last >= 0.05 and prev and t < 3.40 then     -- (a drop every 0.05 s where the ball WAS)
+					last = t
+					local d = trail[nextD]; nextD = nextD % #trail + 1
+					d.p, d.v, d.t0 = prev, p - prev, t
+				end
+				prev = p
+				for _, d in trail do
+					local e = t - d.t0
+					if e < 0.35 and d.v and d.v.Magnitude > 1e-3 then
+						put(d.m, CFrame.lookAt(d.p, d.p + d.v) * CFrame.Angles(-pi / 2, 0, 0), 0.9 * (1 - e / 0.35), 1 - smooth(e / 0.35))
+					else hide(d.m) end
+				end
+				return true
+			end, stop = function() kill({ ball }); for _, d in trail do kill({ d.m }) end end }
+		end },
+		{ world = true, t = 3.00, fn = function(ctx) snd(GSND.gurgle, ctx.tbomb or ctx.base.Position, 0.16, 1.15) end },
+		-- IMPACT (3.40): the K6 splat (not a particle burst), a small crack under it, rocks, then the sticky K7 puddle
+		{ world = true, t = 3.40, fn = function(ctx)
+			local hit = ctx.tbomb or onG(ctx, cast(ctx) * Vector3.new(0, 0, -16))
+			snd(TS.mushy, hit, 0.78, 0.94); snd(GSND.slap, hit, 0.25, 1.05); snd(GSND.splash, hit, 0.61, 1.00)
+			local f = groundFrame(ctx, hit, cast(ctx).LookVector)
+			local splat, crack, glow = mesh(ctx, "titanSplat1"), mesh(ctx, "titanCrack1"), mesh(ctx, "titanCrackGlow1")
+			return { step = function(_, t)
+				local u = (t - 3.40) / 0.8
+				if t > 4.4 then return false end
+				if u < 1 then put(splat, f, curve({ { 0, 0.40 }, { 0.18, 1 }, { 0.50, 1.10 }, { 1, 0.70 } }, u), curve({ { 0, 0.70 }, { 0.075, 1 }, { 0.65, 0.8 }, { 1, 0 } }, u))   -- (r3: 0.70 at 3.40 -> 1 by 3.46)
+				else hide(splat) end
+				local ka = smooth((t - 3.48) / 0.06) * (1 - smooth((t - 4.0) / 0.4))
+				put(crack, f + Vector3.new(0, 0.02, 0), 0.6, ka); put(glow, f + Vector3.new(0, 0.01, 0), 0.6, ka)
+				return true
+			end, stop = function() kill({ splat, crack, glow }) end }
+		end },
+		{ world = true, t = 3.42, fn = function(ctx) return debris(ctx, "bomb", { ctx.tbomb or ctx.base.Position }, nil, 3.42, 77) end },
+		{ world = true, t = 3.46, fn = function(ctx) snd(SND.avalanche, ctx.tbomb or ctx.base.Position, 0.24, 1.10, 0.08, 0.9) end },
+		-- the sticky puddle: 10 wide = the radius-5 slow zone, held while the server's slow lasts (to 5.90), then fades
+		{ world = true, t = 3.40, fn = function(ctx)
+			local hit = ctx.tbomb or ctx.base.Position
+			local f = groundFrame(ctx, hit, cast(ctx).LookVector)
+			local pud = mesh(ctx, "titanPuddle1")
+			local nextB = 4.2
+			return { step = function(_, t)
+				if t > 6.1 then return false end
+				local s = curve({ { 0, 0.55 }, { 0.3, 1.0 }, { 1, 1 } }, (t - 3.40) / 1.0)   -- (r3: from the hit, full 10 wide by 3.70)
+				local wob = 1 + 0.02 * sin(t * 5)
+				put(pud, f + Vector3.new(0, 0.03, 0), Vector3.new(s * wob, 1, s / wob), 1 - smooth((t - 5.90) / 0.2))
+				if t >= nextB and t < 5.8 then nextB += 0.7; bubbles(ctx, hit, 1) end
+				return true
+			end, stop = function() kill({ pud }) end }
+		end },
+		{ world = true, t = 3.75, fn = function(ctx) snd(GSND.gurgle, ctx.tbomb or ctx.base.Position, 0.19, 0.92) end },
+		{ world = true, t = 6.05, fn = function(ctx) ctx.tbomb = nil end },
+	},
+}
+
+-- ===================================================== J3: GOO TSUNAMI =====================================================
+local WAVE_FRONT = {   -- (segment 1 lifted 50 deg at the release: the spec's +27 buried the tips 6.4 under, measured)
+	T(), T({ -12, -16, -12 }, { -8, -10, -8 }), T({ -23, -27, -17 }, { -14, -15, -12 }), T({ -32, -34, -22 }, { -18, -18, -14 }),
+	T({ -58, 70, 24 }, { 14, 18, 14 }), T({ -56, 72, 22 }, { 16, 19, 16 }), T({ -20, 30, 10 }, { 7, 9, 6 }), T({ 3, 5, 3 }, { 2, 3, 2 }), T(), T(),
+}
+-- (back chains at the release, measured: segment 1 swings 16 less forward (the tips landed 2.4 past the spec's spots), and
+-- segments 2-3 take the spec's rz the OTHER way: on this rig they point UP from the elbow, so "down" opened the fold
+-- outward; planting needs them folded in toward the body, and segment 1 swung 55 deg further DOWN (its tips stood 4-5
+-- studs above the spots otherwise): the back tentacles slam down beside the body)
+local WAVE_BACK = {
+	T(), T({ -10, -12, -10 }, { -8, -9, -6 }), T({ -20, -24, -17 }, { -12, -14, -9 }), T({ -28, -30, -20 }, { -18, -18, -12 }),
+	T({ 70, 36, 22 }, { 73, -22, -16 }), T({ 72, 37, 20 }, { 75, -23, -17 }), T({ 30, 17, 10 }, { 30, -10, -7 }), T({ 4, 6, 3 }, { 3, 4, 2 }), T(), T(),
+}
+local GATHER_F = 7.5                 -- (the gathering wall stands just in front of the skirt; the wave launches from it)
+local WAVE_FROM, WAVE_TO = GATHER_F + 2, 30
+A.TiWave = {
+	boneKeys = true, dur = 5.45, lock = 3.2,
+	keys = keys({
+		{ 0.00, "E", 0, 0, 0, 0, 0, 0, 0, 0 },
+		{ 0.40, "O", 0.42, -0.22, -6, -8, 0.30, 5, 0.35, 14 },
+		{ 1.20, "E", 0.92, -0.45, -11, -13, 0.56, 8, 0.72, 22 },
+		{ 1.75, "O", 1.25, -0.55, -15, -17, 0.70, 10, 0.94, 32 },
+		{ 2.10, "I", -0.25, 0.95, 18, 19, -0.38, -13, -0.50, 12 },
+		{ 2.30, "O", -0.30, 1.02, 14, 15, -0.42, -10, -0.46, 20 },
+		{ 2.60, "E", 0.12, 0.38, 4, 5, 0.06, 5, 0.18, 12 },
+		{ 3.20, "E", 0.05, 0.08, -2, -2, 0.10, 2, 0.12, 5 },
+		{ 4.15, "E", 0, 0, 0, 0, 0, 0, 0, 0 },
+		{ 5.00, "E", 0, 0, 0, 0, 0, 0, 0, 0 },
+	}, WAVE_FRONT, WAVE_BACK),
+	-- all four tips onto the ground at the release (spec 6.3): in 2.02-2.10, held to 2.28, let go by 2.55
+	post = contacts({ { "TentFL", Vector3.new(4.5, 0, -10.5) }, { "TentFR", Vector3.new(-4.5, 0, -10.5) },
+		{ "TentBL", Vector3.new(5.1, 0, -3.1), 0.92 }, { "TentBR", Vector3.new(-5.1, 0, -3.1), 0.62 } }, 2.02, 2.10, 2.28, 2.55),   -- (back tip bones sit up by the mesh's own underside under them: BL 0.92, BR 0.62, measured in titan_tips.py)
+	extra = function(t, p) p.glowMul = 1 + 0.35 * smooth((t - 0.40) / 1.2) * (1 - smooth((t - 2.10) / 0.5)) end,   -- (swelling glow)
+	events = {
+		-- the 12 x 30 lane from the Titan's centre (the server's: 0 to 24 + its body, 12 wide); kept after the release
+		{ t = 0, fn = function(ctx)
+			local c = castAt(ctx)
+			snd(TS.roar41, ctx.bonePos("Top"), 0.42, 0.88)
+			local w = gooLane(ctx, c.Position, c.LookVector, 0, WAVE_TO, 6, 0.0, 3.20)
+			w.worldAt = 2.10
+			return w
+		end },
+		{ t = 0.45, fn = function(ctx) snd(GSND.gurgle, ctx.base.Position, 0.32, 0.77) end },
+		-- goo gathers into a wall in front of the skirt (1.20-1.75), 12 wide, 5.5 high; it becomes the wave at 2.10
+		{ t = 1.20, fn = function(ctx)
+			snd(SND.quake, ctx.base.Position, 0.30, 0.93, 0, 0.9)
+			local g = mesh(ctx, "titanGather1")
+			return { step = function(_, t)
+				if t >= 2.12 then return false end
+				local h = smooth((t - 1.20) / 0.55)
+				local f = cast(ctx) * CFrame.new(0, 0, -GATHER_F)
+				put(g, CFrame.new(onG(ctx, f.Position)) * f.Rotation, Vector3.new(0.6 + 0.4 * h, 0.08 + 0.92 * h, 0.8 + 0.2 * h), 0.95)
+				return true
+			end, stop = function() kill({ g }) end }
+		end },
+		{ t = 1.75, fn = function(ctx) snd(GSND.splash, ctx.base.Position, 0.28, 0.85, 0.12) end },
+		-- RELEASE (2.10): the K8 wave travels the lane (front edge linear to 30 by 3.20, the crest rising 0.65 -> 1.55x =
+		-- 15.5 high), a low crown bursts along the launch edge, foam rides the crest from 2.60, rocks tumble in it
+		{ world = true, t = 2.10, fn = function(ctx)
+			local c = cast(ctx)
+			snd(TS.fall, ctx.base.Position, 0.58, 0.94); snd(TS.mushy, ctx.base.Position, 0.48, 0.90)
+			local wave, burst = mesh(ctx, "titanWave1"), mesh(ctx, "titanCrown1")   -- (r2: the C-curl wave carries its own foam lobes)
+			local rocks = {}
+			for i = 1, 5 do rocks[i] = mesh(ctx, "titanRock" .. ((i - 1) % 4 + 1)) end
+			return { step = function(_, t)
+				if t >= 3.27 then return false end   -- (r3: overlaps the crash wall 3.20-3.27)
+				local u = clamp01((t - 2.10) / 1.10)
+				local front = WAVE_FROM + (WAVE_TO - WAVE_FROM) * u
+				local ys = curve({ { 0, 0.65 }, { 0.45, 1.25 }, { 0.75, 1.55 }, { 1, 1.55 } }, u)
+				local base = c * CFrame.new(0, 0, -(front - 6.9))     -- (r3 curl: the crest tip is 6.9 ahead of its origin)
+				local g = onG(ctx, base.Position)
+				local pitch = rad(-10 + 16 * smooth(u))               -- (it rolls forward as it goes)
+				local wob = 0.45 * sin(t * 9)
+				put(wave, CFrame.new(g) * base.Rotation * CFrame.new(wob, 0, 0) * CFrame.Angles(pitch, 0, 0), Vector3.new(1, ys, 1), 1)
+				if t > 2.60 then
+					local fa = smooth((t - 2.60) / 0.1)
+					for i, r in rocks do
+						local ph = t * 4 + i * 1.3
+						local q = CFrame.new(g) * base.Rotation * CFrame.new(-4.5 + i * 1.8, 2 + 3 * ys * (0.5 + 0.4 * sin(ph)), -1.0 + 0.8 * cos(ph))
+						put(r, q * CFrame.Angles(ph, ph * 0.7, 0), 0.6 + 0.15 * (i % 3), fa)
+					end
+				end
+				local ub = (t - 2.12) / 0.95
+				if ub > 0 and ub < 1 then
+					local bf = cast(ctx) * CFrame.new(0, 0, -WAVE_FROM)
+					put(burst, CFrame.new(onG(ctx, bf.Position)) * bf.Rotation, Vector3.new(1.5, 0.45, 0.6) * curve({ { 0, 0.55 }, { 0.12, 1 }, { 0.38, 1.12 }, { 1, 0.72 } }, ub),
+						curve({ { 0, 0 }, { 0.05, 1 }, { 0.40, 1 }, { 0.80, 0.35 }, { 1, 0 } }, ub))
+				else hide(burst) end
+				return true
+			end, stop = function() kill({ wave, burst }); kill(rocks) end }
+		end },
+		{ world = true, t = 2.30, fn = function(ctx) snd(GSND.splash, cast(ctx) * Vector3.new(0, 0, -14), 0.45, 0.91) end },
+		{ world = true, t = 2.60, fn = function(ctx) snd(SND.avalanche, cast(ctx) * Vector3.new(0, 0, -20), 0.34, 0.94, 0.18, 0.8) end },
+		-- CRASH (3.20, the server's one hit): the K9 splash wall at the lane's end, rocks, the K10 flood left on the lane
+		{ world = true, t = 3.20, fn = function(ctx)
+			local c = cast(ctx)
+			local endp = c * Vector3.new(0, 0, -WAVE_TO)
+			snd(TS.mushy, endp, 0.86, 0.88); snd(GSND.slap, endp, 0.30, 1.0); snd(GSND.splash, endp, 0.73, 0.90)
+			local wall = mesh(ctx, "titanSplashWall1")
+			local f = groundFrame(ctx, endp, c.LookVector)
+			return { step = function(_, t)
+				local u = (t - 3.20) / 0.9
+				if u >= 1 then return false end
+				put(wall, f * CFrame.new(0, 0, 1.0), curve({ { 0, 0.60 }, { 0.18, 1 }, { 0.45, 1.15 }, { 1, 0.75 } }, u), curve({ { 0, 0.65 }, { 0.067, 1 }, { 0.60, 0.85 }, { 1, 0 } }, u))   -- (r3: 0.65 at 3.20 -> 1 by 3.26, under the wave)
+				return true
+			end, stop = function() kill({ wall }) end }
+		end },
+		{ world = true, t = 3.22, fn = function(ctx)
+			local c = cast(ctx)
+			return debris(ctx, "wave", { onG(ctx, c * Vector3.new(-3, 0, -29)), onG(ctx, c * Vector3.new(3, 0, -29)) }, c.LookVector, 3.22, 93)
+		end },
+		{ world = true, t = 3.24, fn = function(ctx) snd(SND.avalanche, cast(ctx) * Vector3.new(0, 0, -28), 0.52, 1.04, 0, 1.6) end },
+		{ world = true, t = 3.30, fn = function(ctx) snd(SND.quake, cast(ctx) * Vector3.new(0, 0, -20), 0.32, 1.04, 0.80, 1.4) end },
+		-- the flooded lane: 12 x 30 from the Titan's centre, held while the server's slow lasts (3.20 + 2 = 5.20), then fades.
+		-- (r3, ChatGPT: one flat 30-stud mesh floats / sinks on bumpy ground: three 12 x 10 sections, each on its own ground)
+		{ world = true, t = 3.28, fn = function(ctx)
+			local c = cast(ctx)
+			local secs = {}
+			for k = 0, 2 do
+				local mid = c * Vector3.new(0, 0, -(10 * k + 5))
+				secs[k + 1] = { m = mesh(ctx, "titanFlood1"), f = (c * CFrame.new(0, 0, -10 * k)) + Vector3.new(0, ctx.ground(mid.X, mid.Z) - c.Position.Y + 0.03, 0) }
+			end
+			local nextB = 3.6
+			return { step = function(_, t)
+				if t > 5.45 then return false end
+				local s = curve({ { 0, 0.70 }, { 0.2, 1 }, { 1, 1 } }, (t - 3.28) / 1.0)
+				for _, sc in secs do put(sc.m, sc.f, Vector3.new(s, 1, 1 / 3), 1 - smooth((t - 5.20) / 0.25)) end
+				if t >= nextB and t < 5.1 then nextB += 0.5; bubbles(ctx, c * Vector3.new((math.random() - 0.5) * 8, 0.2, -6 - math.random() * 22), 1) end
+				return true
+			end, stop = function() for _, sc in secs do kill({ sc.m }) end end }
+		end },
+		{ world = true, t = 3.80, fn = function(ctx) snd(GSND.gurgle, cast(ctx) * Vector3.new(0, 0, -15), 0.19, 0.82) end },
+	},
+}
+
+-- ===================================================== J4: HURT (0.52 s, additive) =====================================================
+-- Spec 7.1 is for a hit on its right (+X); these keys push toward +X (a hit on the -X side): X-side channels mirrored.
+-- rows { t, ease, lift, side, roll, bodyRz, bodyOx, topRz, topOx, lid }
+local HURT = {
+	{ 0.00, "E", 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0.06, "O", -0.12, 0.28, -6, -9, 0.24, -11, 0.12, 48 },
+	{ 0.10, "O", -0.18, 0.40, -8, -12, 0.35, -13, 0.20, 60 },
+	{ 0.20, "E", -0.08, 0.22, -4, -5, 0.12, -3, 0.02, 24 },
+	{ 0.30, "E", 0.09, -0.22, 5, 7, -0.16, 8, -0.12, 8 },
+	{ 0.42, "E", -0.03, 0.08, -2, -3, 0.06, -2, 0.04, 2 },
+	{ 0.52, "E", 0, 0, 0, 0, 0, 0, 0, 0 },
+}
+-- tentacles (spec: hit side, opposite side, back; hit-side rz, mirrored on the opposite side), at the same 7 times
+local HIT_RX = { Z3, { 7.2, 12, 14.4 }, { 12, 20, 24 }, { 1.5, 3, 6 }, { -9, -14, -12 }, { 3, 5, 4 }, Z3 }
+local OPP_RX = { Z3, { -6, -9.6, -10.8 }, { -10, -16, -18 }, { 1, 1, -2 }, { 12, 18, 14 }, { -4, -5, -4 }, Z3 }
+local BACK_RX = { Z3, { 4.8, 7.2, 6 }, { 8, 12, 10 }, { 0, 1, 0.5 }, { -8, -10, -9 }, { 3, 4, 2 }, Z3 }
+local HIT_RZ = { Z3, { 4.8, 7.2, 6 }, { 8, 12, 10 }, { 1.5, 2, 2 }, { -5, -8, -6 }, { -2.3, -3.6, -2.7 }, Z3 }
+local function hurtKeys()
+	local out = {}
+	for i, r in HURT do
+		local b = { Body = { 0, 0, r[6], r[7], 0, 0 }, Top = { 0, 0, r[8], r[9], 0, 0 }, Lid = { LID_FULL * r[10] / 60, 0, 0 } }
+		for s = 1, 3 do
+			b["TentFR" .. s] = { -HIT_RX[i][s], 0, -HIT_RZ[i][s] }     -- (the hit side, -X: whips down / inward)
+			b["TentFL" .. s] = { -OPP_RX[i][s], 0, -HIT_RZ[i][s] }     -- (the far side: the mirrored sign, flung up / out)
+			b["TentBL" .. s] = { 0, BACK_RX[i][s], 0 }
+			b["TentBR" .. s] = { 0, -BACK_RX[i][s], 0 }
+		end
+		out[i] = { t = r[1], ease = EZ[r[2]], root = { r[3], r[4], 0, 0, r[5], 0 }, bones = b }
+	end
+	return out
+end
+A.TiHurt = {
+	boneKeys = true, dur = 0.52, additive = true, pushX = true,
+	keys = hurtKeys(),
+	extra = function(t, p) if t > 0.06 and t < 0.20 then p.glowMul = 0.88 end end,
+	events = {
+		{ t = 0, fn = function(ctx)
+			local at = ctx.hurtAt or ctx.base.Position
+			snd(GSND.slap, at, 0.43, 1.08); droplets(ctx, at, 5, 4)
+		end },
+		{ t = 0.10, fn = function(ctx) snd(GSND.gurgle, ctx.hurtAt or ctx.base.Position, 0.24, 0.92) end },
+		{ t = 0.30, fn = function(ctx) snd(TS.fall, ctx.hurtAt or ctx.base.Position, 0.19, 1.12, 0.08) end },
+	},
+}
+
+-- ===================================================== J4: DEFEAT (3.80 s + motes to 5.20) =====================================================
+local DEF_FRONT = {   -- (segment 1 lifted ~55 deg from 1.20: the spec's keys put the tips 7.2 under, measured; the shell takes over at 1.30)
+	T(), T({ -7, -10, -7.5 }, { -4, -5, -4 }), T({ -14, -20, -15 }, { -8, -10, -8 }), T({ -10, 16, 12 }, { 8, 12, 8 }), T({ -34, 28, 18 }, { 14, 18, 14 }),
+	T({ -38, 18, 10 }, { 10, 12, 8 }), T({ -40, 7, 3 }, { 4, 5, 3 }), T({ -40, 7, 3 }, { 4, 5, 3 }), T({ -40, 7, 3 }, { 4, 5, 3 }),
+}
+local DEF_BACK = {
+	T(), T({ -5, -7, -6 }, { -3, -4, -3 }), T({ -10, -14, -12 }, { -6, -8, -6 }), T({ 12, 16, 10 }, { 10, 12, 8 }), T({ 25, 28, 17 }, { 16, 20, 14 }),
+	T({ 14, 17, 10 }, { 10, 13, 9 }), T({ 6, 8, 4 }, { 5, 6, 3 }), T({ 6, 8, 4 }, { 5, 6, 3 }), T({ 6, 8, 4 }, { 5, 6, 3 }),
+}
+A.TiDefeat = {
+	boneKeys = true, dur = 5.2,
+	keys = keys({
+		{ 0.00, "E", 0, 0, 0, 0, 0, 0, 0, 0 },
+		{ 0.20, "O", 0.24, -0.40, -12, -12, 0.10, 12, 0.18, 0 },
+		{ 0.40, "O", 0.35, -0.65, -17, -18, 0.20, 16, 0.30, 0 },
+		{ 0.75, "I", -0.20, 0.20, 8, 10, -0.35, -8, -0.45, 20 },
+		{ 1.20, "I", -0.65, 0.30, 10, 14, -1.10, 20, -1.75, 38 },
+		{ 1.80, "O", -0.82, 0.20, 5, 10, -1.60, 24, -2.50, 48 },
+		{ 2.40, "E", -0.95, 0, 0, 4, -2.00, 15, -3.30, 54 },
+		{ 3.20, "E", -0.95, 0, 0, 0, -2.10, 0, -3.70, 60 },
+		{ 3.80, "E", -0.95, 0, 0, 0, -2.10, 0, -3.70, 60 },
+	}, DEF_FRONT, DEF_BACK),
+	extra = function(t, p) p.glowMul = 1 - smooth((t - 0.8) / 1.3) end,
+	events = {
+		{ t = 0, fn = function(ctx)
+			-- (MOVE TEST repeats a finished defeat: the body starts visible again)
+			for _, d in ctx.m:GetDescendants() do if d:IsA("BasePart") and d.Name ~= "Hitbox" then d.LocalTransparencyModifier = 0 end end
+			castAt(ctx)
+			snd(TS.roar29, ctx.bonePos("Top"), 0.48, 0.82)
+		end },
+		{ t = 0.15, fn = function(ctx) droplets(ctx, ctx.bonePos("Top"), 4, 3) end },
+		{ t = 0.40, fn = function(ctx) snd(GSND.thump, ctx.base.Position, 0.32, 0.78) end },
+		-- the COLLAPSE (spec 7.3): the skinned body crossfades into its own sagging shell (1.05-1.30), the shell into the
+		-- melt heap (1.70-2.55), the heap into the K11 puddle (2.40-3.20); the puddle spreads 8 -> 13 wide (ease out)
+		{ t = 0.75, fn = function(ctx)
+			local c = cast(ctx)
+			local shell, heap, pud = mesh(ctx, "titanCollapse1"), mesh(ctx, "titanMeltHeap1"), mesh(ctx, "titanMelt1")
+			local hidden, was, done = {}, {}, false
+			for _, d in ctx.m:GetDescendants() do if d:IsA("BasePart") and d.Name ~= "Hitbox" then table.insert(hidden, d); was[d] = d.LocalTransparencyModifier end end
+			local SH = { { 0.75, 1.75 }, { 1.20, 1.43 }, { 1.80, 0.91 }, { 2.40, 0.44 }, { 2.55, 0.36 } }   -- (shell height x its 7.15 authored)
+			local HH = { { 1.70, 1.0 }, { 1.80, 0.84 }, { 2.40, 0.40 }, { 3.20, 0.08 } }                  -- (heap height x its 4.52)
+			local PW = { { 0.75, 8.0 / 13 }, { 1.20, 9.0 / 13 }, { 1.80, 10.5 / 13 }, { 2.40, 12.0 / 13 }, { 3.20, 1.0 } }
+			return { step = function(_, t)
+				if t > 5.2 then done = true; return false end
+				local body = smooth((t - 1.05) / 0.25)
+				for _, d in hidden do if d.Parent then d.LocalTransparencyModifier = body end end
+				local f = CFrame.new(onG(ctx, ctx.base.Position)) * c.Rotation
+				local sa = body * (1 - smooth((t - 1.70) / 0.85))
+				if sa > 0.01 then put(shell, f, Vector3.new(1, curve(SH, t), 1), sa) else hide(shell) end
+				local ha = smooth((t - 1.70) / 0.4) * (1 - smooth((t - 2.40) / 0.8))
+				if ha > 0.01 then put(heap, f, Vector3.new(1, curve(HH, t), 1), ha) else hide(heap) end
+				local w = PW[#PW][2]
+				for i = 1, #PW - 1 do
+					if t <= PW[i + 1][1] then local u = clamp01((t - PW[i][1]) / (PW[i + 1][1] - PW[i][1])); w = PW[i][2] + (PW[i + 1][2] - PW[i][2]) * (1 - (1 - u) ^ 2); break end
+				end
+				put(pud, f + Vector3.new(0, 0.08, 0), Vector3.new(w, 1, w), smooth((t - 0.75) / 0.45) * (1 - smooth((t - 4.6) / 0.6)))   -- (r2: lifted clear of terrain bumps)
+				return true
+			end, stop = function()
+				kill({ shell, heap, pud })
+				if not done then for _, d in hidden do if d.Parent then d.LocalTransparencyModifier = was[d] end end end   -- (cancelled: put it back)
+			end }
+		end },
+		{ t = 1.20, fn = function(ctx) snd(TS.fall, ctx.base.Position, 0.76, 0.88); snd(TS.mushy, ctx.base.Position, 0.46, 0.90, 0.08) end },
+		{ t = 1.80, fn = function(ctx) snd(GSND.gurgle, ctx.base.Position, 0.34, 0.75) end },
+		{ t = 2.40, fn = function(ctx) snd(GSND.splash, ctx.base.Position, 0.38, 0.78, 0.12); bubbles(ctx, ctx.base.Position, 2) end },
+		{ t = 3.20, fn = function(ctx) snd(GSND.gurgle, ctx.base.Position, 0.18, 1.04) end },
+		-- 3.80: exactly SIXTEEN matter motes rise from the puddle (spec 7.4: golden-angle spiral, four groups, 1.40 s each)
+		{ t = 3.80, fn = function(ctx)
+			snd(GSND.slap, ctx.base.Position, 0.18, 1.22, 0.05)
+			local o = onG(ctx, ctx.base.Position)
+			local motes = {}
+			for i = 0, 15 do
+				local th = rad(i * 137.507764)
+				local r = 1.0 + 3.8 * math.sqrt((i + 0.5) / 16)
+				motes[i + 1] = { m = mesh(ctx, "titanMote1"), halo = mesh(ctx, "titanMote1"), p = o + Vector3.new(r * cos(th), 0.3 + 0.2 * ((i * 7) % 5) / 4, r * sin(th)),
+					d = (i % 4) * 0.08, h = 3.5 + 2.5 * ((i * 5) % 16) / 15, dr = Vector3.new(cos(th), 0, sin(th)) * 0.45 }
+			end
+			return { step = function(_, t)
+				if t > 5.2 then return false end
+				for _, k in motes do
+					local e = t - 3.80 - k.d
+					if e < 0 then hide(k.m); hide(k.halo); continue end
+					local u = clamp01(e / 1.05)
+					local up = k.h * (1 - (1 - u) ^ 3) + ((u >= 1) and 0.12 * sin((e - 1.05) * 9) or 0)
+					local s = curve({ { 0, 0.2 }, { 0.10, 1 }, { 0.75, 1 }, { 1, 0.65 } }, e / 1.40)
+					local a = curve({ { 0, 0 }, { 0.10, 1 }, { 0.80, 1 }, { 1, 0 } }, e / 1.40)
+					local cf = CFrame.new(k.p + k.dr * u + Vector3.new(0, up, 0))
+					put(k.m, cf, s, a)
+					put(k.halo, cf, s * 1.25, a * 0.4)                -- (the spec's glow halo, 1.25x: readable against pale ground)
+				end
+				return true
+			end, stop = function() for _, k in motes do kill({ k.m, k.halo }) end end }
+		end },
+	},
+}
+
+for _, atk in { A.TiSlam, A.TiBomb, A.TiWave, A.TiHurt, A.TiDefeat } do table.sort(atk.events, function(x, y) return x.t < y.t end) end
+A.FOR = A.FOR or {}
+A.FOR.SquishF4v5 = { Slam = A.TiSlam, Bomb = A.TiBomb, Wave = A.TiWave, Defeat = A.TiDefeat, Hurt = A.TiHurt }
+end

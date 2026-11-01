@@ -1,0 +1,120 @@
+ChatGPT said:
+Goo Marsh — Studio r2 Audit
+GO WITH CHANGES — 1 blocker
+
+Overall: 7.5/10. This is a meaningful improvement over r1. The biome now looks populated, the mushrooms have recognisable silhouettes, and the ground seating problems appear largely resolved.
+
+However, the pools still resemble bright cyan Neon surfaces rather than thick, internally glowing jelly. That's the one issue I would fix before final visual approval.
+
+A. Updated scores
+
+Category
+
+	
+
+r1
+
+	
+
+r2
+
+
+
+
+Match to D
+
+	
+
+6.5
+
+	
+
+7.5/10
+
+
+
+
+Goo appearance in Studio
+
+	
+
+6
+
+	
+
+7/10
+
+
+
+
+Readability from plots
+
+	
+
+6.5
+
+	
+
+7/10
+
+
+
+
+Density / composition vs D4
+
+	
+
+7
+
+	
+
+8/10
+
+B. Blocking fix
+
+1. Pool emission and depth — REQUIRED
+
+Panel 4 reveals the problem: the pool has a nearly uniform bright cyan surface. The rim is visible, but the interior has insufficient depth.
+
+Change:
+
+Reduce interior emissive contribution by 60–75%.
+
+Shift the centre toward deep teal #0A6B8F.
+
+Keep bright cyan #31D9FF predominantly on the outer 0.7–1.2-stud rim.
+
+Restore subtle, irregular darker clouding across the centre, with 2–3 broad ripple variations.
+
+Keep the existing height and terrain seating; those are now substantially better.
+
+Pass condition: From 5-stud eye height, a pool must have a darker, visibly deep centre and soft luminous perimeter—not resemble a uniformly lit cyan plate.
+
+No geometry rebuild necessary.
+
+C. Non-blocking later polish
+
+Landmark distance: The +15% size improvement helps, but from Plot 2 the mushroom is still a small silhouette on the horizon. I'd leave it rather than enlarging again. The biome is identifiable, and a later entrance landmark or environmental lighting accent can improve visual attraction.
+
+Nest entrance: The bright concentric violet rings still resemble a portal target. Reduce the innermost glow approximately 20–30% and preserve darker layers toward the mouth to create a sense of tunnel depth.
+
+Marsh floor: Better, but still pale in many places. A small additional contrast pass around the pool banks would help; don't darken the entire basin.
+
+Performance: 311k placed triangles and 618 parts are not automatically excessive with streaming, but they are not phone-approved without a real device test. Profile a dense grove, a pool-heavy view and a hub-to-marsh approach on the 4 GB baseline.
+
+D. Final call
+
+GO WITH CHANGES. Fix the pool emissive mask, then save the biome and hand it over to James.
+
+I would not request another full art audit or structural revision. The composition, stalks, gills, grove spacing and nest placement are now sufficiently developed to proceed.
+
+The marsh is production-viable. One material correction remains before I'd call its visual pass complete.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High

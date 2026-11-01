@@ -1,0 +1,68 @@
+ALL GUARD RAILS MET
+RACE MIRROR: Squish Fn vs Crunch Fn (target 0.90-1.10)
+   F1 0.96
+   F2 0.99
+   F3 1.05
+   F4 1.02
+LOOP: counter side's edge, 4 race combos (target 1.40-3.00: clear, not a wipe)
+   F1>F4 2.52  2.49  2.52  2.54
+   F4>F3 2.52  2.41  2.45  2.53
+   F3>F2 2.46  2.09  2.11  2.45
+   F2>F1 2.20  2.20  2.20  2.20
+DIAGONALS: edge (target 0.77-1.30: close)
+   F1vF3 1.14  1.24  1.12  1.27
+!! F2vF4 0.76  0.75  0.75  0.76
+1 FLAGGED
+
+== SPREAD
+mirror F1 0.96  F2 0.97  F3 1.05  F4 1.04
+F1>F4  2.61  2.54  2.63  2.60
+F4>F3  2.41  2.41  2.41  2.41
+F3>F2  2.49  2.14  2.23  2.45
+F2>F1  2.01  2.20  2.01  2.20
+F1vF3  1.08  1.17  1.04  1.21
+F2vF4  0.81  0.80  0.80  0.81
+
+== LANE
+mirror F1 1.02  F2 1.00  F3 1.05  F4 1.02
+F1>F4  2.36  2.33  2.42  2.44
+F4>F3  3.14  3.45  3.14  3.52
+F3>F2  2.36  2.01  2.11  2.33
+F2>F1  2.20  2.20  2.20  2.20
+F1vF3  1.27  1.38  1.24  1.43
+F2vF4  0.70  0.71  0.71  0.70
+22 compositions x 2 races, 12 fights per pair
+TOP 8 (and its hardest counter):
+  74%  SQUISH 0T 6B 4P 0S    countered by SQUISH 1T 4B 0P 0S (100%)
+  73%  SQUISH 0T 4B 4P 8S    countered by SQUISH 0T 6B 0P 8S (100%)
+  73%  CRUNCH 0T 6B 4P 0S    countered by SQUISH 0T 8B 0P 0S (100%)
+  68%  CRUNCH 0T 4B 4P 8S    countered by SQUISH 0T 6B 4P 0S (100%)
+  68%  CRUNCH 0T 4B 8P 0S    countered by SQUISH 0T 6B 0P 8S (100%)
+  68%  SQUISH 0T 4B 8P 0S    countered by SQUISH 0T 6B 4P 0S (100%)
+  67%  SQUISH 0T 8B 0P 0S    countered by SQUISH 0T 0B 0P 32S (100%)
+  64%  SQUISH 0T 6B 0P 8S    countered by SQUISH 0T 0B 0P 32S (100%)
+Every composition has a counter that beats it >= 65%
+BOTTOM 5:
+  25%  CRUNCH 1T 2B 0P 8S
+  21%  CRUNCH 1T 0B 0P 16S
+  20%  SQUISH 1T 0B 0P 16S
+  19%  SQUISH 1T 0B 4P 8S
+  16%  CRUNCH 1T 0B 4P 8S
+Cross-race overall: SQUISH 51.5%  CRUNCH 48.5%
+SQUISH F1 Drip      A:CLING avg 49% / best 87% vs F3 | B:BOING avg 4% / best 16% vs F4 | C:BOING BOMBS avg 4% / best 15% vs F4
+SQUISH F2 Twin      A:DOUBLE SLAP avg 21% / best 83% vs F1 | B:STICKY FLOOR avg 6% / best 10% vs F1 | C:BOING SLAM avg 12% / best 20% vs F2
+SQUISH F3 Brute     A:KNUCKLE POUND avg 20% / best 58% vs F2 | B:STRETCH GRAB avg 12% / best 40% vs F1 | C:CHEST THUMP avg 12% / best 28% vs F1
+SQUISH F4 Titan     A:TENTACLE SLAM avg 48% / best 135% vs F3 | B:GOO BOMB avg 2% / best 8% vs F4 | C:GOO TSUNAMI avg 1% / best 4% vs F3
+CRUNCH F1 Pebble    A:CHIP avg 45% / best 82% vs F3 | B:CURL UP avg 4% / best 15% vs F4 | C:ROLL OUT avg 5% / best 16% vs F3
+CRUNCH F2 Pincer    A:SCISSOR SNAP avg 21% / best 83% vs F1 | B:CLAW BLOCK avg 8% / best 22% vs F1 | C:SIDE SWEEP avg 2% / best 10% vs F1
+CRUNCH F3 Ram       A:HORN GORE avg 1% / best 38% vs F2 | B:HOOF STAMP avg 5% / best 13% vs F2 | C:RAM CHARGE avg 4% / best 10% vs F2
+CRUNCH F4 Colossus  A:GROUND SHATTER avg 46% / best 129% vs F3 | B:BOULDER HURL avg 0% / best 2% vs F4 | C:SOLAR STRIKE avg 0% / best 2% vs F4
+SQUISH F1 Drip      B+C uplift avg 9%  per enemy form 0% 0% 3% 32%
+SQUISH F2 Twin      B+C uplift avg 17%  per enemy form 22% 27% 17% 0%
+SQUISH F3 Brute     B+C uplift avg 19%  per enemy form 40% 17% 18% 0%
+SQUISH F4 Titan     B+C uplift avg 3%  per enemy form 0% 0% 4% 8%
+CRUNCH F1 Pebble    B+C uplift avg 10%  per enemy form 0% 0% 16% 23%
+CRUNCH F2 Pincer    B+C uplift avg 13%  per enemy form 22% 33% -5% 0%
+CRUNCH F3 Ram       B+C uplift avg 8%  per enemy form 0% 20% 13% 0%
+CRUNCH F4 Colossus  B+C uplift avg 1%  per enemy form 0% 0% 0% 3%
+DONE

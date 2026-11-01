@@ -1,0 +1,24 @@
+{
+  "status": "PASS_PLANNING_GEOMETRY_ONLY",
+  "placementCount": 60,
+  "pieceCounts": {
+    "gmLandmark": 1,
+    "gmTrumpet": 16,
+    "gmUmbrella": 14,
+    "gmBlob": 13,
+    "gmPool": 6,
+    "gmDNAVein": 7,
+    "gmNest": 3
+  },
+  "plannedTriangleTarget": 92900,
+  "minimumProtectedRouteWidth": 18,
+  "minimumExtraClearanceBeyondProtectedRoute": 1.408,
+  "zoneBoundaryChecks": "Conservative full XZ circles",
+  "overlapChecks": "Conservative full XZ circles",
+  "actualMeshCounts": "NOT_BUILT",
+  "actualTerrainSeating": "NOT_TESTED",
+  "actualWalkability": "NOT_TESTED",
+  "actualSightlines": "NOT_TESTED",
+  "ChatGPTThinkingVerdict": "NONE_NOT_SUBMITTED",
+  "failures": []
+}

@@ -1,0 +1,13 @@
+8 mixes, 640 fights: SQUISH 56.1 %  CRUNCH 43.9 % --dt=0.05
+8 mixes, 640 fights: SQUISH 54.1 %  CRUNCH 45.9 % --dt=0.05 --old
+
+== OPEN (20 fights each, Squish A v Crunch B, sides alternate)
+Mixed E v E    old  fight 52.4%  stuck  0.1%  overkill 25.3%  pred 27.2%  switch33.51  stacked 0.20  secs  37  A-win  65%
+               new  fight 41.4%  stuck  9.9%  overkill 27.9%  pred 20.4%  switch 9.26  stacked 0.18  secs  37  A-win  50%
+                   moving 29.3%  yielding  8.0%  waiting  2.0%  path-fail  0.0%  BLOCKED  2.3%  longest trap 4.6 s
+
+== BOULDERS (20 fights each, Squish A v Crunch B, sides alternate)
+Mixed E v E    old  fight 50.7%  stuck  0.5%  overkill 24.2%  pred 25.9%  switch38.30  stacked 0.22  secs  38  A-win  70%
+               new  fight 40.5%  stuck 11.8%  overkill 26.6%  pred 19.4%  switch 8.92  stacked 0.19  secs  37  A-win  40%
+                   moving 27.8%  yielding 10.1%  waiting  1.5%  path-fail  0.2%  BLOCKED  1.4%  longest trap 7.5 s
+DONE

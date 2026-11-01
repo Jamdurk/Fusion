@@ -1,0 +1,10 @@
+ChatGPT Crystal Canyon Studio r2 Final Audit (31 Oct ~04:10, transcribed from studio-audit-r2-GO.png; the Chrome
+extension dropped, so the sheet was pasted by hand into the chat)
+VERDICT: GO - SAVE & HAND OVER TO JAMES. "GO. Freeze Crystal Canyon r2 and save it."
+Scores r1 -> r2: visual match to E 6.5 -> 8; readability from plots 4.5 -> 7.5; navigation 8 -> 8.5; phone budget 8 -> 8 (provisional)
+Blockers resolved: landmark size PASS, nests PASS, seams + terrain paint PASS, crystal distribution PASS, colour PASS.
+Non-blocking polish: 1 nest tunnel still slightly concentric (shadow variation in the lighting pass); 2 some ground seams
+subtle from player height (contrast on selected ones, not all 12); 3 arch somewhat blocky but suits basalt, do not remodel.
+Performance: keep all 273k placed tris. James phone test: from the plots, the densest crystal section with FX on, walking
+the arch + both links + nest approaches. Targets 30+ fps, no streaming gaps, no severe memory growth.
+Do not enlarge the spire again, rebuild nests or add crystals. Move on to the remaining hub work.

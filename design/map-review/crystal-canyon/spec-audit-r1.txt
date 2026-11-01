@@ -1,0 +1,674 @@
+ChatGPT said:
+Crystal Canyon SPEC r1 — Audit
+GO WITH CHANGES
+
+Approved for Blender previews and a limited Studio prototype. Not yet approved for full canyon population.
+
+The modelling specification is strong. The 53-stud landmark, chunky amber quartz, cooler mid-grey basalt and restrained magma seams are consistent with E2–E6.
+
+The remaining issues are mostly terrain clearance, asset seating, lighting and texture efficiency, not art direction.
+
+A. Scores
+
+Category
+
+	
+
+Score
+
+	
+
+Assessment
+
+
+
+
+Kit / geometry
+
+	
+
+8.5/10
+
+	
+
+Good silhouettes, useful modular variety
+
+
+
+
+Textures / materials
+
+	
+
+8.5/10
+
+	
+
+Faithful to E3; emission needs validation
+
+
+
+
+Layout / navigation
+
+	
+
+7.5/10
+
+	
+
+Strong loop, but several narrow passages
+
+
+
+
+Phone budget
+
+	
+
+7.5/10
+
+	
+
+205k tris reasonable; lights/textures need changes
+
+
+
+
+Overall specification
+
+	
+
+8/10
+
+	
+
+Production-ready direction
+
+B. Numbered fixes, priority order
+
+1. Fix terrain seating methodology — REQUIRED
+
+The specification says every asset is raycast-seated on the lowest ground under its footprint. That is risky.
+
+For ordinary rocks and crystal clusters, seat on a representative contact plane using multiple terrain samples. Allow shallow burial, but no floating corners.
+
+For the landmark, prepare a roughly 30 × 28-stud stable foundation on the plateau.
+
+For the arch, sample both bridge abutments independently. Do not use the low channel floor beneath its centre as the seating height.
+
+For the nests, level the alcove footprint before seating the mound.
+
+Your scaled arch is approximately 58 studs across, 25.5 high and 10.8 deep, assuming the 1.7 multiplier applies to height.
+
+The bridge must meet the plateau on both sides and leave at least 12 studs of clear height above the canyon floor. Check this after carving.
+
+2. Widen channel pinch points — REQUIRED
+
+Your previous terrain measurements showed floor widths of only 18–22 studs in several places.
+
+An 18-stud-wide walking route inside an 18-stud-wide canyon has essentially no clearance.
+
+Carve narrow channel-floor sections to 26 studs minimum.
+
+Use 30–32 studs at sharp bends, mining-bay junctions and nest approaches.
+
+Keep the final usable route at least 18 studs after placing decorations.
+
+Verify Link A and Link B remain open after terrain voxelisation.
+
+Do not fill the newly widened sections with decorative outcrops.
+
+3. Correct the lighting budget — REQUIRED
+
+You specified one landmark light, three seam lights and one tunnel light per nest.
+
+That's seven potential dynamic lights, exceeding your six-per-view budget if all are visible.
+
+Change to:
+
+One spire light, shadowless, range 42.
+
+At most two seam lights affecting a busy view, shadowless, range 10–14.
+
+One tunnel light per nearby nest, range 10–12, but enable only the closest two when appropriate.
+
+All other orange glow comes from emissive masks, not PointLights.
+
+Keep a hard ceiling of six active visible local lights; aim for four or fewer in normal exploration.
+
+4. Preserve the spire's crystal hierarchy — HIGH
+
+Seven main crystals could become visually crowded compared with E2b.
+
+Keep the seven, but ensure three or four dominate the silhouette. The remainder should be visibly shorter and partly buried between the main crystals.
+
+Your 6.3k-triangle landmark is excellent. Don't add geometry simply to increase detail.
+
+5. Reduce unnecessary texture memory — HIGH
+
+Nine 1024-pixel texture sets with four maps each can be expensive. Uncompressed RGBA8 equivalents would occupy roughly 144 MiB before mipmaps, although actual compressed and runtime memory use varies.
+
+I recommend:
+
+1024: landmark crystals, main basalt, prominent seam and nest shell.
+
+512: secondary clusters, columns, common rocks and ground shards.
+
+256: tunnel lining and minor reusable details.
+
+Reuse identical MeshIds and texture IDs across repeated objects.
+
+Baking at 2× resolution is fine if the exported textures remain at the intended sizes.
+
+6. Control the basalt emission — MEDIUM
+
+Your lighter basalt values are justified by the previous Studio experience. I would not force the stone darker.
+
+The important rule is that ordinary basalt remains predominantly non-emissive, even with EmissiveStrength around 1.4.
+
+Keep approximately 70–80% of the ordinary rock surface black in its emission mask. The strongest glow should belong to crystal roots, selected fractures and magma interiors.
+
+Roblox multiplies emissive contribution by the surface colour, and excessive values can clamp toward white. 
+Documentation - Roblox Creator Hub
+
+For mining nodes, your planned larger core crystal is the right distinction from decorative clusters. Keep veins visually brighter, but clearly interactive through proximity feedback as well.
+
+C. E5 — Exact Roblox particle settings
+
+These are starting values for a 4 GB-phone target, designed around the effects shown in E5.
+
+Rate is particles per second per enabled emitter, size is in studs, speed is studs/second, and LightEmission ranges from 0 to 1.
+
+E5 effect
+
+	
+
+Rate/s
+
+	
+
+Lifetime (s)
+
+	
+
+Size (studs)
+
+	
+
+Speed
+
+	
+
+Colour
+
+	
+
+LightEmission
+
+
+
+
+1. Magma heat shimmer
+
+	
+
+0.25
+
+	
+
+1.2–2.0
+
+	
+
+0.8–1.5
+
+	
+
+0.1–0.4 upward
+
+	
+
+#F58A39
+
+	
+
+0.15
+
+
+
+
+2. Rising embers
+
+	
+
+0.8
+
+	
+
+0.7–1.3
+
+	
+
+0.10–0.25
+
+	
+
+1.2–2.0 upward
+
+	
+
+#FFB347 → #E75A24
+
+	
+
+0.70
+
+
+
+
+3. Crystal sparkle
+
+	
+
+0.25
+
+	
+
+0.15–0.30
+
+	
+
+0.15–0.35
+
+	
+
+0
+
+	
+
+#FFF1B9
+
+	
+
+0.85
+
+
+
+
+4. Landmark glow haze
+
+	
+
+0.6
+
+	
+
+1.5–2.1
+
+	
+
+2–3
+
+	
+
+0.1–0.4 upward
+
+	
+
+#FFCC6A
+
+	
+
+0.25
+
+
+
+
+5. Nest tunnel motes
+
+	
+
+1.2
+
+	
+
+1.3–2.3
+
+	
+
+0.12–0.30
+
+	
+
+0.5–1.0 outward
+
+	
+
+#FFB45A
+
+	
+
+0.65
+
+
+
+
+6. Warm canyon dust
+
+	
+
+1.2
+
+	
+
+2.8–4.2
+
+	
+
+0.5–1.2
+
+	
+
+1.1–2.3 sideways
+
+	
+
+#B9A18C
+
+	
+
+0.05
+
+For magma shimmer, don't attempt expensive screen-space refraction. Use a soft, low-opacity animated wisp.
+
+For crystal sparkles, use a tiny star sprite on a facet edge, fading in and out. No actual light is required.
+
+Expected particle count
+
+Roblox's approximate steady-state particle count is Rate × average Lifetime, multiplied by active emitters. 
+Documentation - Roblox Creator Hub
+
+Effect
+
+	
+
+Active emitters in stress view
+
+	
+
+Approx. visible particles
+
+
+
+
+Magma shimmer
+
+	
+
+3
+
+	
+
+1
+
+
+
+
+Embers
+
+	
+
+6
+
+	
+
+5
+
+
+
+
+Sparkles
+
+	
+
+13 (spire + 12 clusters)
+
+	
+
+1
+
+
+
+
+Landmark haze
+
+	
+
+1
+
+	
+
+1
+
+
+
+
+Nest motes
+
+	
+
+3
+
+	
+
+6–7
+
+
+
+
+Dust
+
+	
+
+6
+
+	
+
+25
+
+
+
+
+Total
+
+	
+
+32
+
+	
+
+~40
+
+Estimated simultaneous particles
+
+40 / 60
+
+Approximately 20 particles of headroom under your 60-particle target.
+
+This count assumes all specified emitters are active. Actual visibility varies with camera frustum, distance and streaming.
+
+Set up local distance-based enable/disable rules:
+
+Within 70 studs: Full effects.
+
+70–130 studs: Embers, major landmark effects and occasional sparkle only.
+
+Beyond 130 studs: Static baked emission, no ambient particle systems.
+
+Low graphics: Reduce dust rate by 50% first.
+
+Roblox's ParticleEmitter.LightEmission controls particle blending; it does not illuminate nearby geometry. Actual ground illumination requires a light object. 
+Documentation - Roblox Creator Hub
+
+Local light settings
+
+Location
+
+	
+
+Count active
+
+	
+
+Range
+
+	
+
+Brightness
+
+	
+
+Colour
+
+
+
+
+Landmark base
+
+	
+
+1
+
+	
+
+42
+
+	
+
+1.0
+
+	
+
+#FFB45A
+
+
+
+
+Nearby magma seams
+
+	
+
+Up to 2
+
+	
+
+12
+
+	
+
+0.7
+
+	
+
+#FF8A2E
+
+
+
+
+Nearby nest tunnels
+
+	
+
+Up to 2
+
+	
+
+12
+
+	
+
+0.8
+
+	
+
+#FF9A42
+
+All Shadows = false.
+
+That gives five canyon lights active in the busiest intended view, leaving one slot under your six-light target.
+
+For the slow magma pulse, I recommend animating a very thin separate Neon crack accent or nearby PointLight brightness. Avoid depending on frequent SurfaceAppearance texture or mask changes at runtime; those properties have preprocessing restrictions. 
+Documentation - Roblox Creator Hub
+
+D. Final implementation checks
+
+Three smaller but important issues to carry into Studio:
+
+Mining collision: Decorative crystals can remain CanCollide = false, but ensure vein hitboxes remain queryable so mining raycasts work.
+
+Arch collision: Use simple invisible collision geometry for the walkable deck and sides, rather than relying on detailed per-block mesh collisions.
+
+LOD and draw calls: Keep crystals and basalt as reusable assets. Roblox specifically identifies lost mesh instancing, excessive mesh density and overlapping transparent effects as performance risks. 
+Documentation - Roblox Creator Hub
+
+Performance approval criteria
+
+Your estimated 205k placed triangles is acceptable as a starting budget, especially compared with the 311k-triangle Goo Marsh.
+
+For the canyon specifically, I would target:
+
+View
+
+	
+
+Target rendered canyon triangles
+
+
+
+
+From the plots
+
+	
+
+20–45k
+
+
+
+
+Normal channel exploration
+
+	
+
+60–90k
+
+
+
+
+Dense spire / crystal view
+
+	
+
+100–120k maximum initially
+
+These are project-specific profiling targets, not engine limits. The important question is the entire scene cost, including hub and other biomes, on an actual lower-end phone. Roblox recommends testing on real baseline hardware. 
+Documentation - Roblox Creator Hub
+
+Final decision
+
+GO WITH CHANGES — proceed with the Blender kit and Studio prototype.
+
+Before full population, complete the three required fixes: proper contact seating, channel clearance and light budgeting. The other changes can be validated during the Studio art pass.
+
+The strongest feature of this specification is its contrast with the Goo Marsh: cool, soft, rounded Squish environments versus hot, angular, fractured Crunch geology.
+
+Keep that distinction. It will make the two species and their home regions instantly recognisable even on a small phone screen.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High

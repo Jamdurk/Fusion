@@ -1,0 +1,1289 @@
+{
+  "status": "DRAFT_UNREVIEWED_NOT_FOR_IMPORT",
+  "task": "TASK A Goo Marsh",
+  "units": "studs",
+  "coordinates": "Roblox X/Y/Z; north=-Z",
+  "rotationConvention": "Roblox Y rotation in degrees. Model front=-Z before yaw; -90 faces +X.",
+  "disclaimer": "All dimensions, triangle counts and exclusion radii are proposed. No mesh, terrain query, raycast, or in-game sightline was measured.",
+  "zone": {
+    "x": [
+      -830,
+      -490
+    ],
+    "z": [
+      -330,
+      330
+    ],
+    "floorApproxY": -6
+  },
+  "pieces": {
+    "gmLandmark": {
+      "count": 1,
+      "trianglesTarget": 6000,
+      "dimensionsStuds": [
+        40,
+        37,
+        38
+      ],
+      "clearanceRadius": 7,
+      "boundsRadius": 20
+    },
+    "gmTrumpet": {
+      "count": 16,
+      "trianglesTarget": 1800,
+      "dimensionsStuds": [
+        12,
+        15,
+        12
+      ],
+      "clearanceRadius": 7,
+      "boundsRadius": 7
+    },
+    "gmUmbrella": {
+      "count": 14,
+      "trianglesTarget": 1600,
+      "dimensionsStuds": [
+        14,
+        9,
+        12
+      ],
+      "clearanceRadius": 8,
+      "boundsRadius": 8
+    },
+    "gmBlob": {
+      "count": 13,
+      "trianglesTarget": 1000,
+      "dimensionsStuds": [
+        8,
+        4.5,
+        7
+      ],
+      "clearanceRadius": 5.5,
+      "boundsRadius": 5.5
+    },
+    "gmPool": {
+      "count": 6,
+      "trianglesTarget": 1200,
+      "dimensionsStuds": [
+        48,
+        0.8,
+        48
+      ],
+      "clearanceRadius": 24,
+      "boundsRadius": 24
+    },
+    "gmDNAVein": {
+      "count": 7,
+      "trianglesTarget": 1400,
+      "dimensionsStuds": [
+        8,
+        6,
+        7
+      ],
+      "clearanceRadius": 5.5,
+      "boundsRadius": 5.5
+    },
+    "gmNest": {
+      "count": 3,
+      "trianglesTarget": 1900,
+      "dimensionsStuds": [
+        32,
+        15,
+        24
+      ],
+      "clearanceRadius": 20,
+      "boundsRadius": 20
+    }
+  },
+  "routes": [
+    {
+      "id": "entry",
+      "width": 18,
+      "points": [
+        [
+          -490,
+          0
+        ],
+        [
+          -535,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "east-spine",
+      "width": 18,
+      "points": [
+        [
+          -535,
+          -300
+        ],
+        [
+          -535,
+          300
+        ]
+      ]
+    },
+    {
+      "id": "north-nest-approach",
+      "width": 18,
+      "points": [
+        [
+          -535,
+          -190
+        ],
+        [
+          -650,
+          -150
+        ],
+        [
+          -668,
+          -135
+        ]
+      ]
+    },
+    {
+      "id": "middle-nest-approach",
+      "width": 18,
+      "points": [
+        [
+          -535,
+          -35
+        ],
+        [
+          -618,
+          -35
+        ]
+      ]
+    },
+    {
+      "id": "south-nest-approach",
+      "width": 18,
+      "points": [
+        [
+          -535,
+          95
+        ],
+        [
+          -620,
+          115
+        ],
+        [
+          -648,
+          140
+        ]
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "id": "gmLandmark_01",
+      "piece": "gmLandmark",
+      "x": -511,
+      "z": -35,
+      "rotationYDegrees": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "y": null,
+      "yPlanApprox": 0,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 7,
+      "fullXZBoundsRadius": 20,
+      "note": "37-stud planned height; cap underside >=15 studs; full cap stays inside marsh. Trunk leaves entry clear. Sightlines require Studio verification."
+    },
+    {
+      "id": "gmPool_01",
+      "piece": "gmPool",
+      "x": -600,
+      "z": -120,
+      "rotationYDegrees": 0,
+      "scale": [
+        1.4166666666666667,
+        1,
+        1.4166666666666667
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Measure each existing dip; set the top just below its rim, with no exposed side wall. Do not infer a common y.",
+      "groundExclusionRadius": 34,
+      "fullXZBoundsRadius": 34,
+      "note": "Opaque low relief surface scaled to the existing terrain dip radius. No transparent layers."
+    },
+    {
+      "id": "gmPool_02",
+      "piece": "gmPool",
+      "x": -700,
+      "z": 40,
+      "rotationYDegrees": 0,
+      "scale": [
+        1.9166666666666667,
+        1,
+        1.9166666666666667
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Measure each existing dip; set the top just below its rim, with no exposed side wall. Do not infer a common y.",
+      "groundExclusionRadius": 46,
+      "fullXZBoundsRadius": 46,
+      "note": "Opaque low relief surface scaled to the existing terrain dip radius. No transparent layers."
+    },
+    {
+      "id": "gmPool_03",
+      "piece": "gmPool",
+      "x": -770,
+      "z": -200,
+      "rotationYDegrees": 0,
+      "scale": [
+        1.1666666666666667,
+        1,
+        1.1666666666666667
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Measure each existing dip; set the top just below its rim, with no exposed side wall. Do not infer a common y.",
+      "groundExclusionRadius": 28,
+      "fullXZBoundsRadius": 28,
+      "note": "Opaque low relief surface scaled to the existing terrain dip radius. No transparent layers."
+    },
+    {
+      "id": "gmPool_04",
+      "piece": "gmPool",
+      "x": -590,
+      "z": 180,
+      "rotationYDegrees": 0,
+      "scale": [
+        1.25,
+        1,
+        1.25
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Measure each existing dip; set the top just below its rim, with no exposed side wall. Do not infer a common y.",
+      "groundExclusionRadius": 30,
+      "fullXZBoundsRadius": 30,
+      "note": "Opaque low relief surface scaled to the existing terrain dip radius. No transparent layers."
+    },
+    {
+      "id": "gmPool_05",
+      "piece": "gmPool",
+      "x": -760,
+      "z": 230,
+      "rotationYDegrees": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Measure each existing dip; set the top just below its rim, with no exposed side wall. Do not infer a common y.",
+      "groundExclusionRadius": 24,
+      "fullXZBoundsRadius": 24,
+      "note": "Opaque low relief surface scaled to the existing terrain dip radius. No transparent layers."
+    },
+    {
+      "id": "gmPool_06",
+      "piece": "gmPool",
+      "x": -640,
+      "z": -260,
+      "rotationYDegrees": 0,
+      "scale": [
+        1.0833333333333333,
+        1,
+        1.0833333333333333
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Measure each existing dip; set the top just below its rim, with no exposed side wall. Do not infer a common y.",
+      "groundExclusionRadius": 26,
+      "fullXZBoundsRadius": 26,
+      "note": "Opaque low relief surface scaled to the existing terrain dip radius. No transparent layers."
+    },
+    {
+      "id": "gmNest_01",
+      "piece": "gmNest",
+      "x": -650,
+      "z": -35,
+      "rotationYDegrees": -90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 20,
+      "fullXZBoundsRadius": 20,
+      "note": "Default authored front is -Z. Rotation -90 degrees faces +X, toward the approach. Entry and battle staging space require measured model and Studio checks."
+    },
+    {
+      "id": "gmNest_02",
+      "piece": "gmNest",
+      "x": -680,
+      "z": 140,
+      "rotationYDegrees": -90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 20,
+      "fullXZBoundsRadius": 20,
+      "note": "Default authored front is -Z. Rotation -90 degrees faces +X, toward the approach. Entry and battle staging space require measured model and Studio checks."
+    },
+    {
+      "id": "gmNest_03",
+      "piece": "gmNest",
+      "x": -700,
+      "z": -135,
+      "rotationYDegrees": -90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 20,
+      "fullXZBoundsRadius": 20,
+      "note": "Default authored front is -Z. Rotation -90 degrees faces +X, toward the approach. Entry and battle staging space require measured model and Studio checks."
+    },
+    {
+      "id": "gmTrumpet_01",
+      "piece": "gmTrumpet",
+      "x": -621,
+      "z": -180,
+      "rotationYDegrees": 26,
+      "scale": [
+        1.2,
+        1.2,
+        1.2
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 8.4,
+      "fullXZBoundsRadius": 8.4,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmTrumpet_02",
+      "piece": "gmTrumpet",
+      "x": -642,
+      "z": 45,
+      "rotationYDegrees": 265,
+      "scale": [
+        0.94,
+        0.94,
+        0.94
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.58,
+      "fullXZBoundsRadius": 6.58,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmTrumpet_03",
+      "piece": "gmTrumpet",
+      "x": -777,
+      "z": -150,
+      "rotationYDegrees": 0,
+      "scale": [
+        0.89,
+        0.89,
+        0.89
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.23,
+      "fullXZBoundsRadius": 6.23,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmTrumpet_04",
+      "piece": "gmTrumpet",
+      "x": -569,
+      "z": 227,
+      "rotationYDegrees": 127,
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.3,
+      "fullXZBoundsRadius": 6.3,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmTrumpet_05",
+      "piece": "gmTrumpet",
+      "x": -724,
+      "z": 192,
+      "rotationYDegrees": 321,
+      "scale": [
+        0.94,
+        0.94,
+        0.94
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.58,
+      "fullXZBoundsRadius": 6.58,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmTrumpet_06",
+      "piece": "gmTrumpet",
+      "x": -587,
+      "z": -231,
+      "rotationYDegrees": 295,
+      "scale": [
+        1.19,
+        1.19,
+        1.19
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 8.33,
+      "fullXZBoundsRadius": 8.33,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmTrumpet_07",
+      "piece": "gmTrumpet",
+      "x": -555,
+      "z": -93,
+      "rotationYDegrees": 39,
+      "scale": [
+        0.97,
+        0.97,
+        0.97
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.79,
+      "fullXZBoundsRadius": 6.79,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmTrumpet_08",
+      "piece": "gmTrumpet",
+      "x": -769,
+      "z": 48,
+      "rotationYDegrees": 79,
+      "scale": [
+        1.15,
+        1.15,
+        1.15
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 8.05,
+      "fullXZBoundsRadius": 8.05,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmTrumpet_09",
+      "piece": "gmTrumpet",
+      "x": -764,
+      "z": -270,
+      "rotationYDegrees": 192,
+      "scale": [
+        0.85,
+        0.85,
+        0.85
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 5.95,
+      "fullXZBoundsRadius": 5.95,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmTrumpet_10",
+      "piece": "gmTrumpet",
+      "x": -615,
+      "z": 235,
+      "rotationYDegrees": 117,
+      "scale": [
+        1.08,
+        1.08,
+        1.08
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 7.56,
+      "fullXZBoundsRadius": 7.56,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmTrumpet_11",
+      "piece": "gmTrumpet",
+      "x": -759,
+      "z": 278,
+      "rotationYDegrees": 74,
+      "scale": [
+        0.92,
+        0.92,
+        0.92
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.44,
+      "fullXZBoundsRadius": 6.44,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmTrumpet_12",
+      "piece": "gmTrumpet",
+      "x": -589,
+      "z": -210,
+      "rotationYDegrees": 319,
+      "scale": [
+        1.19,
+        1.19,
+        1.19
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 8.33,
+      "fullXZBoundsRadius": 8.33,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmTrumpet_13",
+      "piece": "gmTrumpet",
+      "x": -647,
+      "z": -73,
+      "rotationYDegrees": 216,
+      "scale": [
+        0.86,
+        0.86,
+        0.86
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.02,
+      "fullXZBoundsRadius": 6.02,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmTrumpet_14",
+      "piece": "gmTrumpet",
+      "x": -766,
+      "z": 92,
+      "rotationYDegrees": 96,
+      "scale": [
+        0.87,
+        0.87,
+        0.87
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.09,
+      "fullXZBoundsRadius": 6.09,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmTrumpet_15",
+      "piece": "gmTrumpet",
+      "x": -759,
+      "z": -247,
+      "rotationYDegrees": 74,
+      "scale": [
+        1.12,
+        1.12,
+        1.12
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 7.84,
+      "fullXZBoundsRadius": 7.84,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmTrumpet_16",
+      "piece": "gmTrumpet",
+      "x": -586,
+      "z": 231,
+      "rotationYDegrees": 18,
+      "scale": [
+        1.05,
+        1.05,
+        1.05
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 7.35,
+      "fullXZBoundsRadius": 7.35,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmUmbrella_01",
+      "piece": "gmUmbrella",
+      "x": -590,
+      "z": -73,
+      "rotationYDegrees": 225,
+      "scale": [
+        1.14,
+        1.14,
+        1.14
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 9.12,
+      "fullXZBoundsRadius": 9.12,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmUmbrella_02",
+      "piece": "gmUmbrella",
+      "x": -630,
+      "z": 0,
+      "rotationYDegrees": 234,
+      "scale": [
+        1.16,
+        1.16,
+        1.16
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 9.28,
+      "fullXZBoundsRadius": 9.28,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmUmbrella_03",
+      "piece": "gmUmbrella",
+      "x": -699,
+      "z": -217,
+      "rotationYDegrees": 293,
+      "scale": [
+        1.06,
+        1.06,
+        1.06
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 8.48,
+      "fullXZBoundsRadius": 8.48,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmUmbrella_04",
+      "piece": "gmUmbrella",
+      "x": -646,
+      "z": 218,
+      "rotationYDegrees": 181,
+      "scale": [
+        1.09,
+        1.09,
+        1.09
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 8.72,
+      "fullXZBoundsRadius": 8.72,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmUmbrella_05",
+      "piece": "gmUmbrella",
+      "x": -807,
+      "z": 207,
+      "rotationYDegrees": 293,
+      "scale": [
+        0.87,
+        0.87,
+        0.87
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.96,
+      "fullXZBoundsRadius": 6.96,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmUmbrella_06",
+      "piece": "gmUmbrella",
+      "x": -621,
+      "z": -322,
+      "rotationYDegrees": 351,
+      "scale": [
+        0.93,
+        0.93,
+        0.93
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 7.44,
+      "fullXZBoundsRadius": 7.44,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmUmbrella_07",
+      "piece": "gmUmbrella",
+      "x": -670,
+      "z": -86,
+      "rotationYDegrees": 348,
+      "scale": [
+        0.87,
+        0.87,
+        0.87
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.96,
+      "fullXZBoundsRadius": 6.96,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmUmbrella_08",
+      "piece": "gmUmbrella",
+      "x": -758,
+      "z": -4,
+      "rotationYDegrees": 10,
+      "scale": [
+        0.98,
+        0.98,
+        0.98
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 7.84,
+      "fullXZBoundsRadius": 7.84,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmUmbrella_09",
+      "piece": "gmUmbrella",
+      "x": -811,
+      "z": -181,
+      "rotationYDegrees": 54,
+      "scale": [
+        0.91,
+        0.91,
+        0.91
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 7.28,
+      "fullXZBoundsRadius": 7.28,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmUmbrella_10",
+      "piece": "gmUmbrella",
+      "x": -626,
+      "z": 204,
+      "rotationYDegrees": 106,
+      "scale": [
+        0.87,
+        0.87,
+        0.87
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.96,
+      "fullXZBoundsRadius": 6.96,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmUmbrella_11",
+      "piece": "gmUmbrella",
+      "x": -806,
+      "z": 239,
+      "rotationYDegrees": 57,
+      "scale": [
+        0.96,
+        0.96,
+        0.96
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 7.68,
+      "fullXZBoundsRadius": 7.68,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmUmbrella_12",
+      "piece": "gmUmbrella",
+      "x": -615,
+      "z": -230,
+      "rotationYDegrees": 76,
+      "scale": [
+        1.17,
+        1.17,
+        1.17
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 9.36,
+      "fullXZBoundsRadius": 9.36,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmUmbrella_13",
+      "piece": "gmUmbrella",
+      "x": -557,
+      "z": -161,
+      "rotationYDegrees": 286,
+      "scale": [
+        1.11,
+        1.11,
+        1.11
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 8.88,
+      "fullXZBoundsRadius": 8.88,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmUmbrella_14",
+      "piece": "gmUmbrella",
+      "x": -729,
+      "z": -18,
+      "rotationYDegrees": 71,
+      "scale": [
+        1.16,
+        1.16,
+        1.16
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 9.28,
+      "fullXZBoundsRadius": 9.28,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmBlob_01",
+      "piece": "gmBlob",
+      "x": -552,
+      "z": -117,
+      "rotationYDegrees": 54,
+      "scale": [
+        1.14,
+        1.14,
+        1.14
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.27,
+      "fullXZBoundsRadius": 6.27,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmBlob_02",
+      "piece": "gmBlob",
+      "x": -618,
+      "z": 37,
+      "rotationYDegrees": 185,
+      "scale": [
+        1.17,
+        1.17,
+        1.17
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.435,
+      "fullXZBoundsRadius": 6.435,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmBlob_03",
+      "piece": "gmBlob",
+      "x": -805,
+      "z": -162,
+      "rotationYDegrees": 314,
+      "scale": [
+        0.98,
+        0.98,
+        0.98
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 5.39,
+      "fullXZBoundsRadius": 5.39,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmBlob_04",
+      "piece": "gmBlob",
+      "x": -641,
+      "z": 173,
+      "rotationYDegrees": 68,
+      "scale": [
+        1.15,
+        1.15,
+        1.15
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.325,
+      "fullXZBoundsRadius": 6.325,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmBlob_05",
+      "piece": "gmBlob",
+      "x": -764,
+      "z": 176,
+      "rotationYDegrees": 162,
+      "scale": [
+        0.92,
+        0.92,
+        0.92
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 5.06,
+      "fullXZBoundsRadius": 5.06,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmBlob_06",
+      "piece": "gmBlob",
+      "x": -587,
+      "z": -294,
+      "rotationYDegrees": 165,
+      "scale": [
+        0.85,
+        0.85,
+        0.85
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 4.675,
+      "fullXZBoundsRadius": 4.675,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmBlob_07",
+      "piece": "gmBlob",
+      "x": -643,
+      "z": -172,
+      "rotationYDegrees": 86,
+      "scale": [
+        0.87,
+        0.87,
+        0.87
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 4.785,
+      "fullXZBoundsRadius": 4.785,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmBlob_08",
+      "piece": "gmBlob",
+      "x": -664,
+      "z": 99,
+      "rotationYDegrees": 267,
+      "scale": [
+        1.03,
+        1.03,
+        1.03
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 5.665,
+      "fullXZBoundsRadius": 5.665,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmBlob_09",
+      "piece": "gmBlob",
+      "x": -810,
+      "z": -256,
+      "rotationYDegrees": 233,
+      "scale": [
+        1.03,
+        1.03,
+        1.03
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 5.665,
+      "fullXZBoundsRadius": 5.665,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmBlob_10",
+      "piece": "gmBlob",
+      "x": -615,
+      "z": 133,
+      "rotationYDegrees": 220,
+      "scale": [
+        1.07,
+        1.07,
+        1.07
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 5.885,
+      "fullXZBoundsRadius": 5.885,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmBlob_11",
+      "piece": "gmBlob",
+      "x": -745,
+      "z": 278,
+      "rotationYDegrees": 331,
+      "scale": [
+        0.89,
+        0.89,
+        0.89
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 4.895,
+      "fullXZBoundsRadius": 4.895,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmBlob_12",
+      "piece": "gmBlob",
+      "x": -680,
+      "z": -281,
+      "rotationYDegrees": 222,
+      "scale": [
+        1.04,
+        1.04,
+        1.04
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 5.72,
+      "fullXZBoundsRadius": 5.72,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmBlob_13",
+      "piece": "gmBlob",
+      "x": -581,
+      "z": -57,
+      "rotationYDegrees": 273,
+      "scale": [
+        1.08,
+        1.08,
+        1.08
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 5.94,
+      "fullXZBoundsRadius": 5.94,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmDNAVein_01",
+      "piece": "gmDNAVein",
+      "x": -650,
+      "z": -125,
+      "rotationYDegrees": 262,
+      "scale": [
+        0.94,
+        0.94,
+        0.94
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 5.17,
+      "fullXZBoundsRadius": 5.17,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmDNAVein_02",
+      "piece": "gmDNAVein",
+      "x": -755,
+      "z": 71,
+      "rotationYDegrees": 300,
+      "scale": [
+        0.96,
+        0.96,
+        0.96
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 5.28,
+      "fullXZBoundsRadius": 5.28,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmDNAVein_03",
+      "piece": "gmDNAVein",
+      "x": -720,
+      "z": -244,
+      "rotationYDegrees": 146,
+      "scale": [
+        0.85,
+        0.85,
+        0.85
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 4.675,
+      "fullXZBoundsRadius": 4.675,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmDNAVein_04",
+      "piece": "gmDNAVein",
+      "x": -553,
+      "z": 221,
+      "rotationYDegrees": 350,
+      "scale": [
+        1.13,
+        1.13,
+        1.13
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.215,
+      "fullXZBoundsRadius": 6.215,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmDNAVein_05",
+      "piece": "gmDNAVein",
+      "x": -737,
+      "z": 265,
+      "rotationYDegrees": 188,
+      "scale": [
+        0.96,
+        0.96,
+        0.96
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 5.28,
+      "fullXZBoundsRadius": 5.28,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmDNAVein_06",
+      "piece": "gmDNAVein",
+      "x": -694,
+      "z": -239,
+      "rotationYDegrees": 185,
+      "scale": [
+        1.1,
+        1.1,
+        1.1
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 6.05,
+      "fullXZBoundsRadius": 6.05,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    },
+    {
+      "id": "gmDNAVein_07",
+      "piece": "gmDNAVein",
+      "x": -555,
+      "z": -78,
+      "rotationYDegrees": 310,
+      "scale": [
+        0.96,
+        0.96,
+        0.96
+      ],
+      "y": null,
+      "yPlanApprox": -6,
+      "seating": "Raycast terrain at the footprint and seat base at origin; check all edges.",
+      "groundExclusionRadius": 5.28,
+      "fullXZBoundsRadius": 5.28,
+      "note": "Draft cluster placement; adjust only after terrain seating and actual mesh bounds are known."
+    }
+  ],
+  "plannedPlacementCount": 60,
+  "plannedTriangleTarget": 92900,
+  "requiredSightlineOrigins": [
+    {
+      "plot": 1,
+      "x": -230,
+      "z": -190,
+      "eyeYApprox": 10.2
+    },
+    {
+      "plot": 2,
+      "x": -230,
+      "z": -65,
+      "eyeYApprox": 10.2
+    },
+    {
+      "plot": 3,
+      "x": -230,
+      "z": 65,
+      "eyeYApprox": 10.2
+    },
+    {
+      "plot": 4,
+      "x": -230,
+      "z": 190,
+      "eyeYApprox": 10.2
+    }
+  ],
+  "nextValidation": "ChatGPT Thinking spec review. Then measured model bounds and triangle counts; then Studio terrain seating, >=14-stud actual lanes, landmark visibility, and phone performance."
+}

@@ -1,0 +1,233 @@
+ChatGPT said:
+E3 — Crystal Canyon PBR Material Guide
+
+These are recommended sRGB bake targets for Blender and Roblox, matching the six panels. Roughness and emissive strengths are starting values for testing under the game's moon lighting.
+
+Panel / material
+
+	
+
+Base
+
+	
+
+Deep
+
+	
+
+Glow
+
+	
+
+Highlight
+
+	
+
+Roughness
+
+	
+
+Emissive
+
+
+
+
+1. Amber crystal
+
+	
+
+#F5A029
+
+	
+
+#A73B1B
+
+	
+
+#FFCC6A
+
+	
+
+#FFF1B9
+
+	
+
+0.30
+
+	
+
+1.2–1.8
+
+
+
+
+2. Crystal root
+
+	
+
+#DD7A2B
+
+	
+
+#554D4E
+
+	
+
+#FFB84A
+
+	
+
+#FFE5A0
+
+	
+
+0.35–0.80
+
+	
+
+1.0–1.6
+
+
+
+
+3. Basalt
+
+	
+
+#62636C
+
+	
+
+#41444E
+
+	
+
+#8F7867
+
+	
+
+#92949B
+
+	
+
+0.85
+
+	
+
+0
+
+
+
+
+4. Magma seam
+
+	
+
+#55545C
+
+	
+
+#37353C
+
+	
+
+#FF8A2E
+
+	
+
+#FFF4B7
+
+	
+
+0.35–0.85
+
+	
+
+1.5–2.2
+
+
+
+
+5. Ground seam plate
+
+	
+
+#59575A
+
+	
+
+#3A3D45
+
+	
+
+#FF7834
+
+	
+
+#FFE3A2
+
+	
+
+0.35–0.85
+
+	
+
+1.0–1.7
+
+
+
+
+6. Canyon sand
+
+	
+
+#A69A8A
+
+	
+
+#72675F
+
+	
+
+#E4A65B
+
+	
+
+#D2C5B1
+
+	
+
+0.90
+
+	
+
+0
+
+For non-emissive basalt and sand, the glow column indicates warm colour accents, not actual emitted light.
+
+Emissive mask recommendations
+
+Crystals: Keep most facets non-emissive. Concentrate emission toward the inner core and fractures, with brighter edges baked into the ColorMap.
+
+Magma: Use an approximately white-yellow core, orange middle and deep-red boundary. Limit strong emission to narrow crack interiors.
+
+Basalt: Metalness 0 throughout. Preserve visible grey surface detail rather than making the rock near-black.
+
+Ground: Bake scattered amber grit into the albedo; avoid emissive terrain except for designated magma cracks.
+
+Roblox EmissiveStrength is a multiplier, not an absolute brightness measurement. Excessive strength can clamp highlights toward white, so test each mask under actual Studio lighting. 
+Documentation - Roblox Creator Hub
++1
+
+My recommendation: Start the large crystal spires at EmissiveStrength = 1.4, magma seams at 1.7, and ordinary rock at 0. Raise selectively only if the amber landmarks fail to read from the tycoon plots.
+
+The key visual rule is translucent-looking amber crystals against readable mid-grey stone, with orange light concentrated inside fractures—not uniformly glowing orange rocks.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High

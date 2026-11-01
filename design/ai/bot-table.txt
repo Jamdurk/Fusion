@@ -1,0 +1,4 @@
+SQUISH answering SQUISH: best answer wins 100 % on average; mixes with no >= 65 % answer: none
+SQUISH answering CRUNCH: best answer wins 100 % on average; mixes with no >= 65 % answer: none
+CRUNCH answering SQUISH: best answer wins 100 % on average; mixes with no >= 65 % answer: none
+CRUNCH answering CRUNCH: best answer wins 98 % on average; mixes with no >= 65 % answer: none

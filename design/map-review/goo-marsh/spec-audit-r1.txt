@@ -1,0 +1,250 @@
+ChatGPT said:
+Goo Marsh SPEC r1 — Hard Audit
+GO WITH CHANGES
+
+Verdict: Strong asset specification, but I would make six changes before building the full marsh. The main risks are excessive secondary-mushroom geometry, insufficient visible goo coverage, and particle/texture costs.
+
+The D3 material direction is correct. Do not change the overall art style.
+
+These scores assess the written specification, not completed Blender renders.
+
+A. Scores
+
+Category
+
+	
+
+Score
+
+
+
+
+Match to D / D2b / D3
+
+	
+
+8.5/10
+
+
+
+
+Avoids shiny plastic toy appearance
+
+	
+
+8/10
+
+
+
+
+Phone performance
+
+	
+
+6.5/10
+
+
+
+
+Layout and readability from plots
+
+	
+
+7/10
+
+
+
+
+Overall specification
+
+	
+
+8/10
+
+The highest-risk visual issue is whether your baked goo actually looks internally illuminated. That cannot be confirmed until the material is rendered.
+
+B. What's correct
+
+The 36-stud giant mushroom, 40-stud cap, 15-stud trumpet cluster, 32 × 15 nest and 48-stud pools follow D2b well. The opaque goo approach, recessed glow spots, pearl stalks, violet gills and zero-metalness workflow are appropriate.
+
+Three landmark mushrooms, three nests and eight DNA veins are reasonable for a 340 × 660-stud biome.
+
+The layout also correctly keeps the open plain between the plots and the marsh. 
+goo-marsh-SPEC-r1.md
+ 
+goo-marsh-SPEC-r1.md
+
+C. Required changes, most important first
+
+1. Reduce secondary-mushroom geometry — HIGH
+
+Your current counts imply approximately 247–251k placed triangles. The largest avoidable cost is:
+
+30 trumpet clusters × 2,200 = 66k triangles.
+
+28 umbrellas × 2,000 = 56k triangles.
+
+That's 122k triangles in secondary mushrooms alone.
+
+Change: Reduce each trumpet cluster to 1,200–1,500 triangles and each umbrella to 900–1,200. Keep the three giant mushrooms at 8.5k each.
+
+Target 175–200k placed triangles for the finished marsh, and approximately 40–65k rendered marsh triangles per view on the baseline phone.
+
+Do not reduce the mushroom counts yet.
+
+2. Increase the actual goo coverage — HIGH
+
+Six 48-stud pools and ten narrow streams cover only a small fraction of a 340 × 660 basin.
+
+Without additional surface treatment, you risk building a grey moon valley containing mushrooms instead of a Goo Marsh.
+
+Keep the six main pools, but add:
+
+Two wider pools or shallow extensions, approximately 70–85 studs across.
+
+10–14 irregular thin-film goo patches, roughly 20–40 studs long.
+
+Goo-coated banks and connecting trickles around the existing pools.
+
+Aim for approximately 10–15% of the biome visibly affected by goo, without covering every walking route. Use opaque meshes and baked detail.
+
+3. Correct the giant gill specification — MEDIUM
+
+D2b shows approximately 12 broad readable radial gills, but your specification uses 64 modelled blades.
+
+64 equally prominent blades will look too finely ribbed at phone distance.
+
+Use 12–16 primary gill blades, with finer secondary grooves baked into the normal map. Keep the deep lilac emission between them. This preserves D2b's chunky silhouette.
+
+4. Move the entrance landmark slightly deeper — HIGH
+
+The giant at (-511, -35) has a 40-stud-wide cap. Its edge comes almost to the biome boundary and may interfere with your X −535 route.
+
+Move it to approximately X −575, Z −35, then verify a minimum 18-stud clear walking corridor.
+
+Keep one giant clearly visible from each western plot, but don't let its stalk or hanging drips obstruct the entrance.
+
+5. Fix particle and lighting budgets — HIGH
+
+Starting every emitter at Rate 30 is excessive for a calm marsh, particularly with multiple pools and mushroom caps.
+
+Roblox specifically warns that overlapping particles cause GPU overdraw, with mobile devices having lower particle limits. 
+GitHub
+
+Use:
+
+Drips: approximately 1–3 particles/second on nearby giant mushrooms only.
+
+Pool bubbles: 1–2 particles/second on selected pools.
+
+Spores: 1 particle/second or occasional bursts.
+
+Total target: roughly 25–60 simultaneously visible particles on a low-end phone.
+
+Dynamic lights: only the nearest 1–2 giant caps and, where useful, one nearby nest; all shadowless.
+
+6. Optimise the texture bake and emissive masks — HIGH
+
+Do not automatically create four unique 1024-pixel textures for every individual mesh.
+
+Giant cap, gills and stalk: 1024 maps where visibly justified.
+
+Nests: 512–1024.
+
+Secondary mushrooms and blobs: shared 512 atlases.
+
+Small rocks and sprouts: 256–512.
+
+Reuse the same mesh and texture assets across instances.
+
+Your use of EmissiveMaskContent is supported by Roblox. However, its contribution is multiplied by albedo, and overly high EmissiveStrength can clamp bright regions towards white. Keep the bright spots restrained. 
+Documentation - Roblox Creator Hub
+
+Also, Blender's Ambient Occlusion node with Inside enabled is a useful approximation for the jelly shading, but it measures internal occlusion rather than literal material thickness. Validate the baked gradient on the giant cap and one slumped blob before batch generation. 
+Blender 5.2 LTS Manual
+
+D. Smaller omissions and visual risks
+
+Issue
+
+	
+
+Recommendation
+
+
+
+
+Goo dripping down cliff walls
+
+	
+
+Add 3–5 short wall drapes/rivulets, reused meshes
+
+
+
+
+Nest tunnel dimensions
+
+	
+
+Make opening at least 8 studs wide and 7 high for clean alien movement
+
+
+
+
+Blob silhouettes
+
+	
+
+Ensure lobes are asymmetric and visibly sag into a continuous ground film
+
+
+
+
+Goo material roughness
+
+	
+
+Use roughly 0.35–0.45 on deep body areas, 0.18–0.25 on wet rims; avoid uniformly glossy shading
+
+
+
+
+Pools
+
+	
+
+Give them dark teal centres and thicker luminous boundaries, not uniform cyan surfaces
+
+
+
+
+Distant landmark visibility
+
+	
+
+Test all four western plots at 5-stud eye height, not just the closest
+
+One more performance consideration: SLIM is useful for static models, but don't assume it eliminates the cost of a fully streamed grove. Roblox recommends keeping individual SLIM model extents relatively compact and profiling their loaded detail. 
+Documentation - Roblox Creator Hub
+
+E. Final decision
+
+GO WITH CHANGES — approved to prototype the Blender kit, not yet approved for full biome population.
+
+I would build and inspect these first: one giant mushroom, one blob mound, one goo pool, one nest and one DNA vein.
+
+Approval conditions: The giant must preserve the broad violet gills; the blob must look like sagging translucent jelly rather than spheres; the pool must read as goo rather than plastic flooring; and the nest must have a clear traversable tunnel.
+
+Once those five assets pass in Studio, populate the basin using the reduced geometry and effects budgets.
+
+The strongest part of this spec is the shared D3 material language. Protect that visual quality instead of spending triangles on dozens of secondary mushrooms.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High
