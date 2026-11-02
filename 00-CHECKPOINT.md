@@ -1,42 +1,36 @@
-# Alien Fusion: resume snapshot (31 Oct 2026 13:50, Claude)
+# Alien Fusion: resume snapshot (1 Nov 2026 16:05, Claude)
 
-Moon TYCOON + merge battles (mechanics `design\21-GAME-MECHANICS.md` v4.2). Rules: `DECISIONS.md`. History: `BUILD-LOG.md`.
-**Read `LESSONS.md` before touching models, textures, terrain or effects.** Old snapshots: `history\`.
+Moon TYCOON + merge battles. Rules `DECISIONS.md`, history `BUILD-LOG.md`, **read `LESSONS.md` first**. Previous snapshot
+(map / conquest / throne detail): `history\00-CHECKPOINT.2026-11-01-pre-mining.md`.
 
-## VERIFIED (file dates checked 15:18)
-- **Main place** `AlienFusion-map.rbxl` saved 31 Oct 15:18 (3.76 MB, local file, Ctrl+S; title bar = the D:\ path).
-  Backups: `backups\AlienFusion-map.pre-ring380-31Oct.rbxl` (13:45, ring at r 320);
-  `backups\AlienFusion-map.pre-conquest-ring-31Oct.rbxl` (12:13 = the map before the ring);
-  `Alien Fusion base map.rbxl` = James's untouched safety copy (same 12:13 map). NOT published (cloud test place has no
-  canyon / ring yet; James publishes).
-- **Hub map r5 RING** (ChatGPT stage-1 GO 9.2): moon stretched 100 N/S + 52 E/W (~1,764 x 1,600 playable); Moonwood N,
-  Goo Marsh W, Crystal Canyon E built, Lander Ruins S greybox; 8 plots 85 x 95 at **r 380** (James 31 Oct pm: further back; was 320; 22.5 + 45k deg,
-  facing the crater), graded lanes 20 wide r 337.5 -> 125 (75 studs clear from a base to Fort 1; ChatGPT GO 9.3), 16 levelled fort pads (Fort 1 r 240, Fort 2 r 170). Terrain =
-  `assets\blender\scripts\hub_terrain_ring.py` (stretches `terrain_grid_hub.r4.json` from `hub_terrain.py`) ->
-  `terrain_grid_hub.json`; Studio `src\tools\hub-ring-stretch.luau` (stages; ServerStorage.ArchiveRingR5 = old greybox +
-  12 archived rocks).
-- **FORT 1 "Hatchling Nest" on lane 1** (ChatGPT visual GO 9/10): `src\tools\hub-fort1-place.luau` ("wild" /
-  "conquered") -> `workspace.Hub.Conquest.Lane1.Fort1`; inactive look in `ServerStorage.FortLooks`; AI pieces in
-  `ServerStorage.FortKit`. CoreHitbox, CoreHP 600, 6 WildSpawn attachments, ApproachFrom.
-- **CRATER THRONE** (ChatGPT stage B GO 9.2): reactor MOVES (client `ReactorMotion`,
-  `src\StarterPlayer.StarterPlayerScripts.ReactorMotion.client.luau`), contained arena (terrace r 47-75, 8 ramps =
-  the lanes' crater entries, pylons EAST/WEST, 4 spawn pockets at r 60) + state FX via `Throne` attributes. Backup before:
-  `backups\AlienFusion-map.pre-throne-arena-31Oct.rbxl`. Spec `design\conquest-lanes\core\THRONE-SPEC.md`.
-  Stage C (crown, rim banners, owner colour, spawn flash, meteor, broken pylon) GO 9.5. NOT built: throne COMBAT.
+## WORKING COPY (James, 1 Nov)
+`C:\Users\AFish\OneDrive\Desktop\Alien Fusion` = the GitHub copy (github.com/Jamdurk/fusion) and the place Studio has
+open. Work + save HERE; `D:\Roblox Game Venture\Games\Alien Fusion` is a mirror (copied back at the end of a session).
+`studio-sync\` = James's sync export of the Studio scripts (don't hand-edit).
 
-## MATERIALS + TYCOON (1 Nov, DESIGN LOCKED by James): `design\24-MATERIALS-AND-TYCOON.md` (ChatGPT GO). MOON ROCK /
-GOO DNA / CRYSTAL DNA, ONE incubator (2 eggs), hand mining + slow machines, rare = looks only. NOTHING BUILT. First build =
-one plot: starter launch pad, drill, mineable rock, Goo vein, incubator, a hatch into the army, Fort 1.
+## VERIFIED (1 Nov 15:56)
+- `AlienFusion-map.rbxl` saved 16:55 (3,796,336 B) via File > Save to File (this Studio has NO Ctrl+S for it):
+  `tools\af-save.ps1 -title "AlienFusion-map" -x 28 -y 50 -x2 76 -y2 358` (window with a title bar; maximised =
+  `-x 20 -y 12 -x2 66 -y2 320`; unsure: `-x 28 -y 50 -nosave` + look at the shot). Check the file time. Backup before mining:
+  `D:\...\backups\AlienFusion-map.pre-mining-1Nov.rbxl`. NOT published.
+- **MINING built** (ChatGPT spec r2 GO, build audit GO WITH 2 FIXES -> both fixed + tested). Files:
+  `src\ReplicatedStorage.AlienFusion.MiningConfig.module.luau` (all numbers), `src\ServerScriptService.MiningService.server.luau`,
+  `src\StarterPlayer.StarterPlayerScripts.MiningClient.client.luau`, setup `src\tools\mining-setup.luau` (re-runnable).
+  Spec `design\economy\mining-spec-r2.txt`, audit `mining-build-audit-r1.txt`, refs `design\concepts\mining\`.
+  - Moon Rock on YOUR plot (Plot1.Mining: SmallRock1-3, BigRock, GooPocket, 2 empty Dense sockets); DNA in the biomes:
+    16 veins + 6 rotating clusters per biome (12 sockets) + 8 Moonwood pods (4 cyan / 4 amber). 5 picks T1-T5.
+  - Server-timed in Play: small 3.00 s, big 6.50 s (20 taps/s = no speed-up), T2 Goo vein 9.31 s, empty refused,
+    other owner's plot refused (`Plot1` attr OwnerUserId), terrain wall blocks.
 
-## CONQUEST LANES status (start: `design\CONQUEST-LANES-HANDOFF.md`, log `design\conquest-lanes\BUILD-LOG.md`)
-- James 31 Oct: stretch + ring first (done), then Fort 1 on one lane (visual done); throne = real army capped at 32
-  matter; Fort 1 goo nest / Fort 2 crystal fort as designed.
-- NEXT (gameplay stage, ChatGPT gate): LAUNCH PAD deploy (8-matter cap), 6 wild Drips, 600 HP core break, capture
-  transition (colour spread, flag swap, core swirl pulse 2-3 s), drill reward; then James's phone test.
-  Needs the combat code from the AI-test place (`src-aitest\`) in the map place + MERGE in battle (not built anywhere).
-- Throne next (ChatGPT): server-side combat: 32-matter garrison, 2 x 400 HP pylons, 3,000 HP core, capture state machine, a 32 v 32 test
-  (Titan beside small units through the 21-stud pinch). Test a real army along a lane + up the plot ramp (F4).
+## NOT VERIFIED / OPEN
+- Hit / break effects, auto-walk, HUD on a real phone (James tests). Cluster 4-min rotation live. 5-minute rate run
+  (targets: T1 plot 50-75 rock/min, T1 biome 12-18 DNA/min). Two-player independence test.
+- Mining feel r3 (16:39): tap = one swing, hold = repeat, 0.45 s, HP x1.5; swing pose works on any rig. MOVE TEST
+  menu PICKAXE section (T1-T5) needs `MiningConfig.TEST_PICKS = true`; TURN OFF at launch.
+- NOT built: meteorite (James: leave it), pickaxe shop pads, Dense Rock pad, hiding the pick in battle, saving currency.
+- Still from before: Fort 1 gameplay, throne combat, Lander Ruins greybox, phone perf of the canyon.
 
-## OPEN (older)
-- Canyon non-blocking: per-view tris + 4 GB phone test; distance-based FX enable. Streaming settings by hand.
-- Lander Ruins (S) still greybox.
+## NEXT
+Fresh session: read `design\TYCOON-HANDOFF.md` first. James phone-tests mining -> tycoon slice 1 (plan
+`design\25-TYCOON-PLAN.md`, ChatGPT r2 GO: Drill pad 20, Incubator pad 30 with both egg chambers + repeat hatching +
+hatch reveal card, starter 12 Goo; session-only) -> slice 2 saving + offline.

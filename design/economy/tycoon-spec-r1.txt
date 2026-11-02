@@ -1,0 +1,1402 @@
+ChatGPT said:
+Alien Fusion — TYCOON SPEC r1
+GO WITH TUNING
+
+Research completed with live web search: 32 search queries across 5 batches. I used 19 distinct source pages, including Roblox Creator Hub documentation, developer discussions, official game descriptions, developer updates and independent market analysis.
+
+Recommendation for James: Build a fast button tycoon with a visible alien factory, permanent progression and a conquest endgame.
+
+The first minute must prove that Alien Fusion is a game about aliens fighting, not just a game about mining rocks. The tycoon then becomes the player's reason to keep returning.
+
+1. Research findings that actually matter
+
+Game / source
+
+	
+
+What works
+
+	
+
+What Alien Fusion should borrow
+
+
+
+
+Grow a Garden
+
+	
+
+Simple buying, visible growth, offline progression and showing discoveries to friends. 
+Play on Roblox
+
+	
+
+Machines visibly grow the base while players are away
+
+
+
+
+Steal a Brainrot
+
+	
+
+Simple collection-to-income loop, visible possessions and player interaction. 
+Play on Roblox
+
+	
+
+Show off aliens across eight plots, but no stealing owned aliens
+
+
+
+
+Pet Simulator 99
+
+	
+
+Eggs, collections, new zones and regular content. 
+BIG Games
+
+	
+
+Two recognizable egg families, cosmetic collection and future species
+
+
+
+
+Merge an Army
+
+	
+
+Merge troops, build armies, earn income and attack bases. 
+Play on Roblox
+
+	
+
+Visible army deployment, but merging must be tactical rather than simply making the biggest troop
+
+
+
+
+Factory Simulator
+
+	
+
+Gather resources, construct machines and automate production. 
+Play on Roblox
+
+	
+
+A short, animated conveyor chain with obvious outputs
+
+
+
+
+Retail Tycoon 2
+
+	
+
+Player-owned construction, functional equipment and expansion. 
+Roblox
++1
+
+	
+
+Every machine has a real job; avoid buying meaningless walls
+
+
+
+
+Mining Simulator 2
+
+	
+
+Tool upgrades, mining and collectible eggs. 
+Play on Roblox
+
+	
+
+Better pickaxes and mining areas, but no backpack-selling interruptions
+
+
+
+
+Bee Swarm Simulator
+
+	
+
+Resource regions, creature collection, quests and exploration. 
+Play on Roblox
+
+	
+
+Use Goo Marsh, Crystal Canyon and Moonwood as meaningful destinations
+
+
+
+
+Military Tycoon
+
+	
+
+Base construction leads to fighting, raiding and capturing locations. 
+Play on Roblox
+
+	
+
+Fort 1 → Fort 2 → King of the Moon
+
+
+
+
+Restaurant Tycoon 2
+
+	
+
+Customizable businesses that friends can visit. 
+Play on Roblox
+
+	
+
+Trophy displays, cosmetic base choices and social visits
+
+These examples demonstrate established gameplay structures, not verified individual retention rates.
+
+What the Roblox data says
+
+Roblox's own documentation makes three useful distinctions:
+
+D1 retention: Players must understand and enjoy the core loop quickly. Roblox recommends reaching the fun within approximately five minutes. 
+Documentation - Roblox Creator Hub
+
+D7 retention: Players need meaningful progression and reasons to continue. 
+Documentation - Roblox Creator Hub
++1
+
+D30 retention: Finished players need fresh content, long-term objectives and social activities. 
+Documentation - Roblox Creator Hub
+
+Roblox also recommends visual onboarding, contextual hints and testing where players abandon the first-time experience. 
+Documentation - Roblox Creator Hub
++1
+
+A March 2026 Newzoo analysis documents the enormous 2025 growth of Grow a Garden and Steal a Brainrot, but also how quickly breakout-game popularity can decline. Huge initial popularity isn't proof of durable retention. 
+Newzoo
+
+I couldn't verify public D1/D7/D30 retention or actual revenue for the individual tycoons. Roblox's creator analytics and comparable-game benchmarks are generally not public at that level. 
+Documentation - Roblox Creator Hub
+
+Five design rules I'd adopt
+
+First purchase in 15–30 seconds. First battle starts within 60 seconds. First hatch happens by minute 3.
+
+Early purchases every 30–90 seconds of focused progression, not necessarily every 30–90 seconds of total play.
+
+Every purchase changes something visible or immediately usable. No empty collector pads, walls or scanners.
+
+Use price = expected income × desired saving time, accounting for combat, travel and spending on other pads. This is also the practical approach suggested in a 2025 Roblox DevForum balancing discussion. 
+Roblox
+
+Show one main goal at a time. On phones, display no more than two or three relevant purchase pads. Roblox recommends responsive, readable interfaces that avoid crowding touch controls. 
+Documentation - Roblox Creator Hub
++1
+
+Don't use a fixed exponential price formula across the whole tycoon. Price the actual usefulness of each upgrade, with larger gaps only when players have genuinely improved their earning power.
+
+2. The recommended tycoon structure
+
+The crucial design decision is two linked progression tracks:
+
+Army track: Incubator → more aliens → Launch Rig upgrades → Forts → Throne.
+
+Factory track: Drill → Refinery → Pickaxes → Dense Rocks → Extractors.
+
+Players can alternate between them. Don't force someone who wants to fight to purchase every factory machine first.
+
+A key change from the earlier draft: the first drill must be cheap, and the Incubator must arrive before expensive upgrades. An 80–100 Rock first drill would already cost more than a minute of sustained T1 mining, before accounting for the first battle.
+
+Recommended pad and price table
+All prices are Moon Rock. Times are estimated first-session purchase windows, not timed unlocks or guaranteed outcomes.
+
+Stage / purchase
+
+	
+
+Rock
+
+	
+
+Target time
+
+	
+
+What appears or changes
+
+
+
+
+Starter Launch Pad
+
+	
+
+Free
+
+	
+
+0:00
+
+	
+
+Eight Drips ready to deploy
+
+
+
+
+1. Rock Drill
+
+	
+
+20
+
+	
+
+0:15–0:30
+
+	
+
+Spinning drill starts earning Rock
+
+
+
+
+2. Incubator
+
+	
+
+30
+
+	
+
+1–2 min
+
+	
+
+Glowing egg chamber; Squish and Crunch choices
+
+
+
+
+3. Refinery
+
+	
+
+45
+
+	
+
+2–3 min
+
+	
+
+Moving conveyor; drill income increases
+
+
+
+
+4. T2 Iron Pick
+
+	
+
+50
+
+	
+
+3–4 min
+
+	
+
+Larger metal pickaxe
+
+
+
+
+5. Launch Rig I — 12 matter
+
+	
+
+75
+
+	
+
+6–8 min
+
+	
+
+Larger deployment circle, 12-matter capacity
+
+
+
+
+6. Goo Extractor
+
+	
+
+65
+
+	
+
+7–9 min
+
+	
+
+Cyan pump producing slow Goo DNA
+
+
+
+
+7. T3 Lunar Pick
+
+	
+
+95
+
+	
+
+9–11 min
+
+	
+
+Glowing blue pickaxe
+
+
+
+
+8. Dense Rock I
+
+	
+
+110
+
+	
+
+11–14 min
+
+	
+
+First rich Moon Rock deposit appears
+
+
+
+
+9. Crystal Extractor
+
+	
+
+100
+
+	
+
+12–15 min
+
+	
+
+Amber extractor producing Crystal DNA
+
+
+
+
+10. Launch Rig II — 16 matter
+
+	
+
+140
+
+	
+
+13–17 min
+
+	
+
+Second deployment ring
+
+
+
+
+11. T4 Crystal Pick
+
+	
+
+180
+
+	
+
+17–24 min
+
+	
+
+Amber pickaxe, optional
+
+
+
+
+12. Launch Rig III — 24 matter
+
+	
+
+220
+
+	
+
+18–23 min
+
+	
+
+Larger deployment field
+
+
+
+
+13. Dense Rock II
+
+	
+
+190
+
+	
+
+19–26 min
+
+	
+
+Second rich Rock deposit, optional
+
+
+
+
+14. Second Egg Slot
+
+	
+
+200
+
+	
+
+20–28 min
+
+	
+
+Second incubation chamber, optional
+
+
+
+
+15. Launch Rig IV — 32 matter
+
+	
+
+360
+
+	
+
+23–30 min
+
+	
+
+Full-army launch system
+
+
+
+
+16. Hatch Speed Upgrade
+
+	
+
+250
+
+	
+
+25–40 min
+
+	
+
+Egg chamber upgrades, 12 s → 8 s
+
+
+
+
+17. Trophy Hall
+
+	
+
+250
+
+	
+
+25–45 min
+
+	
+
+Rare alien displays
+
+
+
+
+18. T5 Cosmic Pick
+
+	
+
+340
+
+	
+
+27–45 min
+
+	
+
+Purple energy pickaxe, optional
+
+
+
+
+19. Dense Rock Refresh
+
+	
+
+300
+
+	
+
+35–50 min
+
+	
+
+Dense deposits refill faster
+
+
+
+
+20. Second Rock Drill
+
+	
+
+450
+
+	
+
+40–60 min
+
+	
+
+Second automated drill
+
+
+
+
+21. Extractor upgrades
+
+	
+
+450 each
+
+	
+
+45–90 min
+
+	
+
+Larger Goo/Crystal production machines
+
+
+
+
+22+. Decorations / expansions
+
+	
+
+60–800+
+
+	
+
+Ongoing
+
+	
+
+Custom base appearance and displays
+
+These are proposed prices, not Roblox industry averages. They're designed around Alien Fusion's measured mining rates.
+
+Purchase gates
+
+The first Incubator and basic pickaxes require only Rock and their previous machine/tool prerequisites. They should never require a fort victory.
+
+Launch Rig I becomes recommended when the player owns roughly 10 matter; Rig II when they own 14; Rig III after Fort 2 and approximately 20 owned matter; Rig IV after Fort 2 and approximately 24 owned matter. These are visibility/recommendation conditions, not necessarily purchase restrictions on matter ownership.
+
+Fort 1 strengthens the Goo Extractor. Fort 2 strengthens the Crystal Extractor and opens the advanced launch progression. Neither fort blocks players from mining its family's DNA.
+
+Important: The times in the table are not cumulative promises. A player who prioritizes the fastest 16-alien army may delay the Refinery, extractors and tool upgrades. A player who enjoys building will buy more machinery and reach the full army later.
+
+Two changes I strongly recommend
+
+First: give every new player 12 Goo DNA once. This is exactly one starter Squish Egg. It guarantees that even someone who loses Fort 1 can experience hatching by minute 3.
+
+Fort 1's proposed first-clear reward becomes 60 Moon Rock + 24 Goo DNA + 12 Crystal DNA, so it also introduces Crunch without forcing a long trip to Crystal Canyon.
+
+Second: let the Incubator keep hatching while the player is mining. After choosing an egg, players can enable repeat hatching, spending 12 matching DNA per egg until they run out or stop it. The basic chamber handles one egg at a time, taking 12 seconds each. Completed aliens enter the collection automatically.
+
+Without this, repeatedly walking 200 studs back from Goo Marsh to hatch individual eggs could break the 5–8-minute target.
+
+No paid auto-hatch advantage, no extra currency and no change to cosmetic rarity rules.
+
+3. First 10 minutes — intended player experience
+
+This is the guided route, not a mandatory sequence. The player can ignore an upgrade to focus on hatching or combat.
+
+Time
+
+	
+
+What happens
+
+	
+
+What the player sees
+
+
+
+
+0:00–0:30
+
+	
+
+Mine two small rocks; buy the 20-Rock Drill
+
+	
+
+First machine springs to life
+
+
+
+
+0:30–1:00
+
+	
+
+Deploy eight starter Drips at Fort 1
+
+	
+
+Aliens march down the lane and merge
+
+
+
+
+1:00–2:00
+
+	
+
+Finish Fort 1, receive resources, buy Incubator
+
+	
+
+First Squish Egg hatches
+
+
+
+
+2:00–3:00
+
+	
+
+Buy Refinery; hatch first Pebble with Fort 1's Crystal DNA
+
+	
+
+Conveyor starts, amber alien appears
+
+
+
+
+3:00–4:00
+
+	
+
+Buy T2 pickaxe, travel to Goo Marsh
+
+	
+
+Faster mining, visible Goo veins
+
+
+
+
+4:00–5:00
+
+	
+
+Mine Goo DNA; Incubator keeps hatching
+
+	
+
+Growing collection of Drips
+
+
+
+
+5:00–6:00
+
+	
+
+Keep mining, experimenting with merges
+
+	
+
+Larger Squish forms
+
+
+
+
+6:00–7:00
+
+	
+
+Approach 16 owned matter; buy 12-matter Launch Rig
+
+	
+
+Bigger deployment area
+
+
+
+
+7:00–8:00
+
+	
+
+Buy Goo Extractor or continue army progression
+
+	
+
+First passive DNA machine
+
+
+
+
+8:00–9:00
+
+	
+
+Return to Rock mining, collect machine income
+
+	
+
+More pads become affordable
+
+
+
+
+9:00–10:00
+
+	
+
+Work toward T3 and the first Dense Rock
+
+	
+
+Preview of the richer mining setup
+
+The first 16-owned target is achievable near minute 7–8 only for a focused player who spends substantial time mining DNA. It is not guaranteed for someone buying every optional pad.
+
+The first 30 seconds matter most
+
+I would make the first three interactions almost impossible to misunderstand:
+
+MINE ROCK
+
+Rock flashes, breaks and adds directly to the HUD
+
+BUILD DRILL — 20 ROCK
+
+Walk onto the glowing pad; drill visibly activates
+
+ATTACK THE NEST!
+
+Launch Pad glows; eight Drips are ready
+
+Don't open with a text tutorial. Use one glowing objective and a short contextual prompt at a time.
+
+4. The Rock economy — checked against the mining rates
+
+The important distinction is that 64 Rock/min is a sustained hand-mining rate, not the player's average income across a session.
+
+When players fight, travel, hatch or purchase upgrades, they're not actively mining.
+
+Starting budget model
+
+Income source
+
+	
+
+Example
+
+
+
+
+T1 hand mining for 3 minutes
+
+	
+
+192 Rock
+
+
+
+
+Starter Drill + Refinery, across roughly 10 minutes
+
+	
+
+~100 Rock
+
+
+
+
+First Fort 1 victory
+
+	
+
+60 Rock
+
+
+
+
+Available by around minute 10
+
+	
+
+~352 Rock
+
+The first six purchases in the table cost 285 Rock combined. That leaves approximately 67 Rock toward T3, assuming the player prioritizes that purchase path.
+
+This makes the early economy plausible, but it doesn't prove every target can be achieved simultaneously.
+
+Can the player reach a 32-matter army by minute 30?
+
+The core purchases through Launch Rig IV cost approximately 1,310 Rock, including T3, Dense Rock I and both basic extractors.
+
+An example 30-minute resource budget:
+
+Source
+
+	
+
+Rock
+
+
+
+
+3 minutes T1 hand mining
+
+	
+
+192
+
+
+
+
+5 minutes T3 hand mining after Dense Rock I
+
+	
+
+620
+
+
+
+
+Drill/Refinery income over the session
+
+	
+
+~350
+
+
+
+
+Fort 1 and proposed Fort 2 first-clear rewards
+
+	
+
+180
+
+
+
+
+Two optional fort repeats
+
+	
+
+60
+
+
+
+
+Total
+
+	
+
+~1,402
+
+For this calculation, Fort 2's proposed first-clear Rock reward is 120, and optional repeats award 30 each. Those rewards are not locked.
+
+The budget leaves very little spare Rock. That is acceptable for an optimized progression route, but it means players cannot be expected to buy every cosmetic, pickaxe and incubation upgrade before reaching 32 matter.
+
+This is why I recommend optional branches instead of one long mandatory pad chain.
+
+The other constraint is DNA: after the starter grant and Fort 1 reward, players still need substantial active biome mining to reach 32 owned aliens. The earlier 20–30-minute target remains a test target, especially because the real biome veins are farther apart than the original r2 walking assumption.
+
+5. Machine production numbers
+
+Machines should feel useful without replacing the mining system James has just built.
+
+Rock production
+
+Machine stage
+
+	
+
+Passive Rock/min
+
+	
+
+Compared with active mining
+
+
+
+
+First Drill
+
+	
+
+8
+
+	
+
+12.5% of T1's 64/min
+
+
+
+
+Drill + Refinery
+
+	
+
+12
+
+	
+
+18.75% of T1
+
+
+
+
+Two Drills + Refinery
+
+	
+
+24
+
+	
+
+19.4% of T3's 124/min
+
+
+
+
+Both Drills fully upgraded
+
+	
+
+36
+
+	
+
+13.6% of T5's 264/min
+
+The Refinery is a visible conveyor and processor that increases drill production by 50%. It doesn't multiply hand-mining rewards.
+
+DNA production
+
+Machine stage
+
+	
+
+Matching DNA/min
+
+
+
+
+Basic Goo Extractor
+
+	
+
+0.8
+
+
+
+
+Goo Extractor after Fort 1
+
+	
+
+1.2
+
+
+
+
+Upgraded Goo Extractor
+
+	
+
+2.5
+
+
+
+
+Basic Crystal Extractor
+
+	
+
+0.8
+
+
+
+
+Crystal Extractor after Fort 2
+
+	
+
+1.2
+
+
+
+
+Upgraded Crystal Extractor
+
+	
+
+2.5
+
+At T1, active biome mining targets approximately 13 DNA/min. Even a fully upgraded extractor produces less than one-fifth of that.
+
+At T5, the earlier optimistic biome ceiling is approximately 44.7 DNA/min, making the machine contribution relatively smaller.
+
+No Rock-to-DNA conversion. Extractors generate their own slow DNA trickle. The conveyor is a visual Rock-production chain, not another crafting system.
+
+Offline earnings
+
+Keep the locked 2-hour maximum offline accumulation, but calculate offline production at 25% of the saved online machine rate.
+
+Example
+
+	
+
+2-hour offline reward
+
+
+
+
+First Drill + Refinery
+
+	
+
+360 Rock
+
+
+
+
+One post-Fort Goo Extractor
+
+	
+
+36 Goo DNA
+
+
+
+
+Fully upgraded Rock factory
+
+	
+
+1,080 Rock
+
+
+
+
+Fully upgraded Goo Extractor
+
+	
+
+75 Goo DNA
+
+
+
+
+Fully upgraded Crystal Extractor
+
+	
+
+75 Crystal DNA
+
+The payout should be automatic on return, with no collection chore. The server uses the machine rates saved when the player last left, not upgrades purchased after returning. Award the resources and advance the offline timestamp together so the same period cannot pay twice.
+
+These are proposed game-balance choices, not externally established optimal offline rates.
+
+6. Layout — one 85 × 95-stud plot
+
+Coordinates use the plot's local axes:
+
+X: -47.5 to +47.5
+
+Z: -42.5 at the front/crater to +42.5 at the back
+
+Recommended top-down placement
+
+Conceptual layout. Exact machine footprints and collision clearance must be checked in Studio.
+
+Suggested machine centres in local studs:
+
+Feature
+
+	
+
+X
+
+	
+
+Z
+
+
+
+
+Launch Pad
+
+	
+
+0
+
+	
+
+-31
+
+
+
+
+Incubator
+
+	
+
+-27
+
+	
+
+-4
+
+
+
+
+Goo Extractor
+
+	
+
+-31
+
+	
+
++23
+
+
+
+
+Crystal Extractor
+
+	
+
+-13
+
+	
+
++25
+
+
+
+
+Drill
+
+	
+
++25
+
+	
+
++4
+
+
+
+
+Refinery
+
+	
+
++27
+
+	
+
+-12
+
+
+
+
+Mining corner
+
+	
+
++31
+
+	
+
++28
+
+
+
+
+Pickaxe rack
+
+	
+
+-32
+
+	
+
+-31
+
+
+
+
+Trophy display
+
+	
+
++28
+
+	
+
+-31
+
+Keep a central walkway roughly 14 studs wide, leading directly from the base entrance to the back of the plot.
+
+Purchase pads: Use approximately 6 × 6-stud square pads, with large symbols and plain labels. Position each next to where its machine will appear, facing the walkway.
+
+Show one recommended green purchase pad and at most one or two optional pads. Don't reveal the entire future factory as a sea of locked buttons.
+
+Purchases happen when the owner walks onto the pad, as originally planned. Each purchase must be validated and committed server-side before the model appears.
+
+7. Hour 1, day 2 and week 1
+Hour 1
+
+"My base is becoming an alien factory."
+
+Full 32-matter Squish army, developing Crunch collection, Fort 2 conquered or close, first throne attempts, stronger drills and a visible rare alien display.
+
+Next goal: complete the second family's army or conquer the King of the Moon.
+
+Day 2
+
+"I want to improve my collection and beat a harder fort."
+
+Claim capped offline earnings, complete three small rotating daily objectives, hatch for new cosmetic looks and challenge a different fort garrison.
+
+Example objectives: mine five Crystal veins, hatch three Squish eggs, win one optional fort defence. Rewards use existing Rock and DNA.
+
+Week 1
+
+"I want the coolest alien base on the moon."
+
+Pursue rare cosmetic sets, decorate the plot, earn a throne title, improve battle skill and complete weekly fort challenges.
+
+A changing NPC garrison creates new tactical puzzles without increasing enemy stats indefinitely.
+
+Roblox's quest-design documentation supports using short, medium and long-term goals, including daily objectives that encourage players to explore different mechanics. 
+Documentation - Roblox Creator Hub
+
+I would avoid punishing missed login days. A player returning after a week should be excited to continue, not feel they've fallen irreversibly behind.
+
+8. What replaces rebirth?
+
+Permanent collection, skill and customization.
+
+Once a player owns 32 of each species, the next hatch is about appearances rather than army strength. Keep the existing rule: the player chooses whether to apply a newly rolled look to an owned alien, with favourite locks and no automatic replacement.
+
+Moon Rock continues funding cosmetic base expansions, decorations and optional production upgrades. DNA continues funding cosmetic hatching. Forts offer changing tactical challenges; the throne offers social prestige.
+
+The player should eventually be able to build a base that looks noticeably different from another player's, without owning a stronger PvP army.
+
+I would not add a second floor, rebirth multiplier or another currency simply to manufacture endless numerical progression. A later second base row could be a cosmetic extension, but isn't needed for launch.
+
+This also follows Roblox's core-loop principle: repeated actions need a meaningful progression engine, not just repetition for its own sake. 
+Documentation - Roblox Creator Hub
+
+9. First Studio build slice
+
+Build the actual tycoon transaction system, not the whole factory.
+
+Use the existing mining build. On one plot, implement:
+
+A 20-Rock Drill pad that buys the Drill and starts 8 Rock/min.
+
+A 30-Rock Incubator pad that creates the egg machine and enables the first Squish hatch.
+
+The starter 12 Goo DNA grant, once per new profile.
+
+Fort 1's first-clear Rock/DNA reward, using the existing combat system or a temporary test trigger.
+
+A single egg slot with 12-second incubation and optional repeat hatching.
+
+Persistent ownership of purchased pads, balances, machine production and individual hatched aliens.
+
+The acceptance test is: new player joins → mines → builds Drill → launches first battle → builds Incubator → hatches an alien, all within approximately three minutes.
+
+Don't build the Refinery, extractors, second drill, Trophy Hall or Meteor Beacon until that flow works on James's phone.
+
+Instrument the sequence with server-side onboarding events: first Rock mined, Drill bought, first battle started, Fort 1 cleared, Incubator bought, first egg hatched. Roblox's funnel analytics are designed for exactly this sort of drop-off analysis. 
+Documentation - Roblox Creator Hub
+
+10. Final decisions for Claude and James
+
+GO for the one-plot tycoon slice. GO WITH TESTING for the complete economy.
+
+The three biggest choices in this spec are:
+
+Starter 12 Goo DNA: My pick is yes, to guarantee an early hatch.
+
+Repeat hatching: My pick is yes, as a free convenience feature. Otherwise the mining-to-hatching loop involves too much walking.
+
+Factory versus army progression: My pick is two parallel branches, with the army branch always taking priority in the next-goal UI.
+
+The key numerical risk is not the first drill price. It's whether a player can afford the later Launch Rigs while also spending enough time gathering DNA to reach 32 aliens. The example budget suggests it's possible for a focused player, but it has little slack. Claude should simulate a realistic 30-minute session before locking prices.
+
+For analytics, measure first-session drop-off and purchase timings before interpreting D1/D7. Roblox explicitly supports tracking progression, economy sources/sinks and engagement, rather than relying on intuition alone. 
+Documentation - Roblox Creator Hub
++1
+
+Source count correction: 32 live search queries; 23 distinct pages cited across the complete research and design response, including official Roblox documentation, developer discussions, original game listings, developer updates and Newzoo. The pad prices, machine rates and schedules are my proposed Alien Fusion design values, not figures taken from those games.
+
+Final principle: The player should come for the aliens, enjoy building the factory, and stay because there's always a new battle, a rare look or a better-looking base worth pursuing.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High
+Response complete

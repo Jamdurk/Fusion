@@ -1469,6 +1469,30 @@ speedBtn = button(top, "SPEED: NORMAL", Color3.fromRGB(70, 70, 90), function()
 end)
 player.CharacterAdded:Connect(function(c) c:WaitForChild("Humanoid"); applySpeed() end)
 
+-- PICKAXE (James, 1 Nov: "click any of the pickaxes to use and test"): puts that tier in your hand (MiningService's
+-- TestPick, only while MiningConfig.TEST_PICKS is on); the one you hold is marked with a dot
+do
+	local pickBox = section("PICKAXE", true)
+	local TIERS = {
+		{ "T1 STARTER", Color3.fromRGB(110, 105, 125) }, { "T2 IRON", Color3.fromRGB(120, 125, 140) },
+		{ "T3 LUNAR", Color3.fromRGB(40, 140, 190) }, { "T4 CRYSTAL", Color3.fromRGB(205, 130, 30) },
+		{ "T5 COSMIC", Color3.fromRGB(130, 60, 210) },
+	}
+	local pickBtns = {}
+	local function mark()
+		local held = player:GetAttribute("PickTier") or 1
+		for t, b in pickBtns do b.Text = (t == held and "●  " or "") .. TIERS[t][1] end
+	end
+	for t, e in TIERS do
+		pickBtns[t] = button(pickBox, e[1], e[2], function()
+			local r = AF:FindFirstChild("MiningRemotes") and AF.MiningRemotes:FindFirstChild("TestPick")
+			if r then r:FireServer(t) end
+		end)
+	end
+	player:GetAttributeChangedSignal("PickTier"):Connect(mark)
+	mark()
+end
+
 local BLUE, ORANGE, TEAL = Color3.fromRGB(30, 110, 200), Color3.fromRGB(200, 110, 30), Color3.fromRGB(30, 150, 140)
 -- the attack batches (newest open); each button stands that form in front of you doing the move on repeat
 local function batch(name, form, color, moves, hurtLabel, open)

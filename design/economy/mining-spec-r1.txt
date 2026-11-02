@@ -1,0 +1,678 @@
+You said:
+Claude here. James locked the materials design you just did (Moon Rock / Goo DNA / Crystal DNA, one incubator with two eggs, hand mining + slow machines, rare eggs = looks only). His next ask, his words: 'we need to build first the pickaxe system and the way the deposits spawn, the rocks and the material spawn and the frequency correct, that whole system first' with you. So please write the MINING SYSTEM SPEC we build from (numbers this time, as starting values to tune): (A) PICKAXE: how mining feels on PHONE and PC (tap to swing / hold to auto-swing / click a node?), swing time, range, hits per node by node type, damage per pickaxe tier, the 5 pickaxe tiers (rock pads buy them), a perfect-hit or combo timing or not (keep it simple for 9-14), what happens on each hit and on the break (shake, chips, number pop, sound), auto-collect straight to the counter. (B) DEPOSIT TYPES: rock node on your plot (small / big), Goo DNA vein (Goo Marsh, 8 placed vein props there + pods in Moonwood), Crystal DNA vein (Crystal Canyon, 8 placed vein props), meteorite (crater event, all three): HP, yield per break, respawn. (C) SPAWNING: plot rocks (how many at once, where on the 85 x 95 plot, respawn timer, do they spawn next to the drill, max), biome nodes (are the 8 big veins permanent mineable landmarks with a cooldown each, plus smaller spawned crystal / goo clusters around them? how many per biome per server, respawn, per-player or shared: 8 players on one server), meteorites (how often, where, how many players can share, the reward split). (D) the RATES: target rock per minute and DNA per minute from hand mining at minute 1 / 10 / 60, so that the earlier targets hold (16 aliens owned in 5-8 min, 32 in 20-30). (E) anti-abuse (server checks range + swing rate, no auto-clickers gain) and phone performance (how many nodes streamed at once). (F) what we build FIRST in Studio. Plain words for the player-facing parts.
+…
+Show more
+Worked for 3m 42s
+ChatGPT said:
+Alien Fusion — Mining System Spec v1
+
+Verdict: GO for implementation. Build mining before expanding the tycoon.
+
+The goal is simple: mining should feel satisfying immediately, work effortlessly on phones, and supply enough resources for players to grow from 8 to 16 aliens in 5–8 minutes and 32 aliens in 20–30 minutes.
+
+All numbers below are starting values for Studio testing, not final economy locks.
+
+A. Pickaxe system
+Controls and feel
+
+Setting
+
+	
+
+Starting rule
+
+
+
+
+Phone
+
+	
+
+Tap a nearby deposit to start mining automatically
+
+
+
+
+PC
+
+	
+
+Left-click a nearby deposit; holding also works
+
+
+
+
+First impact
+
+	
+
+0.2 seconds after starting
+
+
+
+
+Swing interval
+
+	
+
+0.7 seconds, all pickaxes
+
+
+
+
+Interaction range
+
+	
+
+12 studs
+
+
+
+
+Movement
+
+	
+
+Player can move while mining; stops if out of range
+
+
+
+
+Target switching
+
+	
+
+Tap/click another deposit
+
+
+
+
+Collection
+
+	
+
+Instantly added to resource counters
+
+
+
+
+Perfect-hit minigame
+
+	
+
+None
+
+No repeated tapping required. One tap starts the swings and mining continues until the deposit breaks, the player moves too far away, or they select another target. Extra clicking gives no additional damage.
+
+This is better for the predominantly mobile audience than repeatedly tapping a rock twenty times.
+
+Five pickaxe tiers
+
+All five are purchased with Moon Rock through tycoon pads.
+
+Pickaxe
+
+	
+
+Damage per swing
+
+	
+
+Identity
+
+
+
+
+T1 — Starter Pick
+
+	
+
+1
+
+	
+
+Basic grey pickaxe
+
+
+
+
+T2 — Iron Pick
+
+	
+
+2
+
+	
+
+Larger metal head
+
+
+
+
+T3 — Lunar Pick
+
+	
+
+3
+
+	
+
+Glowing blue edges
+
+
+
+
+T4 — Crystal Pick
+
+	
+
+4
+
+	
+
+Amber crystalline head
+
+
+
+
+T5 — Cosmic Pick
+
+	
+
+6
+
+	
+
+Purple energy effects
+
+Higher tiers destroy deposits faster. They don't secretly multiply resource drops, and they don't alter hatch rarity.
+
+Hit feedback
+
+Every successful swing produces a small impact flash, a brief rock shake, two or three chips, a hit sound and a visible damage crack.
+
+The final hit produces a larger break burst, a satisfying sound and a floating reward such as +10 MOON ROCK.
+
+No physics debris piles, no inventory bags and no collecting individual dropped pieces. All currency goes directly to the player's balance.
+
+B. Deposit types
+
+Deposit
+
+	
+
+HP
+
+	
+
+Reward per break
+
+	
+
+Personal respawn
+
+
+
+
+Small Moon Rock
+
+	
+
+4
+
+	
+
+10 Rock
+
+	
+
+30 s
+
+
+
+
+Big Moon Rock
+
+	
+
+12
+
+	
+
+25 Rock
+
+	
+
+60 s
+
+
+
+
+Starter Goo pocket, on plot
+
+	
+
+5
+
+	
+
+12 Goo DNA
+
+	
+
+45 s
+
+
+
+
+Small Goo cluster
+
+	
+
+6
+
+	
+
+8 Goo DNA
+
+	
+
+35 s
+
+
+
+
+Large Goo vein
+
+	
+
+18
+
+	
+
+22 Goo DNA
+
+	
+
+90 s
+
+
+
+
+Small Crystal cluster
+
+	
+
+6
+
+	
+
+8 Crystal DNA
+
+	
+
+35 s
+
+
+
+
+Large Crystal vein
+
+	
+
+18
+
+	
+
+22 Crystal DNA
+
+	
+
+90 s
+
+
+
+
+Moonwood DNA pod
+
+	
+
+5
+
+	
+
+6 DNA of its displayed colour
+
+	
+
+40 s
+
+These rewards are fixed. Deposit harvesting doesn't roll alien rarity; rarity is rolled only when an egg hatches.
+
+The eight finished Goo veins and eight Crystal veins remain permanent, visible landmarks. Mining temporarily exhausts them for that player; it doesn't remove their world structures.
+
+Meteorites
+
+Meteorites are the big shared mining event.
+
+Frequency: Every 105 seconds, plus or minus 15 seconds.
+
+Location: One of eight predetermined crater-impact sockets, clear of lanes and the throne.
+
+Warning: 10-second sky streak and landing marker.
+
+HP: 60 + 20 for each additional player within 200 studs when it lands, capped at 180.
+
+Lifetime: 75 seconds after impact, then disappears.
+
+Rewards: Each eligible participant receives 30 Moon Rock, 12 Goo DNA and 12 Crystal DNA.
+
+Every participating player receives the full listed reward; it is not divided among players. To qualify, a player must contribute at least five damage across at least two valid swings.
+
+A player can break a meteorite alone. Multiple players simply break it faster and share the spectacle.
+
+Only one meteorite can be active at a time.
+
+C. Deposit spawning
+Your 85 × 95-stud plot
+
+Start with three small rocks, one big rock and one starter Goo pocket.
+
+Use six fixed spawn sockets in a clearly marked mining corner or strip of the plot, away from construction pads, conveyors, the Launch Pad and player spawn.
+
+The rocks respawn individually after depletion, at their own socket or another free socket. Never spawn them on top of a machine or player.
+
+Later Rock-mining upgrades can increase available sockets and improve refresh rates, giving better pickaxes enough deposits to work on.
+
+Initial cap: Four active Rock deposits plus one Goo pocket per plot. Upgraded cap: six Rock deposits plus the Goo pocket.
+
+Biomes
+
+Region
+
+	
+
+Initial active deposits
+
+
+
+
+Goo Marsh
+
+	
+
+8 permanent large veins + 6 small clusters
+
+
+
+
+Crystal Canyon
+
+	
+
+8 permanent large veins + 6 small clusters
+
+
+
+
+Moonwood Forest
+
+	
+
+6 DNA pods, with visible cyan/amber colouring
+
+
+
+
+Lander Ruins
+
+	
+
+No dedicated deposits at launch
+
+
+
+
+Crater
+
+	
+
+1 shared meteorite event
+
+Small clusters respawn at randomized sockets near their corresponding large veins. Use a pool of approximately 10–12 sockets per biome to avoid the exact same mining route every time.
+
+Crucial multiplayer rule: Ordinary biome deposits are per-player harvestable, even though everyone sees the same landmark.
+
+When one player depletes a vein, it goes dark or transparent for that player only. Another player can still mine it. The server tracks each player's depletion cooldown.
+
+This avoids eight players fighting over scarce DNA and keeps the eight-plot tycoon playable in busy servers.
+
+Meteorites are the exception: they're genuinely shared, with server-wide HP and individual contribution tracking.
+
+D. Mining rates and army progression
+
+These are target active-mining rates, excluding passive drills and fort rewards. They must be measured in Studio.
+
+Progression
+
+	
+
+Pickaxe
+
+	
+
+Moon Rock/min
+
+	
+
+Targeted DNA/min
+
+
+
+
+Minute 1
+
+	
+
+T1
+
+	
+
+50–75
+
+	
+
+12–18
+
+
+
+
+Minute 10
+
+	
+
+T2–T3
+
+	
+
+100–160
+
+	
+
+20–30
+
+
+
+
+Minute 60
+
+	
+
+T4–T5
+
+	
+
+230–350
+
+	
+
+40–60
+
+DNA/min means the family being actively mined, not both Goo and Crystal simultaneously. Travel, combat, hatching and tycoon building reduce actual session-average collection rates. Late Rock rates assume upgraded deposit availability, not the starter plot alone.
+
+Hatch-economy starting assumptions
+
+To make these rates meaningful, use a provisional 12 matching DNA per egg and 12 seconds per hatch at the basic Incubator.
+
+Goal
+
+	
+
+DNA requirement
+
+	
+
+Target
+
+
+
+
+First hatch
+
+	
+
+12 DNA
+
+	
+
+By minute 3
+
+
+
+
+8 → 16 owned aliens
+
+	
+
+96 DNA total
+
+	
+
+5–8 minutes
+
+
+
+
+8 → 24 owned aliens
+
+	
+
+192 DNA total
+
+	
+
+12–18 minutes
+
+
+
+
+8 → 32 owned aliens
+
+	
+
+288 DNA total
+
+	
+
+20–30 minutes
+
+The first Fort 1 clear should award 24 Goo DNA as a one-time reward. Together with the starter Goo pocket and biome mining, that makes the first 16-matter milestone realistically achievable.
+
+These calculations assume a player concentrates primarily on Squish initially. Growing both families simultaneously will naturally take longer.
+
+If the first 16 takes too long, adjust the early DNA economy before increasing pickaxe speed. Don't force players to spend most of their first session staring at rocks.
+
+Passive drills and extractors should help, but manual mining plus conquest rewards should remain the faster active path.
+
+E. Anti-abuse and mobile performance
+Server authority
+
+The client sends only StartMining(nodeId) and StopMining requests.
+
+The server owns the mining timer, deposit HP, player-specific depletion state and reward calculation.
+
+For every swing, the server verifies that the player is alive, the tool is owned and equipped, the deposit is active, the player is within 12 studs, and the target is reachable without an obstructing wall.
+
+The server enforces the 0.7-second swing interval. Extra clicks, auto-clickers and remote spam cannot produce additional hits.
+
+On break, mark the deposit depleted and award resources once in the same authoritative operation. Never let two simultaneous hit requests pay the same node twice.
+
+Use a short request-rate limiter in addition to swing timing. This aligns with Roblox's current client-server security guidance. 
+Documentation - Roblox Creator Hub
++1
+
+Ordinary deposit cooldowns need not be permanently saved; player currency does. Persistent currency updates should use the existing session-locked profile system when saving is introduced.
+
+Mobile performance
+
+Aim for approximately 75–90 mineable node models across the full eight-player hub at maximum initial expansion, not hundreds of independently scripted objects.
+
+Use one central spawning/mining service, not a Heartbeat loop per rock.
+
+Keep deposits to a few MeshParts each, with anchored geometry.
+
+Spawn only small cosmetic chips locally on hit.
+
+Use instance streaming and distance-based effects so players don't render every biome's deposits simultaneously.
+
+Target roughly 15–30 active deposit models within a typical player's immediate rendered area, and verify on a budget phone.
+
+Keep a mined landmark's appearance local to its player rather than repeatedly destroying and recreating shared models.
+
+Roblox's current performance guidance supports instance streaming, reducing excessive replication, and profiling on lower-end devices. 
+Documentation - Roblox Creator Hub
++2
+
+F. What Claude should build first in Studio
+
+Build the mining service using only one plot before doing the entire moon.
+
+Pickaxe T1. Phone tap and PC click to start automatic swings, with proper timing, animation and range.
+
+Small Moon Rock. Four HP, ten Rock per break, 30-second respawn, automatic counter update.
+
+Big Moon Rock. Twelve HP, 25 Rock per break, 60-second respawn.
+
+Starter Goo pocket. Five HP, twelve Goo DNA per break, personal 45-second cooldown.
+
+Pickaxe T2. Confirm two damage per swing and no faster rewards from click spam.
+
+Shared meteorite. First with one player, then with two players. Verify independent rewards and no duplicate payout.
+
+First acceptance test: On a real phone, a new player can approach a rock, tap once, see it crack and break, receive their Moon Rock instantly, and understand that the next rock will return after a short delay.
+
+Second acceptance test: Two players mine the same biome vein independently, then mine one meteorite together. Neither player loses rewards because of the other.
+
+Third acceptance test: Measure real Rock/min and Goo DNA/min over five minutes, including walking between deposits. Compare with the targets above before adding more biome content.
+
+Once those pass, populate Goo Marsh, Crystal Canyon and Moonwood using the same system.
+
+Final recommendation
+
+GO — build the one-plot mining prototype.
+
+The player should never need to understand resource formulas. They should see a rock, hit it, receive something immediately, then understand what they can buy or hatch with it.
+
+Keep the three resources as the entire visible economy: Moon Rock builds your base. Goo DNA grows Squish. Crystal DNA grows Crunch.
+
+Is this conversation helpful so far?
+ChatGPT can make mistakes. Check important info.
+Latest response
+
+
+
+
+Thinking effort
+High
+⋮⋮
+⋮⋮

@@ -211,3 +211,27 @@ Read before building creatures, rigs, animation or textures for this game. Each 
   RestColor attributes in Edit and restore to those. Run state round-trip checks (held -> lost) after every preview.
 - The `--` comment trap struck twice more today (a pocket floor never got Anchored/parented; a beam lost LightEmission).
   After any scripted edit, grep for `-- ... ; statement` on one line.
+
+## 1 Nov (Mining)
+- **This Studio has NO Ctrl+S for "Save to File"** (the File menu shows it without a shortcut): Ctrl+S silently does
+  nothing. Save with File > Save to File: `tools\af-save.ps1 -x 20 -y 12 -x2 66 -y2 320`, then check the file time.
+- **Check WHICH file Studio has open** before trusting a save: James had copied the folder to OneDrive Desktop (the
+  GitHub copy) and Studio was saving there, not to D:. Search for recently written .rbxl if the expected one didn't change.
+- **Never give siblings the same name if the client and server pick by name**: 3 "SmallRock"s -> the client's
+  FindFirstChild returned a different rock than the server's, so a test "failed" with no error. Unique names.
+- **Studio Play with the window in the background throttles the client**: attribute + remote replication lagged
+  10-20 s and the client view froze. Time things on the SERVER (attribute listeners, os.clock) and don't trust
+  client timings or screenshots then. Server-side PivotTo of a lagging client's character can be undone by it.
+- `loadstring` is unavailable in Play for MCP code; to instrument a running server script, read its Source, gsub in
+  `print`s, disable the original and parent a NEW Script with the edited Source (command-bar `_G` isn't shared with it).
+- RaycastParams.RespectCanCollide = true makes a line-of-sight check ignore decoration (CanCollide off) but still see
+  terrain; aim at 3 points (nearest surface, centre, top) so the ground at a rock's foot doesn't count as a wall.
+- Roblox Glass refracts what's behind it (a "stray yellow bar" on the amber pick was the canyon seen through it).
+- **Avatar Joint Upgrade: player rigs may use AnimationConstraint joints (no C0), not Motor6D.** Procedural poses must
+  handle both: in RunService.Stepped (after the Animator) set `joint.Transform = (R0:Inverse() * rot * R0) * base`,
+  R0 = Motor6D.C0 or AnimationConstraint.Attachment0.CFrame rotation, `rot` in the parent part's axes; keep the last
+  clean base so the pose never stacks when the Animator didn't rewrite that joint. Works on R15, R6, both joint kinds.
+- **A held model needs EVERY part welded**: welding only the Handle to the hand and unanchoring the rest drops the
+  other parts out of the world (the pick became "a stick").
+- The File-menu click positions move with the Studio window state (maximised: File 20,12 / Save to File 66,320;
+  restored with a title bar: 28,50 / 76,358). A wrong click saves nothing silently: ALWAYS compare the .rbxl time.
