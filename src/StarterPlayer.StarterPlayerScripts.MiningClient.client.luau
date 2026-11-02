@@ -389,10 +389,22 @@ local function showBar(node)
 	Tween:Create(hpFill, TweenInfo.new(0.08), { Size = UDim2.fromScale(math.clamp(hp / max, 0.04, 1), 1) }):Play()
 end
 
--- the break: burst, "+10 MOON ROCK", the deposit goes away until it refills. Runs at the LAST hit (predicted), so it
--- never waits on the server's reply (1 Nov: "a little speck left ... takes a few seconds"); the counter itself still
--- only moves when the server pays
-local function breakFX(node, reward, respawn)
+-- Reward text/sound must ONLY play after the server confirms a break. A predicted
+-- break can be refused, so showing "+10 ROCK" before confirmation is misleading.
+local function confirmedRewardFX(node, reward)
+	local box = node:FindFirstChild("MineHitbox")
+	local pos = box and box.Position or node:GetPivot().Position
+	local y = 0
+	for res, amt in reward do
+		popText(pos + Vector3.new(0, (box and box.Size.Y / 2 or 2) + y, 0), "+" .. amt .. " " .. R[res].label, R[res].color, true)
+		y += 2.5
+	end
+	sfx("sfx_reward_coin_pickup_01", nil, 1)
+end
+
+-- Break visuals are predicted for responsiveness, and can be rolled back.
+-- Rewards are deliberately NOT shown here until the server confirms the break.
+local function breakFX(node, respawn)
 	hpGui.Enabled = false
 	local box = node:FindFirstChild("MineHitbox")
 	local pos = box and box.Position or node:GetPivot().Position
@@ -400,12 +412,6 @@ local function breakFX(node, reward, respawn)
 	chipsAt(pos + Vector3.new(0, 1, 0), color, 9, 30)
 	flashAt(pos, color, 7)
 	sfx("sfx_combat_hit_heavy_01", pos, 0.9)
-	sfx("sfx_reward_coin_pickup_01", nil, 1)
-	local y = 0
-	for res, amt in reward do
-		popText(pos + Vector3.new(0, (box and box.Size.Y / 2 or 2) + y, 0), "+" .. amt .. " " .. R[res].label, R[res].color, true)
-		y += 2.5
-	end
 	local untilT = os.clock() + respawn
 	depletedUntil[node] = untilT
 	setDepletedLook(node, true)
@@ -440,7 +446,8 @@ ResultRE.OnClientEvent:Connect(function(kind, node, a, b)
 	elseif kind == "break" then
 		known[node], pending[node] = nil, nil
 		if predictedBreak[node] then
-			predictedBreak[node] = nil -- already shown; only line the refill timer up with the server's
+			predictedBreak[node] = nil -- visual already played; now the reward is actually confirmed
+			confirmedRewardFX(node, a)
 			local untilT = os.clock() + b
 			depletedUntil[node] = untilT
 			task.delay(b, function()
@@ -450,9 +457,13 @@ ResultRE.OnClientEvent:Connect(function(kind, node, a, b)
 				end
 			end)
 		else
-			breakFX(node, a, b)
+			breakFX(node, b)
+			confirmedRewardFX(node, a)
 		end
 	elseif kind == "refused" then
+		-- Rate-limited swings now receive this acknowledgement instead of disappearing.
+		-- Their pending damage was removed above; if a predicted break was shown,
+		-- undo it when there are no other outstanding swings for this node.
 		if predictedBreak[node] and (pending[node] or 0) == 0 then undoBreak(node)
 		elseif not isDepleted(node) and hpGui.Adornee and hpGui.Adornee.Parent == node then showBar(node) end -- quietly put the bar back
 		-- say why only when the player can do something about it
@@ -515,7 +526,7 @@ local function doSwing(node)
 		if predictedHp(node) <= 0 then -- the last hit: break it now, the server confirms + pays
 			predictedBreak[node] = true
 			local def = Cfg.Nodes[node:GetAttribute("NodeType")]
-			breakFX(node, def.reward, def.respawn)
+			breakFX(node, def.respawn)
 		else
 			showBar(node)
 		end
