@@ -104,7 +104,12 @@ local function award(player, def)
 end
 
 SwingRE.OnServerEvent:Connect(function(player, node, seq)
-	if not rateOk(player) then return end
+	if not rateOk(player) then
+		-- The client has already counted this swing as pending. Always answer,
+		-- even when throttled, so its predicted HP can be reconciled.
+		ResultRE:FireClient(player, "refused", node, "rate", seq)
+		return
+	end
 	local def, box = nodeInfo(node)
 	if not def then return end
 	local now = os.clock()
